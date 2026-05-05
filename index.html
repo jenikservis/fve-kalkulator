@@ -1,0 +1,4036 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FVE konfigurátor verze 3 final</title>
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FVE konfigurátor">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<script>
+(function(){
+  const theme = localStorage.getItem('themeMode') || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#000000' : '#f4f6f8');
+})();
+
+
+function getTheme(){
+  return document.documentElement.getAttribute('data-theme') || 'dark';
+}
+function setTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('themeMode', theme);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#000000' : '#f4f6f8');
+  updateThemeButton();
+  setTimeout(refreshCharts, 30);
+}
+function toggleTheme(){
+  setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+}
+function updateThemeButton(){
+  const btn=document.getElementById('themeToggleBtn');
+  if(!btn) return;
+  const dark=getTheme()==='dark';
+  btn.textContent = dark ? 'Světlý režim' : 'Tmavý režim';
+  btn.classList.toggle('theme-dark-active', dark);
+  btn.classList.toggle('theme-light-active', !dark);
+}
+
+</script>
+
+
+<!-- Netlify-ready static app: deploy this file as index.html. -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+if (window.Chart) {
+  Chart.defaults.elements.bar.borderRadius = 0;
+  Chart.defaults.elements.bar.borderSkipped = false;
+}
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+:root{
+  --bg:#f4f6f8;--card:#fff;--line:#d1d5db;--text:#111827;--muted:#4b5563;
+  --blue:#2563eb;--ok:#047857;--warn:#b45309;--bad:#b91c1c;
+}
+body{font-family:Arial,sans-serif;background:var(--bg);margin:0;padding:18px;color:var(--text)}
+h1{margin:0 0 6px} h2{margin-top:0;font-size:18px} h3{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+label{display:block;font-size:13px;margin-top:9px;color:var(--muted)}
+input,select,textarea,button{width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--line);border-radius:8px;margin-top:4px}
+button,.buttonlink{display:block;text-align:center;text-decoration:none;background:var(--blue);color:#fff;border:none;font-weight:bold;cursor:pointer;margin-top:10px;width:100%;box-sizing:border-box;padding:8px;border-radius:8px}
+button.secondary{background:#64748b}
+button.mobile-on{
+  background:var(--ok)!important; /* zelená = zapnuto */
+  color:#fff!important;
+}
+button.mobile-off{
+  background:var(--bad)!important; /* červená = vypnuto */
+  color:#fff!important;
+}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid #e5e7eb;padding:6px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.ok,.good{color:var(--ok);font-weight:bold}.warn{color:var(--warn);font-weight:bold}.bad{color:var(--bad);font-weight:bold}
+.metric{font-size:22px;font-weight:bold}
+.small{font-size:12px;color:var(--muted)}
+.profi-note{font-size:12px;color:var(--muted);background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;margin-top:8px}
+
+#map{height:330px;border-radius:12px;overflow:hidden}
+#pvgisState{margin-top:8px;font-weight:bold}
+.chart-box{height:520px;position:relative}
+#monthBlock{overflow:hidden;max-height:900px;opacity:1;transition:max-height .35s ease,opacity .25s ease,padding .25s ease,margin .25s ease}
+#monthBlock.closed{max-height:0;opacity:0;padding-top:0!important;padding-bottom:0!important;margin-bottom:0!important;border-width:0!important}
+#monthTable{font-size:11px}
+#monthTable th,#monthTable td{padding:3px}
+#monthTable input{padding:3px;font-size:11px;min-width:55px}
+#cableOut{font-size:13px}
+.cable-card-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px}
+.cable-card{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);padding:12px;box-shadow:0 4px 14px rgba(0,0,0,.10)}
+.cable-card h4{margin:0 0 10px;font-size:15px;color:var(--text)}
+.cable-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;border-top:1px solid rgba(148,163,184,.22);padding:7px 0}
+.cable-row:first-of-type{border-top:none}
+.cable-label{color:var(--muted);text-align:left}
+.cable-value{text-align:right;font-weight:bold;color:var(--text)}
+.cable-status{margin-top:10px;padding:8px;border-radius:10px;border:1px solid currentColor;text-align:center;font-weight:bold}
+@media(max-width:700px){.cable-card-list{display:block}.cable-card{margin-bottom:10px}.cable-row{grid-template-columns:1fr}.cable-value{text-align:left}}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}.chart-box{height:360px}}
+@media print{
+  body{background:white;padding:0}
+  button,.buttonlink,#map{display:none}
+  .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  input,select,textarea{border:none;background:transparent}
+}
+
+.diagram-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.diagram-box{border:2px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:10px;min-width:120px;text-align:center;font-size:13px}
+.diagram-arrow{font-size:24px;color:#64748b}
+.energy-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.flow-box{border:1px solid #cbd5e1;background:#f8fafc;border-radius:10px;padding:10px;text-align:center}
+.flow-value{font-size:20px;font-weight:bold}
+
+
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  body{background:white!important;padding:0!important;margin:0!important;font-size:10px;color:#000}
+  button,.buttonlink,#map,#pvgisJsonFile,#monthToggleBtn,#monthBlock,.chart-box canvas,#chartProd,#chartDiff,#chartSoc{display:none!important}
+  .card{box-shadow:none!important;border:1px solid #ccc!important;border-radius:6px!important;padding:6px!important;margin:4px 0!important;break-inside:avoid}
+  h1{font-size:18px!important;margin:0 0 4px!important}
+  h2{font-size:13px!important;margin:0 0 4px!important}
+  h3{font-size:12px!important;margin:0 0 3px!important}
+  p,.small,.profi-note{font-size:9px!important;margin:2px 0!important}
+  input,select,textarea{border:none!important;background:transparent!important;padding:0!important;margin:0!important;font-size:10px!important}
+  label{font-size:9px!important;margin:1px 0!important}
+  table{font-size:9px!important}
+  th,td{padding:2px!important}
+  .grid,.grid-2{display:grid!important;grid-template-columns:1fr 1fr!important;gap:4px!important}
+  .metric{font-size:13px!important}
+  body.print-protocol .card{display:none!important}
+  body.print-protocol #printProtocolPage{display:block!important}
+  #printProtocolPage{display:block!important}
+}
+#printProtocolPage{display:none}
+.protocol-grid{display:block;grid-template-columns:1fr;gap:0}
+.protocol-box{border:1px solid #ccc;border-radius:6px;padding:6px;margin-bottom:6px;background:#fff}
+.protocol-title{font-size:18px;font-weight:bold;margin-bottom:4px}
+.protocol-table{width:100%;border-collapse:collapse;font-size:10px}
+.protocol-table td{border-bottom:1px solid #eee;padding:3px}
+.protocol-table td:first-child{text-align:left;color:#333}
+.protocol-table td:last-child{text-align:right;font-weight:bold}
+
+
+.sticky-actions{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  background:rgba(255,255,255,.96);
+  border-top:1px solid #cbd5e1;
+  box-shadow:0 -4px 12px rgba(0,0,0,.12);
+  padding:8px 12px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  z-index:9999;
+}
+.sticky-actions button{
+  max-width:260px;
+  margin:0;
+}
+body{padding-bottom:76px}
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.modal{
+  background:#fff;
+  width:min(900px,95vw);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-bottom:10px;
+}
+#printPreviewContent{
+  background:#fff;
+  border:1px solid #ddd;
+  padding:10mm;
+}
+@media print{
+  .sticky-actions,.modal-backdrop{display:none!important}
+  body{padding-bottom:0!important}
+}
+
+
+.mobile-mode .grid,
+.mobile-mode .grid-2{
+  display:block!important;
+}
+.mobile-mode .card{
+  width:100%!important;
+  margin-bottom:10px;
+}
+.mobile-mode .chart-box{
+  height:220px!important;
+}
+.mobile-mode{
+  font-size:14px;
+}
+
+
+.app-version{
+  display:inline-block;
+  background:#111827;
+  color:#fff;
+  border-radius:999px;
+  padding:4px 10px;
+  font-size:12px;
+  font-weight:bold;
+  margin-left:8px;
+  vertical-align:middle;
+}
+.project-actions{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:8px;
+}
+.project-actions button{
+  margin-top:0;
+}
+
+
+/* PWA / iOS-Android styl UI + finální tlačítka */
+:root{
+  --app-black:#000000;
+  --app-black-hover:#111111;
+  --app-green:#16a34a;
+  --app-red:#dc2626;
+}
+html{
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+}
+body{
+  min-height:100vh;
+  padding-left:max(18px, env(safe-area-inset-left));
+  padding-right:max(18px, env(safe-area-inset-right));
+}
+button,.buttonlink{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  background:var(--app-black)!important;
+  color:#fff!important;
+  border:1px solid var(--app-black)!important;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+  width:100%;
+  box-sizing:border-box;
+  padding:11px 12px;
+  border-radius:14px;
+  min-height:44px;
+  letter-spacing:.01em;
+  box-shadow:0 3px 10px rgba(0,0,0,.16);
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+button:hover,.buttonlink:hover{
+  background:var(--app-black-hover)!important;
+  color:#fff!important;
+}
+button:active,.buttonlink:active{
+  transform:scale(.985);
+  box-shadow:0 1px 4px rgba(0,0,0,.22);
+}
+button.secondary{
+  background:var(--app-black)!important;
+  color:#fff!important;
+  border-color:var(--app-black)!important;
+}
+button.mobile-on{
+  background:var(--app-green)!important;
+  color:#fff!important;
+  border-color:var(--app-green)!important;
+}
+button.mobile-off{
+  background:var(--app-red)!important;
+  color:#fff!important;
+  border-color:var(--app-red)!important;
+}
+input,select,textarea{
+  min-height:42px;
+  border-radius:12px;
+  font-size:16px;
+}
+.card{
+  border-radius:18px;
+}
+.sticky-actions{
+  padding:10px max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  backdrop-filter:saturate(160%) blur(14px);
+  -webkit-backdrop-filter:saturate(160%) blur(14px);
+}
+.sticky-actions button{
+  max-width:260px;
+  margin:0;
+  border-radius:16px;
+}
+@media(max-width:700px){
+  body{
+    padding:12px;
+    padding-bottom:calc(168px + env(safe-area-inset-bottom));
+  }
+  h1{font-size:22px}
+  .card{padding:12px;margin-bottom:12px}
+  .sticky-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .sticky-actions button{
+    max-width:none;
+    font-size:13px;
+    padding:10px 8px;
+  }
+  #mobileToggleBtn{
+    grid-column:1 / -1;
+  }
+}
+@media(display-mode:standalone){
+  body{
+    padding-top:calc(18px + env(safe-area-inset-top));
+  }
+}
+
+
+/* iOS tab bar varianta */
+:root{--tab-bg:rgba(255,255,255,.88);--tab-line:rgba(15,23,42,.12);--tab-text:#111827;--tab-muted:#6b7280;--tab-active:#000;}
+.sticky-actions{
+  left:10px!important;right:10px!important;bottom:10px!important;
+  border:1px solid var(--tab-line)!important;
+  border-radius:28px!important;
+  background:var(--tab-bg)!important;
+  box-shadow:0 18px 44px rgba(15,23,42,.22)!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  gap:4px!important;
+  padding:8px max(8px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left))!important;
+  backdrop-filter:saturate(180%) blur(20px)!important;
+  -webkit-backdrop-filter:saturate(180%) blur(20px)!important;
+}
+.sticky-actions button{
+  background:transparent!important;
+  color:var(--tab-text)!important;
+  border:none!important;
+  border-radius:20px!important;
+  min-height:48px!important;
+  padding:7px 4px!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+  box-shadow:none!important;
+}
+.sticky-actions button:hover{background:rgba(0,0,0,.06)!important;color:#000!important;}
+.sticky-actions button:active{transform:scale(.96);background:rgba(0,0,0,.10)!important;}
+.sticky-actions button.mobile-on{background:var(--app-green)!important;color:#fff!important;}
+.sticky-actions button.mobile-off{background:var(--app-red)!important;color:#fff!important;}
+@media(max-width:700px){
+  body{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;}
+  .sticky-actions{grid-template-columns:repeat(6,1fr)!important;gap:2px!important;}
+  .sticky-actions button{font-size:11px!important;min-height:50px!important;padding:6px 2px!important;}
+  #mobileToggleBtn{grid-column:auto!important;}
+}
+
+
+
+/* Light / Dark přepínač + profi dashboard grafy */
+:root,
+html[data-theme="light"]{
+  --bg:#f4f6f8;
+  --card:#ffffff;
+  --card-soft:#f8fafc;
+  --line:#d1d5db;
+  --line-soft:#e5e7eb;
+  --text:#111827;
+  --muted:#4b5563;
+  --blue:#2563eb;
+  --ok:#047857;
+  --warn:#b45309;
+  --bad:#b91c1c;
+  --chart-grid:rgba(15,23,42,.10);
+  --chart-tick:#475569;
+  --chart-prod:#2563eb;
+  --chart-cons:#f59e0b;
+  --chart-diff:#16a34a;
+  --chart-diff-neg:#dc2626;
+  --chart-soc:#7c3aed;
+  --tab-bg:rgba(255,255,255,.90);
+  --tab-line:rgba(15,23,42,.12);
+  --tab-text:#111827;
+}
+html[data-theme="dark"]{
+  --bg:#000000;
+  --card:#080808;
+  --card-soft:#111111;
+  --line:#262626;
+  --line-soft:#1f2937;
+  --text:#ffffff;
+  --muted:#a3a3a3;
+  --blue:#60a5fa;
+  --ok:#22c55e;
+  --warn:#fbbf24;
+  --bad:#f87171;
+  --chart-grid:rgba(255,255,255,.12);
+  --chart-tick:#cbd5e1;
+  --chart-prod:#60a5fa;
+  --chart-cons:#fbbf24;
+  --chart-diff:#22c55e;
+  --chart-diff-neg:#ef4444;
+  --chart-soc:#a78bfa;
+  --tab-bg:rgba(0,0,0,.86);
+  --tab-line:rgba(255,255,255,.14);
+  --tab-text:#ffffff;
+}
+html[data-theme="dark"] body{
+  background:var(--bg)!important;
+  color:var(--text)!important;
+}
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .modal,
+html[data-theme="dark"] .protocol-box{
+  background:var(--card)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.55)!important;
+}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{
+  background:#050505!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:#737373!important}
+html[data-theme="dark"] label,
+html[data-theme="dark"] .small,
+html[data-theme="dark"] .profi-note,
+html[data-theme="dark"] .cable-label{color:var(--muted)!important}
+html[data-theme="dark"] .profi-note,
+html[data-theme="dark"] .flow-box,
+html[data-theme="dark"] .diagram-box,
+html[data-theme="dark"] .cable-card{
+  background:var(--card-soft)!important;
+  border-color:var(--line)!important;
+  color:var(--text)!important;
+}
+html[data-theme="dark"] th,
+html[data-theme="dark"] td{border-bottom-color:var(--line-soft)!important}
+html[data-theme="dark"] .sticky-actions{
+  background:var(--tab-bg)!important;
+  border-color:var(--tab-line)!important;
+  box-shadow:0 -18px 44px rgba(0,0,0,.66)!important;
+}
+html[data-theme="dark"] .sticky-actions button:not(.mobile-on):not(.mobile-off){
+  color:var(--tab-text)!important;
+}
+html[data-theme="dark"] .sticky-actions button:not(.mobile-on):not(.mobile-off):hover{
+  background:rgba(255,255,255,.10)!important;
+  color:#fff!important;
+}
+html[data-theme="dark"] .app-version{background:#fff!important;color:#000!important}
+html[data-theme="dark"] .chart-box{
+  background:linear-gradient(180deg,#0b0b0b,#050505)!important;
+  border-color:var(--line)!important;
+}
+.chart-box{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:12px;
+  background:linear-gradient(180deg,var(--card),var(--card-soft));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 8px 24px rgba(0,0,0,.08);
+}
+#themeToggleBtn.theme-dark-active{
+  background:#111!important;
+  color:#fff!important;
+}
+#themeToggleBtn.theme-light-active{
+  background:#fff!important;
+  color:#000!important;
+  border:1px solid rgba(0,0,0,.14)!important;
+}
+@media(max-width:700px){
+  .chart-box{height:280px!important;padding:10px}
+}
+
+
+
+/* Zvýraznění tlačítek v tmavém režimu */
+html[data-theme="dark"] button:not(.mobile-on):not(.mobile-off),
+html[data-theme="dark"] .buttonlink{
+  background:linear-gradient(180deg,#1f2937,#0f172a)!important;
+  color:#ffffff!important;
+  border:1px solid rgba(96,165,250,.88)!important;
+  box-shadow:0 0 0 1px rgba(96,165,250,.18), 0 8px 22px rgba(96,165,250,.18)!important;
+}
+html[data-theme="dark"] button:not(.mobile-on):not(.mobile-off):hover,
+html[data-theme="dark"] .buttonlink:hover{
+  background:linear-gradient(180deg,#2563eb,#1d4ed8)!important;
+  color:#ffffff!important;
+  border-color:#93c5fd!important;
+  box-shadow:0 0 0 1px rgba(147,197,253,.28), 0 10px 28px rgba(37,99,235,.32)!important;
+}
+html[data-theme="dark"] button.secondary:not(.mobile-on):not(.mobile-off){
+  background:linear-gradient(180deg,#374151,#111827)!important;
+  border-color:rgba(255,255,255,.30)!important;
+}
+html[data-theme="dark"] button.mobile-on{
+  background:linear-gradient(180deg,#22c55e,#15803d)!important;
+  color:#ffffff!important;
+  border:1px solid rgba(187,247,208,.75)!important;
+  box-shadow:0 0 0 1px rgba(34,197,94,.24), 0 8px 24px rgba(34,197,94,.30)!important;
+}
+html[data-theme="dark"] button.mobile-off{
+  background:linear-gradient(180deg,#ef4444,#b91c1c)!important;
+  color:#ffffff!important;
+  border:1px solid rgba(254,202,202,.75)!important;
+  box-shadow:0 0 0 1px rgba(239,68,68,.24), 0 8px 24px rgba(239,68,68,.30)!important;
+}
+html[data-theme="dark"] .sticky-actions{
+  background:rgba(8,8,8,.96)!important;
+  border-color:rgba(96,165,250,.42)!important;
+  box-shadow:0 -14px 42px rgba(0,0,0,.82), 0 0 0 1px rgba(96,165,250,.18)!important;
+}
+html[data-theme="dark"] .sticky-actions button:not(.mobile-on):not(.mobile-off){
+  background:rgba(255,255,255,.10)!important;
+  color:#ffffff!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 4px 14px rgba(0,0,0,.35)!important;
+}
+html[data-theme="dark"] .sticky-actions button:not(.mobile-on):not(.mobile-off):hover{
+  background:rgba(96,165,250,.26)!important;
+  border-color:rgba(147,197,253,.72)!important;
+}
+html[data-theme="dark"] #themeToggleBtn.theme-dark-active{
+  background:linear-gradient(180deg,#ffffff,#dbeafe)!important;
+  color:#000000!important;
+  border-color:#ffffff!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.28), 0 8px 22px rgba(255,255,255,.18)!important;
+}
+
+
+
+/* Mobilní app upgrade: větší mapa, iOS list cards, sticky hlavičky a swipe scroll */
+#map{
+  height:480px!important;
+  border:2px solid var(--line)!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.18);
+}
+@media(max-width:900px){
+  #map{height:430px!important;}
+}
+
+.card{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.card table:not(.protocol-table){
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  border:1.5px solid var(--line)!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+  background:rgba(148,163,184,.05)!important;
+  box-shadow:0 8px 22px rgba(0,0,0,.10);
+}
+.card table:not(.protocol-table) th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--card)!important;
+  color:var(--text)!important;
+  border-bottom:2px solid var(--line)!important;
+}
+.card table:not(.protocol-table) th,
+.card table:not(.protocol-table) td{
+  border-bottom:1px solid var(--line)!important;
+  padding:10px!important;
+}
+@media(max-width:700px){
+  .card table:not(.protocol-table){
+    min-width:680px;
+  }
+  .card::after{
+    content:'';
+    display:block;
+    clear:both;
+  }
+}
+
+#monthBlock{
+  overflow-x:auto!important;
+  -webkit-overflow-scrolling:touch;
+}
+#monthTable{
+  min-width:760px;
+}
+#monthTable th{
+  position:sticky;
+  top:0;
+  z-index:4;
+}
+
+/* Kabely a jištění jako iOS list cards */
+#cableOut{
+  overflow:visible;
+}
+.cable-card-list{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(290px,1fr))!important;
+  gap:14px!important;
+  padding:2px 0 4px;
+}
+.cable-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035))!important;
+  border:1.5px solid var(--line)!important;
+  border-radius:22px!important;
+  padding:0!important;
+  overflow:hidden!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.18)!important;
+}
+.cable-card h4{
+  margin:0!important;
+  padding:14px 16px!important;
+  font-size:16px!important;
+  font-weight:800!important;
+  letter-spacing:-.01em;
+  background:rgba(148,163,184,.12)!important;
+  border-bottom:1.5px solid var(--line)!important;
+}
+.cable-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:14px!important;
+  align-items:center!important;
+  padding:12px 16px!important;
+  border-top:1px solid rgba(148,163,184,.28)!important;
+  min-height:42px;
+}
+.cable-row:first-of-type{border-top:none!important;}
+.cable-label{
+  color:var(--muted)!important;
+  line-height:1.25;
+}
+.cable-value{
+  color:var(--text)!important;
+  font-weight:800!important;
+  text-align:right!important;
+  white-space:nowrap;
+}
+.cable-status{
+  margin:12px 16px 16px!important;
+  padding:11px 12px!important;
+  border-radius:999px!important;
+  border:1.5px solid currentColor!important;
+  text-align:center!important;
+  font-weight:800!important;
+  background:rgba(255,255,255,.04);
+}
+@media(max-width:700px){
+  .cable-card-list{display:block!important;}
+  .cable-card{margin-bottom:14px!important;}
+  .cable-row{grid-template-columns:minmax(0,1fr) auto!important;}
+  .cable-value{text-align:right!important;}
+}
+
+body[data-theme="dark"] .card table:not(.protocol-table) th,
+body.dark .card table:not(.protocol-table) th{
+  background:#050505!important;
+}
+body[data-theme="dark"] .cable-card,
+body.dark .cable-card{
+  box-shadow:0 0 0 1px rgba(255,255,255,.06),0 16px 38px rgba(0,0,0,.65)!important;
+}
+
+
+/* Mobilní režim bez vodorovného posunu a bez zkratek */
+html, body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+img, canvas, svg, iframe{
+  max-width:100%;
+}
+.mobile-mode{
+  width:100%;
+  overflow-x:hidden!important;
+}
+.mobile-mode .grid,
+.mobile-mode .grid-2,
+.mobile-mode .protocol-grid,
+.mobile-mode .project-actions{
+  display:block!important;
+  grid-template-columns:1fr!important;
+}
+.mobile-mode .card,
+.mobile-mode .protocol-box{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+}
+.mobile-mode input,
+.mobile-mode select,
+.mobile-mode textarea,
+.mobile-mode button,
+.mobile-mode .buttonlink{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.25!important;
+}
+.mobile-mode #map{
+  width:100%!important;
+  max-width:100%!important;
+  height:360px!important;
+}
+.mobile-mode .chart-box{
+  width:100%!important;
+  height:260px!important;
+  overflow:hidden!important;
+}
+.mobile-mode .card table:not(.protocol-table),
+.mobile-mode #monthTable,
+.mobile-mode table{
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  font-size:12px!important;
+}
+.mobile-mode th,
+.mobile-mode td{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-align:left!important;
+  padding:7px 5px!important;
+}
+.mobile-mode #monthBlock{
+  overflow-x:hidden!important;
+}
+.mobile-mode #monthTable input{
+  min-width:0!important;
+  width:100%!important;
+  padding:5px!important;
+  font-size:12px!important;
+}
+.mobile-mode .cable-card-list{
+  display:block!important;
+  width:100%!important;
+}
+.mobile-mode .cable-card{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.mobile-mode .cable-row{
+  grid-template-columns:1fr!important;
+  gap:4px!important;
+}
+.mobile-mode .cable-value{
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.mobile-mode .sticky-actions{
+  left:8px!important;
+  right:8px!important;
+  grid-template-columns:1fr 1fr!important;
+  border-radius:22px!important;
+}
+.mobile-mode .sticky-actions button{
+  min-height:44px!important;
+  font-size:12px!important;
+  padding:8px 6px!important;
+}
+@media(max-width:700px){
+  .mobile-mode body,
+  body.mobile-mode{
+    padding-bottom:calc(196px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+
+
+/* FVE návrhový protokol: vždy jedna strana, tabulky pod sebou */
+.protocol-grid{
+  display:block!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+}
+.protocol-box{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.protocol-table{
+  table-layout:fixed;
+  width:100%!important;
+}
+.protocol-table td{
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.protocol-table td:first-child{width:42%;}
+.protocol-table td:last-child{width:58%;}
+.protocol-charts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  align-items:start;
+}
+.protocol-chart-card{
+  border:1px solid #cccccc;
+  border-radius:6px;
+  padding:6px;
+  background:#ffffff!important;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.protocol-chart-title{
+  font-size:11px;
+  font-weight:bold;
+  margin:0 0 4px;
+  color:#000000!important;
+}
+.protocol-chart-img{
+  display:block;
+  width:100%;
+  height:auto;
+  background:#ffffff!important;
+}
+@media(max-width:700px){
+  .protocol-charts{grid-template-columns:1fr;}
+}
+
+@media print{
+  html, body, html[data-theme="dark"], html[data-theme="dark"] body{
+    background:#ffffff!important;
+    color:#000000!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  body.print-protocol, body.print-protocol *{
+    background:#ffffff!important;
+    color:#000000!important;
+    box-shadow:none!important;
+    text-shadow:none!important;
+  }
+  body.print-protocol #printProtocolPage{
+    display:block!important;
+    background:#ffffff!important;
+    color:#000000!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body.print-protocol .protocol-grid{
+    display:block!important;
+    grid-template-columns:1fr!important;
+    gap:0!important;
+  }
+  body.print-protocol .protocol-box{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    border:1px solid #bbbbbb!important;
+    background:#ffffff!important;
+    color:#000000!important;
+    margin:0 0 5px 0!important;
+    padding:6px!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  body.print-protocol .protocol-table{
+    width:100%!important;
+    table-layout:fixed!important;
+    background:#ffffff!important;
+    color:#000000!important;
+  }
+  body.print-protocol .protocol-table td{
+    border-bottom:1px solid #e5e5e5!important;
+    background:#ffffff!important;
+    color:#000000!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  body.print-protocol .protocol-table td:first-child{
+    width:42%!important;
+    color:#333333!important;
+    text-align:left!important;
+  }
+  body.print-protocol .protocol-table td:last-child{
+    width:58%!important;
+    color:#000000!important;
+    text-align:right!important;
+    font-weight:bold!important;
+  }
+}
+
+
+
+/* Náhled Tisk/PDF: vždy bílý papír i při tmavém režimu */
+body.print-preview-open #pdfPreviewModal .modal,
+body.print-preview-open #printPreviewContent,
+body.print-preview-open #printPreviewContent *,
+html[data-theme="dark"] body.print-preview-open #pdfPreviewModal .modal,
+html[data-theme="dark"] body.print-preview-open #printPreviewContent,
+html[data-theme="dark"] body.print-preview-open #printPreviewContent *{
+  background:#ffffff!important;
+  color:#000000!important;
+  border-color:#cccccc!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+body.print-preview-open #pdfPreviewModal{
+  background:rgba(0,0,0,.62)!important;
+}
+body.print-preview-open #pdfPreviewModal .modal{
+  background:#ffffff!important;
+  color:#000000!important;
+}
+body.print-preview-open #printPreviewContent{
+  background:#ffffff!important;
+  color:#000000!important;
+  border:1px solid #dddddd!important;
+  border-radius:0!important;
+  box-sizing:border-box!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+body.print-preview-open #printProtocolPreviewClone{
+  display:block!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  width:100%!important;
+  max-width:190mm!important;
+  margin:0 auto!important;
+}
+body.print-preview-open #printProtocolPreviewClone .protocol-grid{
+  display:block!important;
+  grid-template-columns:1fr!important;
+}
+body.print-preview-open #printProtocolPreviewClone .protocol-box{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  border:1px solid #bbbbbb!important;
+  box-sizing:border-box!important;
+}
+body.print-preview-open #printProtocolPreviewClone .protocol-table,
+body.print-preview-open #printProtocolPreviewClone .protocol-table td{
+  background:#ffffff!important;
+  color:#000000!important;
+  border-color:#e5e5e5!important;
+}
+body.print-preview-open #printProtocolPreviewClone .protocol-table td:first-child{
+  color:#333333!important;
+  text-align:left!important;
+}
+body.print-preview-open #printProtocolPreviewClone .protocol-table td:last-child{
+  color:#000000!important;
+  text-align:right!important;
+  font-weight:bold!important;
+}
+body.print-preview-open #pdfPreviewModal .modal-actions,
+body.print-preview-open #pdfPreviewModal .modal-actions *{
+  background:#ffffff!important;
+  color:#000000!important;
+}
+body.print-preview-open #pdfPreviewModal .modal-actions button{
+  background:#111827!important;
+  color:#ffffff!important;
+  border-color:#111827!important;
+  box-shadow:none!important;
+}
+@media(max-width:700px){
+  body.print-preview-open #pdfPreviewModal{padding:8px!important;}
+  body.print-preview-open #pdfPreviewModal .modal{width:96vw!important;max-width:96vw!important;padding:8px!important;}
+  body.print-preview-open #printPreviewContent{padding:6mm!important;}
+  body.print-preview-open #printProtocolPreviewClone{width:100%!important;max-width:100%!important;}
+}
+
+
+
+/* Oprava tmavého fleku při tisku z dark mode: tiskne se jen bílý protokol */
+@media print{
+  @page{background:#ffffff!important;margin:10mm!important;}
+  html,
+  body,
+  html[data-theme="dark"],
+  html[data-theme="dark"] body{
+    background:#ffffff!important;
+    color:#000000!important;
+    margin:0!important;
+    padding:0!important;
+    min-height:0!important;
+    overflow:visible!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  body::before,
+  body::after{
+    display:none!important;
+    content:none!important;
+  }
+  body.print-protocol > *:not(#printProtocolPage){
+    display:none!important;
+    visibility:hidden!important;
+  }
+  body.print-protocol #pdfPreviewModal,
+  body.print-protocol .modal-backdrop,
+  body.print-protocol .sticky-actions{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    background:#ffffff!important;
+  }
+  body.print-protocol #printProtocolPage{
+    display:block!important;
+    visibility:visible!important;
+    position:static!important;
+    inset:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    background:#ffffff!important;
+    color:#000000!important;
+    box-shadow:none!important;
+    filter:none!important;
+  }
+  body.print-protocol #printProtocolPage,
+  body.print-protocol #printProtocolPage *{
+    background:#ffffff!important;
+    color:#000000!important;
+    box-shadow:none!important;
+    text-shadow:none!important;
+    filter:none!important;
+  }
+  body.print-protocol #printProtocolPage .protocol-box{
+    border:1px solid #bbbbbb!important;
+    margin:0 0 5px 0!important;
+    padding:6px!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  body.print-protocol #printProtocolPage .protocol-table td{
+    border-bottom:1px solid #e5e5e5!important;
+  }
+}
+
+/* Náhled Tisk/PDF: spodní část modalu je také vždy bílá */
+body.print-preview-open #pdfPreviewModal .modal,
+body.print-preview-open #printPreviewContent{
+  background:#ffffff!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.20)!important;
+}
+body.print-preview-open #printPreviewContent::after{
+  content:'';
+  display:block;
+  height:1px;
+  background:#ffffff!important;
+}
+
+
+
+/* Final fix: po návratu z tisku zůstává náhled bílý a mobilní spodní lišta je stejná jako klasická */
+body.print-preview-open,
+body.print-preview-open #pdfPreviewModal,
+body.print-preview-open #pdfPreviewModal .modal,
+body.print-preview-open #printPreviewContent,
+body.print-preview-open #printPreviewContent *{
+  background-color:#ffffff!important;
+  color:#000000!important;
+  border-color:#cccccc!important;
+}
+body.print-preview-open #pdfPreviewModal{
+  background:rgba(0,0,0,.62)!important;
+}
+body.print-preview-open #pdfPreviewModal .modal-actions button{
+  background:#111827!important;
+  color:#ffffff!important;
+}
+body.mobile-mode .sticky-actions{
+  left:10px!important;
+  right:10px!important;
+  bottom:10px!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  gap:2px!important;
+  border-radius:28px!important;
+  padding:8px max(8px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left))!important;
+}
+body.mobile-mode .sticky-actions button{
+  min-height:50px!important;
+  font-size:11px!important;
+  padding:6px 2px!important;
+}
+body.mobile-mode #mobileToggleBtn{
+  grid-column:auto!important;
+}
+@media(max-width:700px){
+  body.mobile-mode{
+    padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+
+/* PVGIS-like grafy: čisté měsíční sloupce, čitelná osa a papírový podklad */
+.chart-box{
+  background:linear-gradient(180deg,var(--card),var(--card-soft))!important;
+  border:1.5px solid var(--line)!important;
+  border-radius:16px!important;
+  padding:14px!important;
+}
+html[data-theme="dark"] .chart-box{
+  background:linear-gradient(180deg,#0b0b0b,#050505)!important;
+  border-color:rgba(96,165,250,.34)!important;
+}
+@media(max-width:700px){
+  .chart-box{height:320px!important;padding:10px!important;}
+}
+
+
+/* Tlačítko načtení polohy v mapě */
+#mapWrap{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+}
+#mapWrap #map{
+  width:100%;
+}
+#pvgisMapBtn{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:1200;
+  width:auto!important;
+  max-width:calc(100% - 24px);
+  margin:0!important;
+  padding:10px 14px!important;
+  min-height:42px!important;
+  border-radius:14px!important;
+  background:#111827!important;
+  color:#ffffff!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.35)!important;
+  font-size:13px!important;
+  line-height:1.1!important;
+  white-space:nowrap;
+}
+#pvgisMapBtn:disabled{
+  opacity:.75;
+  cursor:not-allowed;
+}
+html[data-theme="dark"] #pvgisMapBtn{
+  background:#ffffff!important;
+  color:#000000!important;
+  border-color:rgba(0,0,0,.25)!important;
+}
+@media(max-width:700px){
+  #pvgisMapBtn{
+    left:10px;
+    bottom:10px;
+    font-size:12px!important;
+    padding:9px 12px!important;
+  }
+}
+@media print{
+  #mapWrap,#pvgisMapBtn{display:none!important}
+}
+
+
+
+/* Přehledná měsíční karta místo široké tabulky */
+#monthBlock{overflow:visible!important;max-height:none;}
+#monthTable{display:none!important;}
+.month-card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;
+  margin-top:10px;
+}
+.month-card{
+  border:1.5px solid var(--line);
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--card),var(--card-soft,#f8fafc));
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+  overflow:hidden;
+}
+.month-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  background:rgba(148,163,184,.10);
+}
+.month-card-title{font-weight:800;font-size:16px;}
+.month-card-badge{
+  font-size:12px;
+  font-weight:800;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid currentColor;
+  white-space:nowrap;
+}
+.month-card-body{padding:8px 14px 12px;}
+.month-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid rgba(148,163,184,.22);
+}
+.month-row:last-child{border-bottom:none;}
+.month-label{color:var(--muted);font-size:13px;}
+.month-value{font-weight:800;text-align:right;white-space:nowrap;}
+.month-value input{
+  max-width:96px;
+  text-align:right;
+  margin:0;
+  min-height:34px;
+  padding:6px 8px;
+  font-size:14px;
+}
+.month-summary{
+  margin-top:8px;
+  padding:9px 10px;
+  border-radius:12px;
+  background:rgba(148,163,184,.10);
+  font-weight:800;
+  text-align:center;
+}
+@media(max-width:700px){
+  .month-card-grid{grid-template-columns:1fr;}
+  .month-row{grid-template-columns:1fr auto;}
+}
+@media print{
+  .month-card{box-shadow:none!important;break-inside:avoid;}
+}
+
+
+
+
+
+/* Jednotné zvýraznění hlavních výpočtových částí */
+.calc-highlight{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:10px;
+  margin:0 0 12px;
+}
+.calc-metric{
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  background:linear-gradient(180deg,rgba(37,99,235,.08),rgba(37,99,235,.03));
+  box-shadow:0 8px 22px rgba(15,23,42,.08);
+}
+.calc-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.calc-value{
+  font-size:22px;
+  line-height:1.1;
+  font-weight:900;
+  color:var(--blue);
+}
+.calc-value.ok{color:var(--ok)!important}
+.calc-value.bad{color:var(--bad)!important}
+.calc-note{
+  grid-column:1 / -1;
+  font-size:12px;
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--card-soft);
+}
+html[data-theme="dark"] .calc-metric{
+  background:linear-gradient(180deg,rgba(96,165,250,.18),rgba(96,165,250,.06));
+  box-shadow:0 10px 28px rgba(0,0,0,.45);
+}
+@media print{
+  .calc-highlight{grid-template-columns:repeat(4,1fr)!important;gap:5px!important;margin-bottom:6px!important}
+  .calc-metric{box-shadow:none!important;border:1px solid #ccc!important;background:#fff!important;padding:6px!important;border-radius:6px!important}
+  .calc-label{font-size:8px!important;color:#333!important;margin-bottom:2px!important}
+  .calc-value{font-size:12px!important;color:#000!important}
+  .calc-value.ok{color:#047857!important}
+  .calc-value.bad{color:#b91c1c!important}
+  .calc-note{font-size:8px!important;background:#fff!important;color:#333!important;border-color:#ccc!important;padding:4px!important}
+}
+
+/* Zvýraznění měniče ve výpočtech */
+.inverter-highlight{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:10px;
+  margin:0 0 12px;
+}
+.inverter-metric{
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  background:linear-gradient(180deg,rgba(37,99,235,.08),rgba(37,99,235,.03));
+  box-shadow:0 8px 22px rgba(15,23,42,.08);
+}
+.inverter-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.inverter-value{
+  font-size:22px;
+  line-height:1.1;
+  font-weight:900;
+  color:var(--blue);
+}
+.inverter-value.ok{color:var(--ok)!important}
+.inverter-value.bad{color:var(--bad)!important}
+.inverter-note{
+  grid-column:1 / -1;
+  font-size:12px;
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--card-soft);
+}
+html[data-theme="dark"] .inverter-metric{
+  background:linear-gradient(180deg,rgba(96,165,250,.18),rgba(96,165,250,.06));
+  box-shadow:0 10px 28px rgba(0,0,0,.45);
+}
+@media print{
+  .inverter-highlight{grid-template-columns:repeat(4,1fr)!important;gap:5px!important;margin-bottom:6px!important}
+  .inverter-metric{box-shadow:none!important;border:1px solid #ccc!important;background:#fff!important;padding:6px!important;border-radius:6px!important}
+  .inverter-label{font-size:8px!important;color:#333!important;margin-bottom:2px!important}
+  .inverter-value{font-size:12px!important;color:#000!important}
+  .inverter-value.ok{color:#047857!important}
+  .inverter-value.bad{color:#b91c1c!important}
+  .inverter-note{font-size:8px!important;background:#fff!important;color:#333!important;border-color:#ccc!important;padding:4px!important}
+}
+
+
+/* Finální úprava: hodnoty kabelů a jištění na jeden řádek */
+.calc-metric .calc-value{
+  font-size:clamp(12px,2.3vw,14px);
+  white-space:nowrap;
+  letter-spacing:-0.2px;
+}
+.cable-value{
+  font-size:clamp(12px,2.3vw,14px)!important;
+  white-space:nowrap!important;
+  letter-spacing:-0.2px;
+}
+
+
+
+/* TOP verze výsledkových karet – větší hlavní hodnoty a jednotný dashboard styl */
+.calc-highlight{
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important;
+  gap:12px!important;
+  margin:0 0 14px!important;
+}
+.calc-metric{
+  position:relative;
+  overflow:hidden;
+  min-height:92px;
+  border:1px solid rgba(37,99,235,.22)!important;
+  border-radius:20px!important;
+  padding:14px 14px 13px!important;
+  background:linear-gradient(180deg,rgba(37,99,235,.105),rgba(37,99,235,.035))!important;
+  box-shadow:0 12px 30px rgba(15,23,42,.10)!important;
+}
+.calc-metric::before{
+  content:'';
+  position:absolute;
+  left:0;right:0;top:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--blue),rgba(37,99,235,.20));
+}
+.calc-label{
+  font-size:12px!important;
+  line-height:1.2!important;
+  color:var(--muted)!important;
+  margin-bottom:8px!important;
+  font-weight:800!important;
+  letter-spacing:.01em;
+}
+.calc-value,
+.calc-metric .calc-value{
+  font-size:clamp(24px,3.9vw,34px)!important;
+  line-height:1.04!important;
+  font-weight:950!important;
+  color:var(--blue)!important;
+  letter-spacing:-.035em!important;
+  white-space:normal!important;
+}
+.calc-value.ok{color:var(--ok)!important}
+.calc-value.bad{color:var(--bad)!important}
+.calc-note{
+  margin-top:0!important;
+  border-radius:16px!important;
+  padding:10px 12px!important;
+  font-size:12px!important;
+}
+html[data-theme="dark"] .calc-metric{
+  border-color:rgba(96,165,250,.35)!important;
+  background:linear-gradient(180deg,rgba(96,165,250,.20),rgba(96,165,250,.055))!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.55)!important;
+}
+
+/* Kabelový souhrn má delší hodnoty typu 4 mm² / 16 A, proto zůstává kompaktní a na jeden řádek */
+.cable-summary-highlight .calc-metric{
+  min-height:82px!important;
+}
+.cable-summary-highlight .calc-value,
+.cable-summary-highlight .calc-metric .calc-value{
+  font-size:clamp(15px,2.45vw,20px)!important;
+  line-height:1.08!important;
+  white-space:nowrap!important;
+  letter-spacing:-.025em!important;
+}
+
+@media(max-width:700px){
+  .calc-highlight{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+  .calc-metric{
+    min-height:86px!important;
+    padding:12px 10px!important;
+    border-radius:17px!important;
+  }
+  .calc-label{
+    font-size:11px!important;
+    margin-bottom:7px!important;
+  }
+  .calc-value,
+  .calc-metric .calc-value{
+    font-size:clamp(21px,7vw,27px)!important;
+  }
+  .cable-summary-highlight .calc-value,
+  .cable-summary-highlight .calc-metric .calc-value{
+    font-size:clamp(13px,4.2vw,16px)!important;
+  }
+}
+
+@media print{
+  .calc-highlight{grid-template-columns:repeat(4,1fr)!important;gap:5px!important;margin-bottom:6px!important}
+  .calc-metric{min-height:auto!important;box-shadow:none!important;border:1px solid #ccc!important;background:#fff!important;padding:6px!important;border-radius:6px!important}
+  .calc-metric::before{display:none!important}
+  .calc-label{font-size:8px!important;color:#333!important;margin-bottom:2px!important}
+  .calc-value,.calc-metric .calc-value{font-size:12px!important;color:#000!important;white-space:normal!important;letter-spacing:0!important}
+  .cable-summary-highlight .calc-value,.cable-summary-highlight .calc-metric .calc-value{font-size:10px!important;white-space:nowrap!important}
+  .calc-value.ok{color:#047857!important}
+  .calc-value.bad{color:#b91c1c!important}
+}
+
+
+
+/* Finální sjednocení výsledkových karet – menší jednotné hodnoty */
+.calc-highlight{
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important;
+  gap:11px!important;
+}
+.calc-metric{
+  min-height:82px!important;
+  padding:12px 12px 11px!important;
+  border-radius:18px!important;
+}
+.calc-label{
+  font-size:12px!important;
+  line-height:1.2!important;
+  margin-bottom:7px!important;
+}
+.calc-value,
+.calc-metric .calc-value{
+  font-size:clamp(18px,2.8vw,24px)!important;
+  line-height:1.12!important;
+  font-weight:850!important;
+  letter-spacing:-.02em!important;
+  white-space:normal!important;
+}
+.cable-summary-highlight .calc-metric{
+  min-height:112px!important;
+}
+.cable-stack{
+  display:grid;
+  gap:4px;
+  line-height:1.15;
+  font-size:clamp(14px,2.2vw,18px)!important;
+  letter-spacing:-.015em!important;
+}
+.cable-stack-row{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  border-top:1px solid rgba(148,163,184,.28);
+  padding-top:4px;
+}
+.cable-stack-row:first-child{
+  border-top:none;
+  padding-top:0;
+}
+.cable-stack-label{
+  color:var(--muted);
+  font-size:.72em;
+  font-weight:800;
+  letter-spacing:0;
+}
+.cable-stack-value{
+  color:inherit;
+  font-weight:900;
+  white-space:nowrap;
+}
+@media(max-width:700px){
+  .calc-highlight{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .calc-metric{min-height:78px!important;padding:10px 9px!important}
+  .calc-label{font-size:10.5px!important;margin-bottom:6px!important}
+  .calc-value,.calc-metric .calc-value{font-size:clamp(17px,5.5vw,22px)!important}
+  .cable-summary-highlight .calc-metric{min-height:106px!important}
+  .cable-stack{font-size:clamp(12px,3.9vw,15px)!important}
+}
+@media print{
+  .calc-value,.calc-metric .calc-value{font-size:11px!important;letter-spacing:0!important}
+  .cable-summary-highlight .calc-metric{min-height:auto!important}
+  .cable-stack{font-size:9px!important;gap:2px!important}
+  .cable-stack-row{padding-top:2px!important;gap:4px!important}
+}
+
+
+
+/* verze 3 – větší hodnoty v souhrnu Kabely a jištění */
+.cable-summary-highlight .calc-metric{
+  min-height:118px!important;
+}
+.cable-summary-highlight .cable-stack{
+  font-size:clamp(16px,2.7vw,22px)!important;
+  gap:6px!important;
+  line-height:1.16!important;
+}
+.cable-summary-highlight .cable-stack-row{
+  gap:10px!important;
+  padding-top:6px!important;
+}
+.cable-summary-highlight .cable-stack-row:first-child{
+  padding-top:0!important;
+}
+.cable-summary-highlight .cable-stack-label{
+  font-size:.68em!important;
+}
+.cable-summary-highlight .cable-stack-value{
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+@media(max-width:700px){
+  .cable-summary-highlight .calc-metric{min-height:112px!important}
+  .cable-summary-highlight .cable-stack{font-size:clamp(14px,4.3vw,18px)!important}
+}
+@media print{
+  .cable-summary-highlight .cable-stack{font-size:10px!important;gap:2px!important}
+}
+
+
+
+/* verze 3 – kompaktní výška tabulek a výsledkových karet */
+body{
+  line-height:1.32!important;
+}
+.card{
+  padding:10px 12px!important;
+  margin-bottom:10px!important;
+}
+.card h2{
+  margin-bottom:8px!important;
+}
+.card h3{
+  margin-bottom:6px!important;
+}
+.calc-highlight{
+  gap:8px!important;
+  margin-bottom:10px!important;
+}
+.calc-metric{
+  min-height:68px!important;
+  padding:9px 10px 8px!important;
+  border-radius:15px!important;
+}
+.calc-metric::before{
+  height:3px!important;
+}
+.calc-label{
+  font-size:11px!important;
+  margin-bottom:4px!important;
+  line-height:1.12!important;
+}
+.calc-value,
+.calc-metric .calc-value{
+  font-size:clamp(17px,2.45vw,22px)!important;
+  line-height:1.05!important;
+}
+.calc-note{
+  padding:7px 9px!important;
+  font-size:11.5px!important;
+}
+.cable-summary-highlight .calc-metric{
+  min-height:88px!important;
+}
+.cable-summary-highlight .cable-stack{
+  font-size:clamp(15px,2.35vw,20px)!important;
+  gap:3px!important;
+  line-height:1.08!important;
+}
+.cable-summary-highlight .cable-stack-row{
+  padding-top:3px!important;
+  gap:8px!important;
+}
+.cable-summary-highlight .cable-stack-label{
+  font-size:.64em!important;
+}
+.cable-card{
+  border-radius:16px!important;
+}
+.cable-card h4{
+  padding:10px 12px!important;
+  font-size:14px!important;
+}
+.cable-row{
+  min-height:30px!important;
+  padding:7px 12px!important;
+  gap:8px!important;
+}
+.cable-status{
+  margin:8px 12px 12px!important;
+  padding:8px 10px!important;
+}
+.month-card{
+  padding:10px!important;
+}
+.month-row{
+  padding:4px 0!important;
+}
+th,td{
+  padding:5px!important;
+}
+@media(max-width:700px){
+  .card{padding:9px 10px!important;margin-bottom:9px!important}
+  .calc-highlight{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  .calc-metric{min-height:64px!important;padding:8px 8px 7px!important}
+  .calc-label{font-size:10px!important;margin-bottom:3px!important}
+  .calc-value,.calc-metric .calc-value{font-size:clamp(16px,5vw,20px)!important}
+  .cable-summary-highlight .calc-metric{min-height:82px!important}
+  .cable-summary-highlight .cable-stack{font-size:clamp(13px,4vw,16px)!important}
+}
+@media print{
+  .card{padding:5px!important;margin:3px 0!important}
+  .calc-highlight{gap:4px!important;margin-bottom:4px!important}
+  .calc-metric{min-height:auto!important;padding:5px!important}
+  .calc-label{font-size:7.5px!important;margin-bottom:1px!important}
+  .calc-value,.calc-metric .calc-value{font-size:10px!important;line-height:1.05!important}
+  .cable-summary-highlight .cable-stack{font-size:8.5px!important;gap:1px!important}
+  .cable-summary-highlight .cable-stack-row{padding-top:1px!important}
+}
+
+
+/* verze 3 – větší hodnoty, menší rámečky */
+.calc-highlight{
+  gap:7px!important;
+  margin-bottom:8px!important;
+}
+.calc-metric{
+  min-height:58px!important;
+  padding:6px 8px 6px!important;
+  border-radius:12px!important;
+}
+.calc-metric::before{
+  height:2px!important;
+}
+.calc-label{
+  font-size:10px!important;
+  margin-bottom:2px!important;
+  line-height:1.08!important;
+}
+.calc-value,
+.calc-metric .calc-value{
+  font-size:clamp(20px,3.2vw,28px)!important;
+  line-height:1.02!important;
+  font-weight:950!important;
+  letter-spacing:-.03em!important;
+}
+.calc-note{
+  padding:6px 8px!important;
+  font-size:11px!important;
+  border-radius:10px!important;
+}
+.cable-summary-highlight .calc-metric{
+  min-height:72px!important;
+}
+.cable-summary-highlight .cable-stack{
+  font-size:clamp(17px,2.8vw,23px)!important;
+  gap:2px!important;
+  line-height:1.04!important;
+}
+.cable-summary-highlight .cable-stack-row{
+  padding-top:2px!important;
+  gap:8px!important;
+}
+.cable-summary-highlight .cable-stack-label{
+  font-size:.58em!important;
+}
+.cable-summary-highlight .cable-stack-value{
+  font-weight:950!important;
+}
+.card{
+  padding:8px 10px!important;
+  margin-bottom:8px!important;
+}
+.card h2{margin-bottom:6px!important}
+.card h3{margin-bottom:4px!important}
+@media(max-width:700px){
+  .calc-highlight{gap:6px!important}
+  .calc-metric{min-height:56px!important;padding:6px 7px!important;border-radius:11px!important}
+  .calc-label{font-size:9.5px!important;margin-bottom:2px!important}
+  .calc-value,.calc-metric .calc-value{font-size:clamp(18px,6vw,24px)!important}
+  .cable-summary-highlight .calc-metric{min-height:68px!important}
+  .cable-summary-highlight .cable-stack{font-size:clamp(15px,4.7vw,20px)!important}
+}
+@media print{
+  .calc-metric{padding:4px!important;border-radius:5px!important}
+  .calc-label{font-size:7px!important}
+  .calc-value,.calc-metric .calc-value{font-size:11px!important}
+  .cable-summary-highlight .cable-stack{font-size:9px!important}
+}
+
+
+
+/* Verze 3 – Kabely a jištění pod sebou: Průřez / Jištění */
+.cable-mini-table{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:5px!important;
+  width:100%!important;
+  margin-top:2px!important;
+}
+.cable-mini-cell{
+  border:1px solid rgba(148,163,184,.35)!important;
+  border-radius:10px!important;
+  padding:5px 6px!important;
+  text-align:left!important;
+  background:rgba(255,255,255,.08)!important;
+  min-width:0!important;
+}
+.cable-mini-label{
+  display:block!important;
+  font-size:10px!important;
+  line-height:1.05!important;
+  color:var(--muted)!important;
+  font-weight:800!important;
+  margin-bottom:2px!important;
+}
+.cable-mini-value{
+  display:block!important;
+  font-size:clamp(18px,3.2vw,24px)!important;
+  line-height:1.05!important;
+  color:inherit!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+  letter-spacing:-.03em!important;
+}
+html[data-theme="dark"] .cable-mini-cell{
+  background:rgba(96,165,250,.08)!important;
+  border-color:rgba(96,165,250,.28)!important;
+}
+@media(max-width:700px){
+  .cable-mini-table{gap:4px!important}
+  .cable-mini-cell{padding:5px 4px!important;border-radius:9px!important}
+  .cable-mini-label{font-size:9px!important}
+  .cable-mini-value{font-size:clamp(14px,4.3vw,18px)!important}
+}
+@media print{
+  .cable-mini-table{gap:2px!important}
+  .cable-mini-cell{padding:2px!important;border:1px solid #ccc!important;background:#fff!important;border-radius:4px!important}
+  .cable-mini-label{font-size:7px!important;color:#333!important;margin-bottom:1px!important}
+  .cable-mini-value{font-size:9px!important;color:#000!important;letter-spacing:0!important}
+}
+
+
+/* Zákaznické vyhodnocení systému */
+.customer-summary-card{
+  border-left:5px solid var(--ok)!important;
+}
+.customer-summary-card.summary-warn{border-left-color:var(--warn)!important}
+.customer-summary-card.summary-bad{border-left-color:var(--bad)!important}
+.customer-summary-headline{
+  font-size:clamp(18px,3.5vw,26px);
+  font-weight:900;
+  line-height:1.15;
+  margin:4px 0 6px;
+}
+.customer-summary-note{
+  font-size:14px;
+  color:var(--muted);
+  margin:3px 0 8px;
+}
+.customer-summary-table{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.customer-summary-cell{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:8px;
+  text-align:center;
+  background:var(--card-soft);
+}
+.customer-summary-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:3px;
+}
+.customer-summary-value{
+  font-size:clamp(18px,4.5vw,24px);
+  font-weight:900;
+  line-height:1.05;
+}
+.customer-summary-value.ok{color:var(--ok)!important}
+.customer-summary-value.warn{color:var(--warn)!important}
+.customer-summary-value.bad{color:var(--bad)!important}
+@media(max-width:700px){
+  .customer-summary-table{grid-template-columns:1fr;}
+  .customer-summary-cell{padding:7px;}
+}
+@media print{
+  .customer-summary-card{background:#fff!important;color:#000!important;border-left:4px solid #16a34a!important}
+  .customer-summary-cell{background:#fff!important;border-color:#ccc!important}
+  .customer-summary-headline,.customer-summary-note,.customer-summary-label,.customer-summary-value{color:#000!important}
+}
+
+
+
+/* Verze 3 – otevírací podstránky pro podrobnosti a měsíční přehled */
+.open-panel-actions{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important;
+  gap:8px!important;
+  margin:8px 0 12px!important;
+}
+.open-panel-actions.single{
+  grid-template-columns:1fr!important;
+}
+.open-panel-btn,
+.subpage-close-btn{
+  background:var(--tab-bg,rgba(255,255,255,.90))!important;
+  color:var(--tab-text,var(--text))!important;
+  border:1px solid var(--tab-line,var(--line))!important;
+  border-radius:22px!important;
+  min-height:46px!important;
+  padding:8px 12px!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  box-shadow:0 10px 26px rgba(15,23,42,.14)!important;
+  margin:0!important;
+}
+.open-panel-btn:hover,
+.subpage-close-btn:hover{
+  background:rgba(148,163,184,.18)!important;
+  color:var(--text)!important;
+}
+html[data-theme="dark"] .open-panel-btn,
+html[data-theme="dark"] .subpage-close-btn{
+  background:rgba(255,255,255,.10)!important;
+  color:#ffffff!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 22px rgba(0,0,0,.40)!important;
+}
+.subpage-backdrop{
+  position:fixed!important;
+  inset:0!important;
+  z-index:10050!important;
+  display:none!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+  padding:12px!important;
+  background:rgba(0,0,0,.58)!important;
+  overflow:auto!important;
+  box-sizing:border-box!important;
+}
+.subpage-backdrop.open{
+  display:flex!important;
+}
+body.subpage-open{
+  overflow:hidden!important;
+}
+.subpage{
+  width:min(1100px,100%)!important;
+  max-height:calc(100vh - 24px)!important;
+  overflow:auto!important;
+  background:var(--card)!important;
+  color:var(--text)!important;
+  border:1px solid var(--line)!important;
+  border-radius:24px!important;
+  padding:12px!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.38)!important;
+}
+.subpage-header{
+  position:sticky!important;
+  top:0!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:10px!important;
+  align-items:center!important;
+  padding:4px 0 10px!important;
+  margin-bottom:8px!important;
+  background:var(--card)!important;
+  border-bottom:1px solid var(--line)!important;
+}
+.subpage-header h2{
+  margin:0!important;
+  font-size:18px!important;
+}
+.subpage-close-btn{
+  width:auto!important;
+  min-width:92px!important;
+}
+.subpage-grid{
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;
+  gap:8px!important;
+}
+.subpage-grid .card{
+  border:1px solid rgba(37,99,235,.22)!important;
+  border-radius:14px!important;
+  padding:8px 10px!important;
+  margin:0!important;
+  background:linear-gradient(180deg,rgba(37,99,235,.08),rgba(37,99,235,.025))!important;
+  box-shadow:0 8px 20px rgba(15,23,42,.08)!important;
+  overflow:hidden!important;
+}
+.subpage-grid .card h3{
+  color:var(--muted)!important;
+  font-size:11px!important;
+  line-height:1.12!important;
+  margin:0 0 4px!important;
+  font-weight:900!important;
+}
+.subpage-grid .metric{
+  font-size:clamp(18px,3vw,26px)!important;
+  line-height:1.08!important;
+  font-weight:950!important;
+}
+.subpage-grid .small{
+  font-size:11px!important;
+}
+html[data-theme="dark"] .subpage-grid .card{
+  border-color:rgba(96,165,250,.30)!important;
+  background:linear-gradient(180deg,rgba(96,165,250,.16),rgba(96,165,250,.045))!important;
+  box-shadow:0 10px 26px rgba(0,0,0,.42)!important;
+}
+#monthBlock.subpage-backdrop{
+  max-height:none!important;
+  opacity:1!important;
+  margin:0!important;
+  padding:12px!important;
+  border:0!important;
+}
+#monthBlock.subpage-backdrop.closed{
+  display:none!important;
+}
+#monthBlock.subpage-backdrop.open{
+  display:flex!important;
+}
+.month-subpage .small{
+  margin:0 0 8px!important;
+}
+@media(max-width:700px){
+  .subpage-backdrop{padding:8px!important;}
+  .subpage{border-radius:20px!important;max-height:calc(100vh - 16px)!important;padding:10px!important;}
+  .subpage-header{grid-template-columns:1fr!important;}
+  .subpage-close-btn{width:100%!important;}
+  .subpage-grid{grid-template-columns:1fr 1fr!important;gap:7px!important;}
+  .subpage-grid .metric{font-size:clamp(16px,5.3vw,22px)!important;}
+  .open-panel-actions{grid-template-columns:1fr!important;}
+}
+@media print{
+  .open-panel-actions,.subpage-backdrop{display:none!important;}
+}
+
+
+
+/* Verze 3 – měsíční přehled zpět na stránce, ale standardně sbalený */
+#monthBlock.card{
+  margin-top:8px!important;
+  overflow:visible!important;
+  border:1px solid var(--line)!important;
+}
+#monthBlock.card.closed{
+  display:none!important;
+  max-height:0!important;
+  opacity:0!important;
+  padding:0!important;
+  margin:0!important;
+  border-width:0!important;
+}
+#monthBlock.card.open{
+  display:block!important;
+  max-height:none!important;
+  opacity:1!important;
+}
+#monthToggleBtn.open-panel-btn{
+  margin-bottom:8px!important;
+}
+@media print{
+  #monthToggleBtn,#monthBlock{display:none!important;}
+}
+
+
+/* Verze 3 – hlavní vyhodnocení čisté, souhrn pokrytí je v podrobnostech */
+.subpage .customer-summary-table{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.subpage .customer-summary-cell{
+  padding:7px 6px!important;
+}
+.month-panel-action{
+  margin:8px 0 6px!important;
+}
+@media(max-width:700px){
+  .subpage .customer-summary-table{grid-template-columns:1fr!important;}
+}
+
+
+
+/* Verze 3 – grafy v tiskovém protokolu/PDF vždy viditelné jako obrázky */
+@media print{
+  body.print-protocol #printProtocolPage .protocol-charts,
+  body.print-protocol #printProtocolPage .protocol-chart-card,
+  body.print-protocol #printProtocolPage .protocol-chart-title,
+  body.print-protocol #printProtocolPage .protocol-chart-img{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+  body.print-protocol #printProtocolPage .protocol-charts{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:6px!important;
+    margin-top:4px!important;
+  }
+  body.print-protocol #printProtocolPage .protocol-chart-img{
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    background:#ffffff!important;
+    border:0!important;
+  }
+}
+
+
+
+/* Verze 3 – podrobnosti systému a kabelů se otevírají přímo na místě, ne jako nová stránka */
+.subpage-backdrop{
+  position:static!important;
+  inset:auto!important;
+  z-index:auto!important;
+  display:none!important;
+  align-items:initial!important;
+  justify-content:initial!important;
+  padding:0!important;
+  margin:8px 0 12px!important;
+  background:transparent!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+.subpage-backdrop.open{
+  display:block!important;
+}
+body.subpage-open{
+  overflow:visible!important;
+}
+.subpage{
+  width:100%!important;
+  max-width:100%!important;
+  max-height:none!important;
+  overflow:visible!important;
+  background:var(--card)!important;
+  color:var(--text)!important;
+  border:1px solid var(--line)!important;
+  border-radius:18px!important;
+  padding:10px!important;
+  box-shadow:0 8px 22px rgba(15,23,42,.10)!important;
+  box-sizing:border-box!important;
+}
+.subpage-header{
+  position:static!important;
+  top:auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:8px!important;
+  align-items:center!important;
+  padding:0 0 8px!important;
+  margin:0 0 8px!important;
+  background:transparent!important;
+  border-bottom:1px solid var(--line)!important;
+}
+.subpage-header h2{
+  font-size:16px!important;
+}
+.subpage-close-btn{
+  min-height:40px!important;
+  min-width:82px!important;
+  border-radius:18px!important;
+  padding:7px 10px!important;
+}
+@media(max-width:700px){
+  .subpage{padding:8px!important;border-radius:16px!important;}
+  .subpage-header{grid-template-columns:1fr!important;}
+  .subpage-close-btn{width:100%!important;}
+}
+@media print{
+  .subpage-backdrop{display:none!important;}
+}
+
+
+
+/* Verze 3 finální: podrobnosti se rozbalují přímo na místě, bez tlačítka Skrýt */
+.inline-panel.subpage-backdrop{
+  position:static!important;
+  inset:auto!important;
+  display:block!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  background:transparent!important;
+  padding:0!important;
+  max-height:0!important;
+  overflow:hidden!important;
+  transition:max-height .32s ease, opacity .22s ease, margin .22s ease!important;
+  margin:0!important;
+}
+.inline-panel.subpage-backdrop.open{
+  max-height:2400px!important;
+  opacity:1!important;
+  margin:8px 0 10px!important;
+}
+.inline-panel.subpage-backdrop:not(.open){
+  opacity:0!important;
+}
+.inline-panel .subpage{
+  width:100%!important;
+  max-width:100%!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:0!important;
+  border:none!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.inline-panel .subpage-header{
+  display:block!important;
+  margin:0 0 6px!important;
+}
+.inline-panel .subpage-header h2{
+  margin:0!important;
+  font-size:18px!important;
+}
+.inline-panel .subpage-close-btn{
+  display:none!important;
+}
+.inline-panel .subpage-grid{
+  margin-top:0!important;
+}
+@media print{
+  .inline-panel.subpage-backdrop{display:none!important;}
+}
+
+
+
+/* Finální stavové zobrazení PVGIS mapy – bez modrého ohraničení */
+#pvgisMapBtn,
+html[data-theme="dark"] #pvgisMapBtn,
+html[data-theme="light"] #pvgisMapBtn{
+  left:12px!important;
+  right:auto!important;
+  bottom:12px!important;
+  border:none!important;
+  outline:none!important;
+  box-shadow:0 10px 26px rgba(0,0,0,.38)!important;
+  color:#111827!important;
+  font-weight:900!important;
+  background:#facc15!important;
+  text-shadow:none!important;
+}
+#pvgisMapBtn:focus,
+#pvgisMapBtn:focus-visible,
+#pvgisMapBtn:active{
+  border:none!important;
+  outline:none!important;
+  box-shadow:0 10px 26px rgba(0,0,0,.38)!important;
+}
+#pvgisMapBtn.pvgis-default,
+html[data-theme="dark"] #pvgisMapBtn.pvgis-default{
+  background:linear-gradient(180deg,#fde047,#facc15)!important;
+  color:#111827!important;
+}
+#pvgisMapBtn.pvgis-loading,
+html[data-theme="dark"] #pvgisMapBtn.pvgis-loading{
+  background:linear-gradient(180deg,#ef4444,#b91c1c)!important;
+  color:#ffffff!important;
+  animation:none!important;
+}
+#pvgisMapBtn.pvgis-done,
+html[data-theme="dark"] #pvgisMapBtn.pvgis-done{
+  background:linear-gradient(180deg,#22c55e,#15803d)!important;
+  color:#ffffff!important;
+}
+#pvgisMapBtn.pvgis-error,
+html[data-theme="dark"] #pvgisMapBtn.pvgis-error{
+  background:linear-gradient(180deg,#f87171,#dc2626)!important;
+  color:#ffffff!important;
+}
+@keyframes pvgisPulseGlow{
+  0%,100%{transform:scale(1);box-shadow:0 10px 26px rgba(0,0,0,.38),0 0 0 rgba(239,68,68,0)!important;}
+  50%{transform:scale(1.035);box-shadow:0 14px 34px rgba(0,0,0,.46),0 0 24px rgba(239,68,68,.72)!important;}
+}
+#pvgisState{
+  display:inline-block;
+  margin-top:8px!important;
+  padding:0!important;
+  border-radius:0!important;
+  font-weight:900!important;
+  border:none!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#pvgisState.pvgis-default-state{
+  background:transparent!important;
+  color:#ca8a04!important;
+}
+#pvgisState.pvgis-loading-state{
+  background:transparent!important;
+  color:#dc2626!important;
+}
+#pvgisState.pvgis-done-state{
+  background:transparent!important;
+  color:#16a34a!important;
+}
+#pvgisState.pvgis-error-state{
+  background:transparent!important;
+  color:#dc2626!important;
+}
+html[data-theme="dark"] #pvgisState.pvgis-default-state{
+  background:transparent!important;
+  color:#fde047!important;
+}
+html[data-theme="dark"] #pvgisState.pvgis-loading-state,
+html[data-theme="dark"] #pvgisState.pvgis-error-state{
+  background:transparent!important;
+  color:#f87171!important;
+}
+html[data-theme="dark"] #pvgisState.pvgis-done-state{
+  background:transparent!important;
+  color:#22c55e!important;
+}
+@media(max-width:700px){
+  #pvgisMapBtn{left:10px!important;bottom:10px!important;font-size:12px!important;padding:9px 12px!important;}
+}
+
+</style>
+</head>
+
+<body>
+<h1>FVE konfigurátor <span class="app-version">verze 3</span></h1>
+
+
+<div class="card">
+  <h2>Mapa a PVGIS</h2>
+  <div id="mapWrap">
+    <div id="map"></div>
+    <button type="button" id="pvgisMapBtn" class="pvgis-default" onclick="manualPVGIS()">Načíst z mapy</button>
+  </div>
+  <div id="pvgisState" class="small pvgis-default-state">🟡 PVGIS připraveno – klikni do mapy</div>
+  <p class="small">Klikni do mapy nebo změň souřadnice. Potom použij tlačítko <b>Načíst polohu</b> přímo v mapě. Stejná poloha se ukládá do cache.</p>
+</div>
+<div class="grid">
+  <div class="card">
+    <h2>PVGIS / poloha</h2>
+    <p class="small">Online načtení polohy je dostupné přímo v levém dolním rohu mapy. Stejná poloha se ukládá do cache, aby se zbytečně nevolala online služba. Soubor PVGIS JSON lze vložit dole tlačítkem <b>Import PVGIS JSON</b>.</p>
+    <a class="buttonlink" href="https://re.jrc.ec.europa.eu/pvg_tools/en/" target="_blank" rel="noopener noreferrer">Otevřít PVGIS</a>
+    
+    <div class="grid-2">
+      <div><label>Latitude</label><input id="lat" type="number" step="0.0001" value="50.0755"></div>
+      <div><label>Longitude</label><input id="lon" type="number" step="0.0001" value="14.4378"></div>
+      <div><label>Sklon [°]</label><input id="angle" type="number" value="35"></div>
+      <div><label>Azimut [°]</label><input id="aspect" type="number" value="0"></div>
+      <div><label>Ztráty [%]</label><input id="loss" type="number" value="14"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Vstupy návrhu</h2>
+    <label>Režim výpočtu</label>
+    <select id="mode">
+      <option value="pole">Podle FV pole → dopočítat denní spotřebu</option>
+      <option value="spotreba">Podle denní spotřeby → dopočítat FV pole</option>
+    </select>
+    <div class="small">Obousměrná vazba: v režimu FV pole se dopočítá denní spotřeba; v režimu denní spotřeba se dopočítá potřebné FV pole. Výpočet používá zvolený režim návrhu. Zimní deficit je samostatné upozornění, ne automatický důvod extrémně zvětšovat FV pole.</div>
+    <label>Kolik energie má fotovoltaika pokrýt</label>
+    <select id="targetCoverage">
+      <option value="70">Úsporné řešení (cca 70 %)</option>
+      <option value="90" selected>Vyvážené řešení (cca 90 %) – doporučeno</option>
+      <option value="110">Maximální výkon (100 %+) – vyšší přebytky</option>
+    </select>
+    <div id="coverageInfo" class="small">Vyvážený systém s dobrým poměrem cena/výkon.</div>
+    <label>Režim návrhu FV pole</label>
+    <select id="designPeriod">
+      <option value="year" selected>Roční bilance – doporučeno</option>
+      <option value="summer">Letní / sezónní provoz</option>
+      <option value="winter">Zimní soběstačnost – výrazně zvětší FV pole</option>
+    </select>
+    <div class="small">Profesionální návrh nemá automaticky dimenzovat FV pole jen na zimu. Zimní deficit se vyhodnocuje samostatně.</div>
+    <label>Denní spotřeba [Wh]</label><input id="dailyWh" type="number" value="1383">
+    <label>Výkon pole ručně [Wp]</label><input id="fieldManual" type="number" value="600">
+    <label>Účinnost systému</label><input id="eff" type="number" step="0.01" value="0.8">
+    <label>Účinnost měniče [%]</label><input id="invEff" type="number" value="92">
+    <label>Ztráty kabelů [%]</label><input id="cableLossPct" type="number" value="2">
+    <label>Rezerva znečištění / stáří [%]</label><input id="agingLossPct" type="number" value="5">
+    <label>Napětí systému</label>
+    <select id="voltageMode"><option value="12">12 V</option><option value="24" selected>24 V</option><option value="48">48 V</option></select>
+    <label>Typ baterie</label>
+    <select id="batteryType"><option value="lifepo">LiFePO4</option><option value="lead">Olovo</option></select>
+    <label>DoD baterie</label><input id="dod" type="number" step="0.01" value="0.85" disabled>
+    <label>Dny zálohy</label><input id="backupDays" type="number" step="0.5" value="2">
+    <label>Požadovaná kapacita baterie</label>
+    <div style="display:grid;grid-template-columns:1fr 90px;gap:8px">
+      <input id="batteryManual" type="number" placeholder="hodnota / doporučená baterie">
+      <select id="batUnit"><option value="Wh">Wh</option><option value="Ah">Ah</option></select>
+    </div>
+    <button type="button" onclick="autoBattery()">Automatický návrh baterie</button>
+    <label>Výkon měniče [W]</label><input id="inverterW" type="number" value="1000">
+    <div class="small">Clipping měniče se počítá automaticky podle výkonu měniče. Software zároveň kontroluje, zda není měnič moc silný pro zadanou baterii.</div>
+    <label>Max. proud BMS [A]</label><input id="bmsMax" type="number" value="100">
+    <label>Typ regulátoru</label><select id="regType"><option value="mppt">MPPT</option><option value="pwm">PWM</option></select>
+<label>Max. povolené FV pole regulátoru [Wp]</label><input id="regMaxPvWp" type="number" value="800">
+  </div>
+
+  <div class="card">
+    <h2>Panely a kabely</h2>
+    <label>Panely v sérii</label><input id="series" type="number" value="3">
+    <label>Počet paralelních stringů</label><input id="parallel" type="number" value="1"><div class="small">1 = pouze jeden sériový string, žádné paralelní spojení.</div>
+    <label>Výkon panelu [Wp]</label><input id="panelWp" type="number" value="200">
+    <label>Vmp panelu [V]</label><input id="vmp" type="number" step="0.01" value="23.65">
+    <label>Imp panelu [A]</label><input id="imp" type="number" step="0.01" value="8.46">
+    <label>Voc panelu [V]</label><input id="voc" type="number" step="0.01" value="27.95">
+    <label>Isc panelu [A]</label><input id="isc" type="number" step="0.01" value="8.97">
+    <label>Min. teplota [°C]</label><input id="tmin" type="number" value="-25">
+    <label>Koeficient Voc [%/°C]</label><input id="vocCoeff" type="number" step="0.01" value="0.28">
+    <label>Max. Voc regulátoru [V]</label><input id="maxVoc" type="number" value="100">
+    <label>Min. napětí MPPT [V]</label><input id="mpptMinV" type="number" value="30">
+    <label>Max. napětí MPPT [V]</label><input id="mpptMaxV" type="number" value="100">
+    <button type="button" onclick="autoDesignStrings()">Automatický návrh zapojení panelů</button>
+    <h3>Délky kabelů</h3>
+    <label>FV → regulátor [m]</label><input id="pvLen" type="number" step="0.1" value="10">
+    <label>Regulátor → baterie [m]</label><input id="batLen" type="number" step="0.1" value="2">
+    <label>Baterie → měnič [m]</label><input id="invLen" type="number" step="0.1" value="1.5">
+  </div>
+</div>
+
+<div class="card customer-summary-card" id="customerSummaryCard">
+  <h3>Vyhodnocení systému</h3>
+  <div id="customerSummary" class="customer-summary-headline">Výpočet se zobrazí po zadání hodnot.</div>
+  <div id="customerSummaryNote" class="customer-summary-note"></div>
+</div>
+
+<div class="open-panel-actions">
+  <button type="button" id="infoToggleBtn" class="open-panel-btn" onclick="openInfoPage()">Otevřít podrobnosti systému</button>
+</div>
+
+<div id="infoPage" class="subpage-backdrop inline-panel" aria-hidden="true">
+  <div class="subpage">
+    <div class="subpage-header">
+      <h2>Podrobnosti systému</h2>
+    </div>
+    <div class="grid subpage-grid">
+<div class="card"><h3>Stav systému</h3><div id="status" class="metric"></div></div>
+  <div class="card"><h3>Roční pokrytí</h3><div id="coverage" class="metric"></div></div>
+  <div class="card"><h3>Pokrytí léto</h3><div id="summerCoverage" class="metric"></div></div>
+  <div class="card"><h3>Pokrytí zima</h3><div id="winterCoverage" class="metric"></div></div>
+  <div class="card"><h3>Napětí systému</h3><div id="sysVoltage" class="metric"></div></div>
+  <div class="card"><h3>Dny bez slunce</h3><div id="sunlessDays" class="metric"></div></div>
+  <div class="card"><h3>Kritický měsíc</h3><div id="worstMonth" class="metric"></div></div>
+  <div class="card"><h3>Min. denní výroba</h3><div id="minDaily" class="metric"></div></div>
+  <div class="card"><h3>Clipping měniče</h3><div id="clippingOut" class="metric"></div><div class="small">Omezení výroby při překročení výkonu měniče.</div></div>
+  <div class="card"><h3>Varování</h3><div id="warning"></div></div>
+  <div class="card"><h3>Doporučení</h3><div id="recommendations"></div></div>
+    </div>
+  </div>
+</div>
+
+<h2>Výsledky</h2>
+<div class="grid-2">
+  <div class="card"><h3>FV pole</h3><p id="fveOut"></p></div>
+  <div class="card"><h3>Regulátor, baterie a měnič</h3><p id="regOut"></p></div>
+</div>
+
+<div class="card">
+  <h3>Kabely a jištění</h3>
+  <p id="cableOut"></p>
+</div>
+
+<div id="cablePage" class="subpage-backdrop inline-panel" aria-hidden="true">
+  <div class="subpage">
+    <div class="subpage-header">
+      <h2>Podrobnosti kabelů a jištění</h2>
+    </div>
+    <div id="cableDetails"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Grafické schéma zapojení</h3>
+  <div id="connectionDiagram"></div>
+</div>
+
+<div class="card">
+  <h3>Stav baterie během roku (SOC)</h3>
+  <p class="small">Ukazuje, jestli se baterie podle výroby a spotřeby během roku udrží, nebo se může vybít na nulu.</p>
+  <p id="socOut"></p>
+</div>
+
+<div class="card">
+  <h3>Graf nabití baterie</h3>
+  <div class="chart-box"><canvas id="chartSoc"></canvas></div>
+</div>
+
+<div class="card">
+  <h3>Tok energie</h3>
+  <div id="energyFlow" class="energy-flow"></div>
+</div>
+
+
+<div class="open-panel-actions month-panel-action">
+  <button type="button" id="monthToggleBtn" class="open-panel-btn" onclick="toggleMonthTable()">Otevřít měsíční přehled</button>
+</div>
+
+<div id="monthBlock" class="card closed" aria-hidden="true">
+  <h2>Měsíční přehled</h2>
+  <p class="small">Přehled po jednotlivých měsících bez posouvání do stran. Hodnotu PVGIS můžeš u každého měsíce ručně upravit.</p>
+  <div id="monthCards" class="month-card-grid"></div>
+  <table id="monthTable" aria-hidden="true"></table>
+</div>
+
+<div class="grid-2">
+  <div class="card"><h2>Výroba vs spotřeba</h2><div class="chart-box"><canvas id="chartProd"></canvas></div></div>
+  <div class="card"><h2>Přebytek / deficit</h2><div class="chart-box"><canvas id="chartDiff"></canvas></div></div>
+</div>
+
+
+<div id="printProtocolPage">
+  <div class="protocol-title">FVE návrhový protokol</div>
+  <div class="small">Jednostránkový souhrn pro zákazníka. Výpočty jsou orientační a je nutné je ověřit podle datasheetů komponent a platných ČSN/IEC.</div>
+
+  <div class="protocol-grid">
+    <div class="protocol-box">
+      <h3>Základ návrhu</h3>
+      <table class="protocol-table">
+        <tr><td>Režim</td><td id="p_mode"></td></tr>
+        <tr><td>FV pole</td><td id="p_field"></td></tr>
+        <tr><td>Zapojení panelů</td><td id="p_string"></td></tr>
+        <tr><td>Denní spotřeba</td><td id="p_daily"></td></tr>
+        <tr><td>Roční pokrytí</td><td id="p_coverage"></td></tr>
+        <tr><td>Léto / zima</td><td id="p_seasons"></td></tr>
+      </table>
+    </div>
+
+    <div class="protocol-box">
+      <h3>Regulátor / MPPT</h3>
+      <table class="protocol-table">
+        <tr><td>Regulátor</td><td id="p_reg"></td></tr>
+        <tr><td>Vmp stringu</td><td id="p_vmp"></td></tr>
+        <tr><td>Voc při min. teplotě</td><td id="p_voc"></td></tr>
+        <tr><td>MPPT stav</td><td id="p_mppt"></td></tr>
+      </table>
+    </div>
+
+    <div class="protocol-box">
+      <h3>Baterie a měnič</h3>
+      <table class="protocol-table">
+        <tr><td>Baterie</td><td id="p_battery"></td></tr>
+        <tr><td>Dny bez slunce</td><td id="p_days"></td></tr>
+        <tr><td>Měnič</td><td id="p_inverter"></td></tr>
+        <tr><td>BMS proud</td><td id="p_bms"></td></tr>
+        <tr><td>C-rate</td><td id="p_crate"></td></tr>
+      </table>
+    </div>
+
+    <div class="protocol-box">
+      <h3>Kabely a jištění</h3>
+      <table class="protocol-table">
+        <tr><td>FV → regulátor</td><td id="p_cable_pv"></td></tr>
+        <tr><td>Regulátor → baterie</td><td id="p_cable_reg"></td></tr>
+        <tr><td>Baterie → měnič</td><td id="p_cable_inv"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="protocol-box">
+    <h3>Doporučení / upozornění</h3>
+    <div id="p_recommendations" style="font-size:10px"></div>
+  </div>
+
+  <div class="protocol-box">
+    <h3>Grafy</h3>
+    <div class="protocol-charts">
+      <div class="protocol-chart-card">
+        <div class="protocol-chart-title">Výroba vs spotřeba</div>
+        <img id="p_chart_prod_img" class="protocol-chart-img" alt="Graf výroby a spotřeby">
+      </div>
+      <div class="protocol-chart-card">
+        <div class="protocol-chart-title">Přebytek / deficit</div>
+        <img id="p_chart_diff_img" class="protocol-chart-img" alt="Graf přebytku a deficitu">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const months=[
+  ["Leden",31],["Únor",28],["Březen",31],["Duben",30],["Květen",31],["Červen",30],
+  ["Červenec",31],["Srpen",31],["Září",30],["Říjen",31],["Listopad",30],["Prosinec",31]
+];
+
+let pvgis=[20,40,85,115,135,145,150,135,95,55,25,15];
+let charts={};
+let pvgisValid=true;
+let pvgisStatusText='výchozí hodnoty';
+let pvgisTimeout=null;
+let mapObj=null;
+let markerObj=null;
+
+function el(id){return document.getElementById(id)}
+function val(id){return Number(String(el(id)?.value ?? 0).replace(",", "."))||0}
+function txt(id,v){if(el(id)) el(id).innerHTML=v}
+function round(v,d=0){return Math.round((v||0)*10**d)/10**d}
+function setStatusClass(id, cls){
+  if(el(id)) el(id).className = 'metric ' + cls;
+}
+
+function setPVGISButtonState(text, disabled=false, visual='default'){
+  const btn=el('pvgisMapBtn');
+  if(!btn) return;
+  btn.textContent=text || 'Načíst z mapy';
+  btn.disabled=!!disabled;
+  btn.classList.remove('pvgis-default','pvgis-loading','pvgis-done','pvgis-error');
+  btn.classList.add('pvgis-' + visual);
+}
+
+function setPVGISStateText(html, visual='default'){
+  const state=el('pvgisState');
+  if(!state) return;
+  state.innerHTML=html;
+  state.classList.remove('pvgis-default-state','pvgis-loading-state','pvgis-done-state','pvgis-error-state');
+  state.classList.add('pvgis-' + visual + '-state');
+}
+
+function updatePVGISState(){
+  if(pvgisStatusText==='načítám'){
+    setPVGISStateText('🔴 Načítá se…', 'loading');
+    setPVGISButtonState('Načítám…', true, 'loading');
+  }else if(!pvgisValid){
+    setPVGISStateText('🟡 Připraveno – klikni do mapy', 'default');
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+  }else if(pvgisValid && pvgisStatusText==='aktuální'){
+    setPVGISStateText('🟢 Načteno', 'done');
+    setPVGISButtonState('Načteno', false, 'done');
+  }else if(pvgisStatusText==='import JSON'){
+    setPVGISStateText('🟢 Načteno z JSON', 'done');
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+  }else if(pvgisStatusText==='ručně upravené'){
+    setPVGISStateText('🟡 Ručně upravené hodnoty', 'default');
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+  }else if(String(pvgisStatusText).includes('nepodařilo')){
+    setPVGISStateText('🔴 Nepodařilo se načíst', 'error');
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+  }else if(pvgisValid){
+    setPVGISStateText('🟡 Připraveno – klikni do mapy', 'default');
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+  }
+}
+
+function invalidatePVGIS(){
+  pvgisValid=false;
+  pvgisStatusText='neaktuální – čekám na nové načtení';
+  updatePVGISState();
+}
+
+async function fetchJsonWithTimeout(url, timeoutMs=8000){
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeoutMs);
+  try{
+    const res = await fetch(url,{cache:'no-store', signal:controller.signal});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    let data = await res.json();
+    // Některé CORS/proxy služby vrací JSON jako text v poli contents.
+    if(typeof data?.contents === 'string') data = JSON.parse(data.contents);
+    return data;
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+function pvgisCacheKey(lat,lon){
+  return 'pvgis_static_cache_' + [
+    Number(lat).toFixed(3),
+    Number(lon).toFixed(3),
+    val('loss'),
+    val('angle'),
+    val('aspect')
+  ].join('_');
+}
+
+function readPVGISCache(lat,lon){
+  try{
+    const raw = localStorage.getItem(pvgisCacheKey(lat,lon));
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    // cache 30 dní
+    if(!obj || !Array.isArray(obj.values) || Date.now() - obj.time > 30*24*60*60*1000) return null;
+    return obj.values;
+  }catch(e){
+    return null;
+  }
+}
+
+function savePVGISCache(lat,lon,values){
+  try{
+    localStorage.setItem(pvgisCacheKey(lat,lon), JSON.stringify({time:Date.now(), values:values.slice(0,12)}));
+  }catch(e){}
+}
+
+function canCallPVGISNow(){
+  // Zrychleno: bez minutového čekání; ochranu řeší cache a timeout požadavku.
+  localStorage.setItem('pvgis_last_call_time', String(Date.now()));
+  return {ok:true, seconds:0};
+}
+
+function buildPVGISDirectUrl(lat,lon){
+  const params = new URLSearchParams({
+    lat:String(lat),
+    lon:String(lon),
+    peakpower:'1',
+    loss:String(val('loss')),
+    angle:String(val('angle')),
+    aspect:String(val('aspect')),
+    mountingplace:'free',
+    pvtechchoice:'crystSi',
+    browser:'1',
+    outputformat:'json'
+  });
+  return `https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?${params.toString()}`;
+}
+
+async function loadPVGIS(lat,lon, forceOnline=false){
+  try{
+    const cached = readPVGISCache(lat,lon);
+    if(cached && !forceOnline){
+      pvgis = cached.slice(0,12);
+      pvgisValid=true;
+      pvgisStatusText='aktuální';
+      updatePVGISState();
+      calculate();
+      setPVGISButtonState('Načteno', false, 'done');
+      txt('warning','✅ Poloha načtena z lokální cache. Online služba se znovu nevolala.');
+      return;
+    }
+
+    canCallPVGISNow();
+
+    pvgisValid=true;
+    pvgisStatusText='načítám';
+    updatePVGISState();
+    setPVGISButtonState('Načítám…', true, 'loading');
+    txt('status','Načítá se…');
+
+    const direct = buildPVGISDirectUrl(lat,lon);
+    // Statický HTML web bez Netlify funkce. Přímé PVGIS volání může blokovat CORS,
+    // proto jsou použity veřejné fallback proxy. Díky cache a limitu se nevolají často.
+    const urls=[
+      direct,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(direct)}`,
+      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(direct)}`,
+      `https://corsproxy.io/?${encodeURIComponent(direct)}`
+    ];
+
+    let values=null;
+    let lastError=null;
+    // Zrychleno: volání běží souběžně a vezme se první funkční odpověď.
+    const attempts = urls.map(async (url)=>{
+      const data = await fetchJsonWithTimeout(url, 8000);
+      const extracted = extractPVGISMonthlyValues(data);
+      if(!Array.isArray(extracted) || extracted.length < 12) throw new Error('PVGIS nevrátil měsíční data');
+      return extracted;
+    });
+    try{
+      values = await Promise.any(attempts);
+    }catch(e){
+      lastError=e;
+    }
+
+    if(!Array.isArray(values) || values.length<12){
+      throw lastError || new Error('PVGIS nevrátil měsíční data');
+    }
+
+    pvgis = values.slice(0,12);
+    savePVGISCache(lat,lon,pvgis);
+    pvgisValid=true;
+    pvgisStatusText='aktuální';
+    updatePVGISState();
+    calculate();
+    saveProject();
+    setPVGISButtonState('Načteno', false, 'done');
+    txt('warning','✅ Poloha načtena online a uložena do cache.');
+  }catch(e){
+    pvgisValid=true;
+    pvgisStatusText='výchozí hodnoty – PVGIS se nepodařilo načíst';
+    updatePVGISState();
+    setPVGISButtonState('Načíst z mapy', false, 'default');
+    txt('warning','⚠ Polohu se nepodařilo načíst online. Statická verze nemá vlastní serverovou proxy, proto může veřejná proxy někdy selhat. Výpočet běží z výchozích / posledních hodnot nebo použij Import PVGIS JSON.');
+    calculate();
+    console.log(e);
+  }
+}
+
+function manualPVGIS(){
+  loadPVGIS(val('lat'), val('lon'), false);
+}
+
+function autoPVGIS(){
+  // Statická omezená verze: automatické online volání je vypnuté,
+  // aby se nevyčerpaly limity ani veřejné proxy. Použij tlačítko Načíst polohu v mapě.
+  pvgisValid=false;
+  pvgisStatusText='neaktuální – klikni do mapy';
+  updatePVGISState();
+}
+
+function initMap(){
+  if(typeof L==='undefined') return;
+  mapObj=L.map('map').setView([val('lat')||50.0755,val('lon')||14.4378],7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mapObj);
+  markerObj=L.marker([val('lat')||50.0755,val('lon')||14.4378]).addTo(mapObj);
+
+  mapObj.on('click',e=>{
+    const lat=e.latlng.lat;
+    const lon=e.latlng.lng;
+    el('lat').value=lat.toFixed(5);
+    el('lon').value=lon.toFixed(5);
+    if(markerObj) markerObj.remove();
+    markerObj=L.marker([lat,lon]).addTo(mapObj);
+    saveProject();
+    loadPVGIS(lat, lon, false);
+  });
+}
+
+function saveProject(){
+  const data={};
+  document.querySelectorAll('input,select,textarea').forEach(x=>{if(x.id)data[x.id]=x.value});
+  localStorage.setItem('fve_project',JSON.stringify(data));
+}
+
+function loadProject(){
+  const data=JSON.parse(localStorage.getItem('fve_project')||"{}");
+  Object.keys(data).forEach(id=>{if(el(id))el(id).value=data[id]});
+}
+
+
+function calcCableSection(current,length,voltage,dropPercent){
+  const rho=0.0175;
+  const maxDrop=voltage*(dropPercent/100);
+  return (2*length*current*rho)/maxDrop;
+}
+
+function pickCable(section){
+  const sizes=[1.5,2.5,4,6,10,16,25,35,50];
+  return sizes.find(s=>s>=section)||50;
+}
+
+function fuseFromCable(current,ampacity){
+  let f=current*1.25;
+  return Math.min(f,ampacity);
+}
+
+function cableLoadColor(current,ampacity){
+  const ratio=current/ampacity;
+  if(ratio<0.6) return "good";
+  if(ratio<0.9) return "warn";
+  return "bad";
+}
+
+function recommendedBatteryAhForInverter(invCurrent, batteryType){
+  // Profi orientační návrh:
+  // LiFePO4: cílit max. 0.5C pro běžný provoz
+  // Olovo: cílit max. 0.2C kvůli poklesu napětí a životnosti
+  const targetC = batteryType === 'lifepo' ? 0.5 : 0.2;
+  return invCurrent / targetC;
+}
+
+function batteryLoadText(cRate, batteryType){
+  const highLimit = batteryType === 'lifepo' ? 0.5 : 0.2;
+  const extremeLimit = batteryType === 'lifepo' ? 1.0 : 0.5;
+
+  if(cRate > extremeLimit){
+    return {cls:'bad', text:`❌ Měnič je moc silný pro baterii – extrémní zatížení (${round(cRate,2)}C)`};
+  }
+  if(cRate > highLimit){
+    return {cls:'warn', text:`⚠ Vyšší zatížení baterie (${round(cRate,2)}C) – doporučeno zvětšit baterii`};
+  }
+  return {cls:'ok', text:`✅ Zatížení baterie OK (${round(cRate,2)}C)`};
+}
+
+function getBatteryParams(type,sys){
+  // LiFePO4:
+  // - energie / Ah se počítá jmenovitým napětím 12,8 V na 12V systém
+  // - proudy, regulátor, měnič a jištění se počítají systémovým napětím 12/24/48 V
+  return type==='lifepo'
+    ? {name:'LiFePO4',nominalV:sys*(12.8/12),currentV:sys,regulatorV:sys,dod:.85,efficiency:.95}
+    : {name:'Olovo',nominalV:sys,currentV:sys,regulatorV:sys,dod:.5,efficiency:.85};
+}
+
+function cableSection(l,i,u,p){let du=u*p/100;return du<=0?0:(2*l*i)/(56*du)}
+function roundCable(s){for(const x of [1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240]) if(s<=x)return x;return 300}
+function roundPvCable(s){for(const x of [4,6,10,16,25,35,50,70,95,120,150,185,240]) if(s<=x)return x;return 300}
+function cableAmpacity(s){return ({1.5:16,2.5:25,4:32,6:40,10:63,16:80,25:100,35:125,50:160,70:200,95:250,120:300,150:355,185:425,240:500,300:630})[s]||0}
+function fuseSeries(){return [6,10,16,20,25,32,40,50,63,80,100,125,160,200,250,300,355,400,500,630]}
+function nextFuse(required){for(const f of fuseSeries()) if(f>=required)return f;return 630}
+function cableSeries(isPv=false){return isPv?[4,6,10,16,25,35,50,70,95,120,150,185,240]:[1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240]}
+
+function selectCableAndFuse(calcSection,current,isPv=false){
+  const requiredFuse=current*1.25;
+  const fuse=nextFuse(requiredFuse);
+  for(const c of cableSeries(isPv)){
+    const amp=cableAmpacity(c);
+    if(c>=calcSection && amp>fuse){
+      return {section:c,fuse:fuse,ampacity:amp,ok:true,minFuse:requiredFuse};
+    }
+  }
+  const last=cableSeries(isPv).slice(-1)[0];
+  return {section:last,fuse:fuse,ampacity:cableAmpacity(last),ok:false,minFuse:requiredFuse};
+}
+
+function recommendRegulator(i){for(const s of [10,15,20,30,40,50,60,70,80,100,120,150,200]) if(i<=s)return s;return 250}
+
+function setToggleButtonText(btnId, isOpen, openText, closeText){
+  const btn=el(btnId);
+  if(btn) btn.textContent = isOpen ? closeText : openText;
+}
+function setInfoPageState(open){
+  const page=el('infoPage');
+  if(!page) return;
+  page.classList.toggle('open', !!open);
+  page.setAttribute('aria-hidden', open ? 'false' : 'true');
+  setToggleButtonText('infoToggleBtn', !!open, 'Otevřít podrobnosti systému', 'Zavřít podrobnosti systému');
+}
+function openInfoPage(){
+  const page=el('infoPage');
+  setInfoPageState(!(page && page.classList.contains('open')));
+}
+function closeInfoPage(){
+  setInfoPageState(false);
+}
+function setCablePageState(open){
+  const page=el('cablePage');
+  if(!page) return;
+  page.classList.toggle('open', !!open);
+  page.setAttribute('aria-hidden', open ? 'false' : 'true');
+  setToggleButtonText('cableToggleBtn', !!open, 'Otevřít podrobnosti kabelů a jištění', 'Zavřít podrobnosti kabelů a jištění');
+}
+function openCablePage(){
+  const page=el('cablePage');
+  setCablePageState(!(page && page.classList.contains('open')));
+}
+function closeCablePage(){
+  setCablePageState(false);
+}
+function openMonthPage(){setMonthTableState(true)}
+function closeMonthPage(){setMonthTableState(false)}
+function setMonthTableState(open){
+  const block=el('monthBlock');
+  const btn=el('monthToggleBtn');
+  if(!block) return;
+  if(open){
+    block.classList.remove('closed');
+    block.classList.add('open');
+    block.setAttribute('aria-hidden','false');
+    setToggleButtonText('monthToggleBtn', true, 'Otevřít měsíční přehled', 'Zavřít měsíční přehled');
+  }else{
+    block.classList.remove('open');
+    block.classList.add('closed');
+    block.setAttribute('aria-hidden','true');
+    setToggleButtonText('monthToggleBtn', false, 'Otevřít měsíční přehled', 'Zavřít měsíční přehled');
+  }
+}
+function toggleMonthTable(){
+  const block=el('monthBlock');
+  setMonthTableState(!block || block.classList.contains('closed'));
+}
+
+
+function estimateFieldWpFromConsumption(dailyWh, eff, targetCoverage){
+  const target = (targetCoverage || 100) / 100;
+  const period = el('designPeriod') ? el('designPeriod').value : 'year';
+
+  let idx;
+  if(period === 'summer') idx = [4,5,6,7,8];          // květen-září
+  else if(period === 'year') idx = [0,1,2,3,4,5,6,7,8,9,10,11];
+  else idx = [10,11,0,1];                             // zimní soběstačnost
+
+  const avgDailyPvgis = idx.reduce((s,i)=>s + (pvgis[i] / months[i][1]), 0) / idx.length;
+  if(avgDailyPvgis <= 0 || eff <= 0) return 0;
+
+  // PVGIS je kWh/kWp za měsíc.
+  // Denní výroba z 1 Wp = (PVGIS/měsíc / počet dní) Wh/den.
+  // Potřebné Wp = denní spotřeba / (denní Wh na 1 Wp * účinnost).
+  return (dailyWh * target) / (avgDailyPvgis * eff);
+}
+
+
+function estimateDailyWhFromFieldWp(fieldWp, eff, targetCoverage){
+  const target = (targetCoverage || 100) / 100;
+  const period = el('designPeriod') ? el('designPeriod').value : 'year';
+
+  let idx;
+  if(period === 'summer') idx = [4,5,6,7,8];
+  else if(period === 'year') idx = [0,1,2,3,4,5,6,7,8,9,10,11];
+  else idx = [10,11,0,1];
+
+  const avgDailyPvgis = idx.reduce((s,i)=>s + (pvgis[i] / months[i][1]), 0) / idx.length;
+  if(avgDailyPvgis <= 0 || eff <= 0 || target <= 0) return 0;
+
+  // Denní spotřeba, kterou dané FV pole pokryje v návrhovém období.
+  return fieldWp * avgDailyPvgis * eff / target;
+}
+
+
+let syncLock=false;
+
+function syncModeInputs(changedId=''){
+  if(syncLock) return;
+  syncLock=true;
+
+  const mode = el('mode').value;
+  const eff = val('eff');
+  const targetCoverage = val('targetCoverage') || 100;
+
+  if(mode === 'pole'){
+    const fieldWp = val('fieldManual');
+    const daily = estimateDailyWhFromFieldWp(fieldWp, eff, targetCoverage);
+    if(daily>0 && changedId !== 'dailyWh'){
+      el('dailyWh').value = round(daily);
+    }
+  }else{
+    const dailyWh = val('dailyWh');
+    const fieldWp = estimateFieldWpFromConsumption(dailyWh, eff, targetCoverage);
+    if(fieldWp>0 && changedId !== 'fieldManual'){
+      el('fieldManual').value = round(fieldWp);
+    }
+  }
+
+  syncLock=false;
+}
+
+
+function panelWord(n){
+  n = Number(n) || 0;
+  if(n === 1) return 'panel';
+  if(n >= 2 && n <= 4) return 'panely';
+  return 'panelů';
+}
+function stringText(series, parallel){
+  series = Number(series) || 0;
+  parallel = Number(parallel) || 0;
+  if(parallel <= 1) return `${series}S (${series} ${panelWord(series)} v sérii)`;
+  return `${series}S × ${parallel}P (${series} ${panelWord(series)} v sérii, ${parallel} paralelní stringy)`;
+}
+function stringCode(series, parallel){
+  // Krátký technický zápis bez zbytečného × 1P.
+  if(parallel <= 1) return `${series}S`;
+  return `${series}S × ${parallel}P`;
+}
+
+function stringDetail(series, parallel){
+  series = Number(series) || 0;
+  parallel = Number(parallel) || 0;
+  if(parallel <= 1) return `${series} ${panelWord(series)} v sérii`;
+  return `${series} ${panelWord(series)} v sérii, ${parallel} paralelní stringy`;
+}
+
+function mpptWindowStatus(vmpString, vocCold){
+  const minV=val('mpptMinV');
+  const maxV=val('mpptMaxV') || val('maxVoc');
+
+  if(vocCold > val('maxVoc')) return {ok:false, cls:'bad', text:'Voc překračuje max. Voc regulátoru'};
+  if(vmpString < minV) return {ok:false, cls:'bad', text:'Vmp stringu je pod minimem MPPT'};
+  if(vmpString > maxV) return {ok:false, cls:'bad', text:'Vmp stringu je nad maximem MPPT'};
+  if(vocCold > val('maxVoc')*0.9) return {ok:true, cls:'warn', text:'OK, ale Voc je blízko limitu'};
+  return {ok:true, cls:'ok', text:'MPPT okno OK'};
+}
+
+function suggestStringDesign(){
+  const targetWp = val('fieldManual') || (val('series')*val('parallel')*val('panelWp'));
+  const panelWp = val('panelWp');
+  const vmp = val('vmp');
+  const voc = val('voc');
+  const coeff = Math.abs(val('vocCoeff'))/100;
+  const tmin = val('tmin');
+  const maxVoc = val('maxVoc');
+  const mpptMinV = val('mpptMinV');
+  const mpptMaxV = val('mpptMaxV') || maxVoc;
+
+  const totalPanels = Math.max(1, Math.ceil(targetWp / Math.max(panelWp,1)));
+  let best=null;
+
+  for(let s=1;s<=totalPanels;s++){
+    const p=Math.ceil(totalPanels/s);
+    const vmpString=s*vmp;
+    const vocCold=s*voc*(1+coeff*(25-tmin));
+    const wp=s*p*panelWp;
+
+    const okVoc=vocCold<=maxVoc;
+    const okVmp=vmpString>=mpptMinV && vmpString<=mpptMaxV;
+    const oversize=Math.abs(wp-targetWp);
+    const penalty=(okVoc&&okVmp?0:1000000)+oversize+(p-1)*20;
+
+    const cand={series:s,parallel:p,wp,vmpString,vocCold,okVoc,okVmp,penalty};
+    if(!best || cand.penalty<best.penalty) best=cand;
+  }
+  return best;
+}
+
+function autoDesignStrings(){
+  const s=suggestStringDesign();
+  if(!s) return;
+  el('series').value=s.series;
+  el('parallel').value=s.parallel;
+  calculate();
+}
+
+function calculate(){
+  syncModeInputs();
+  const dailyWh=val('dailyWh'), eff=val('eff'), series=val('series'), parallel=val('parallel'), panelWp=val('panelWp');
+  if(dailyWh<0 || eff<=0 || panelWp<0){
+    txt('warning','❌ Neplatné vstupy: zkontroluj spotřebu, účinnost a výkon panelu.');
+    return;
+  }
+  const vmp=val('vmp'), voc=val('voc'), isc=val('isc');
+  const fieldFromPanels=series*parallel*panelWp;
+  const targetCoverage=val('targetCoverage') || 100;
+  const calculatedFieldWp=estimateFieldWpFromConsumption(dailyWh,eff,targetCoverage);
+
+  // Po synchronizaci je fieldManual vždy aktuální počítaný výkon FV pole.
+  // Režim určuje pouze směr výpočtu:
+  // - FV pole -> denní spotřeba
+  // - denní spotřeba -> FV pole
+  let fieldWp = val('fieldManual');
+  const sysV=Number(el('voltageMode').value);
+  const batt=getBatteryParams(el('batteryType').value,sysV);
+  el('dod').value=batt.dod;
+
+  const vmpString=series*vmp;
+  const vocCold=series*voc*(1+Math.abs(val('vocCoeff'))/100*(25-val('tmin')));
+  const pvCurrent=isc*parallel;
+  const mpptStatus=mpptWindowStatus(vmpString,vocCold);
+  const autoString=suggestStringDesign();
+  const mpptPowerCurrent=fieldWp/batt.regulatorV;
+  const mpptInputCurrent=isc*parallel;
+  const mpptCurrent=Math.max(mpptPowerCurrent,mpptInputCurrent)*1.25;
+  const pwmCurrent=pvCurrent*1.25;
+  const mpptRecommended=recommendRegulator(mpptCurrent);
+  const pwmRecommended=recommendRegulator(pwmCurrent);
+  const regType=el('regType').value;
+  const regCurrent=regType==='mppt'?mpptCurrent:pwmCurrent;
+  const regMaxPvWp=val('regMaxPvWp');
+  const regPvPowerOk=regMaxPvWp<=0 || fieldWp<=regMaxPvWp;
+
+  const usableNeededWh=dailyWh*val('backupDays');
+  const batteryFromLoad=usableNeededWh/(batt.dod*batt.efficiency);
+  const invCurrent=val('inverterW')/batt.currentV;
+  const recBatteryAhByInverter=recommendedBatteryAhForInverter(invCurrent, el('batteryType').value);
+  const recBatteryWhByInverter=recBatteryAhByInverter*batt.nominalV;
+  const batteryFromInverter=recBatteryWhByInverter;
+  const recommendedWh=Math.max(batteryFromLoad,batteryFromInverter);
+  const recommendedAh=recommendedWh/batt.nominalV;
+
+  const batUnit=el('batUnit').value;
+  const manualRaw=el('batteryManual').value.trim();
+  const manualVal=manualRaw===''?0:Number(manualRaw);
+  let batteryWh;
+  if(manualVal===0){
+    batteryWh=recommendedWh;
+    el('batteryManual').placeholder=batUnit==='Ah'?round(recommendedAh,1)+' Ah / doporučená baterie':round(recommendedWh)+' Wh / doporučená baterie';
+  }else{
+    batteryWh=batUnit==='Ah'?manualVal*batt.nominalV:manualVal;
+  }
+
+  const usableEnergyWh=batteryWh*batt.dod*batt.efficiency;
+  const batteryAh=batteryWh/batt.nominalV;
+  const daysWithoutSun=dailyWh>0?usableEnergyWh/dailyWh:0;
+  const cRate=batteryAh>0 ? invCurrent/batteryAh : 0;
+  const batteryLoad=batteryLoadText(cRate, el('batteryType').value);
+  const inverterBatteryOk=batteryAh>=recBatteryAhByInverter;
+
+  const pvLen=val('pvLen'), batLen=val('batLen'), invLen=val('invLen');
+  const pvCable=cableSection(pvLen,pvCurrent,vmpString,2);
+  const batCable=cableSection(batLen,regCurrent,batt.currentV,1.5);
+  const invCable=cableSection(invLen,invCurrent,batt.currentV,1);
+
+  const pvSelect=selectCableAndFuse(pvCable,pvCurrent,true);
+  const regSelect=selectCableAndFuse(batCable,regCurrent,false);
+  const invSelect=selectCableAndFuse(invCable,invCurrent,false);
+
+  const pvCableStd=pvSelect.section, batCableStd=regSelect.section, invCableStd=invSelect.section;
+  const pvFuse={fuse:pvSelect.fuse,ampacity:pvSelect.ampacity,ok:pvSelect.ok};
+  const regFuse={fuse:regSelect.fuse,ampacity:regSelect.ampacity,ok:regSelect.ok};
+  const invFuse={fuse:invSelect.fuse,ampacity:invSelect.ampacity,ok:invSelect.ok};
+
+  const monthly=months.map((m,i)=>{
+    // PVGIS E_m = kWh/kWp/měsíc.
+    // DC výroba ve Wh/měsíc = (Wp/1000) * kWh/kWp * 1000.
+    // Potom se aplikují ztráty systému, kabelů, stáří/znečištění a účinnost měniče.
+    const lossFactor = eff * (val('invEff')/100) * (1-val('cableLossPct')/100) * (1-val('agingLossPct')/100);
+    let prod=(fieldWp/1000)*pvgis[i]*1000*lossFactor;
+    const unclipped=prod;
+    const maxAcPower=val('inverterW');
+    const maxMonthAc=maxAcPower>0 ? maxAcPower*m[1]*24 : Infinity;
+    const clippedEnergy=maxAcPower>0 ? Math.max(0,prod-maxMonthAc) : 0;
+    prod=Math.min(prod,maxMonthAc);
+    const cons=dailyWh*m[1];
+    return {name:m[0],days:m[1],pvgis:pvgis[i],prod,unclipped,clippedEnergy,avgDaily:prod/m[1],cons,diff:prod-cons};
+  });
+
+  const totalProd=monthly.reduce((s,x)=>s+x.prod,0);
+  const totalCons=monthly.reduce((s,x)=>s+x.cons,0);
+  const totalClipped=monthly.reduce((s,x)=>s+(x.clippedEnergy||0),0);
+  const coverage=totalCons>0?totalProd/totalCons:0;
+
+  // Letní / zimní analýza:
+  // léto = květen až září, zima = listopad až únor
+  const summerIdx=[4,5,6,7,8];
+  const winterIdx=[10,11,0,1];
+  const summerProd=summerIdx.reduce((s,i)=>s+monthly[i].prod,0);
+  const summerCons=summerIdx.reduce((s,i)=>s+monthly[i].cons,0);
+  const winterProd=winterIdx.reduce((s,i)=>s+monthly[i].prod,0);
+  const winterCons=winterIdx.reduce((s,i)=>s+monthly[i].cons,0);
+  const summerCoverage=summerCons>0?summerProd/summerCons:0;
+  const winterCoverage=winterCons>0?winterProd/winterCons:0;
+
+  const worst=monthly.reduce((a,b)=>a.diff<b.diff?a:b);
+  const worstDaily=Math.min(...monthly.map(x=>x.avgDaily||0));
+
+  // Stav systému hodnotí hlavně technickou správnost návrhu.
+  // Roční nebo zimní energetický deficit u FVE není automaticky chyba – je to informativní bilance.
+  let statusProblems=[];
+  let statusNotes=[];
+
+  if(el('designPeriod').value==='winter' && winterCoverage<1) statusNotes.push('zimní soběstačnost nevychází podle zadaného cíle');
+  if(coverage<1) statusNotes.push('roční bilance nepokrývá celou spotřebu – u FVE běžné podle režimu provozu');
+  if(el('designPeriod').value!=='winter' && winterCoverage<1) statusNotes.push('zimní deficit je u běžného návrhu očekávaný');
+
+  if(vocCold>val('maxVoc')) statusProblems.push('překročeno Voc regulátoru');
+  if(!mpptStatus.ok) statusProblems.push(mpptStatus.text);
+  if(!regPvPowerOk) statusProblems.push('FV pole je větší než povolený výkon regulátoru');
+  if(!pvFuse.ok||!regFuse.ok||!invFuse.ok) statusProblems.push('nevychází kabely nebo jištění');
+  if(manualVal>0 && batteryWh<recommendedWh) statusNotes.push('baterie je menší než doporučená hodnota');
+  if(daysWithoutSun<1) statusNotes.push('autonomie baterie je menší než 1 den');
+  if(!inverterBatteryOk) statusProblems.push('měnič je moc silný pro baterii');
+  if(invCurrent>val('bmsMax')) statusProblems.push('překročen max. proud BMS');
+
+  txt('status',statusProblems.length
+    ? `<span class="bad">NENÍ OK</span><br><span class="small">${statusProblems.join('<br>')}</span>`
+    : `<span class="ok">OK</span>`);
+
+  const summaryCard = el('customerSummaryCard');
+  const annualPct = round(coverage*100,1);
+  const summerPct = round(summerCoverage*100,1);
+  const winterPct = round(winterCoverage*100,1);
+  const annualClass = coverage >= 0.85 ? 'ok' : (coverage >= 0.6 ? 'warn' : 'bad');
+  const summerOk = summerCoverage >= 1;
+  const winterOk = winterCoverage >= 1;
+  const summaryBad = statusProblems.length > 0;
+  const summaryWarn = !summaryBad && (coverage < 0.85 || !winterOk || !summerOk);
+
+  if(summaryCard){
+    summaryCard.classList.toggle('summary-bad', summaryBad);
+    summaryCard.classList.toggle('summary-warn', summaryWarn);
+  }
+  txt('customerSummary', summaryBad
+    ? '❌ Návrh je potřeba technicky upravit.'
+    : (summaryWarn
+      ? '⚠ Systém je použitelný, v zimě ale počítejte s omezením nebo záložním zdrojem.'
+      : '✅ Systém je vhodný pro běžné použití.'));
+  txt('customerSummaryNote', summaryBad
+    ? 'Nejdříve opravte červeně označené technické problémy.'
+    : (winterOk
+      ? 'Výroba pokrývá zadanou spotřebu i v zimním období.'
+      : 'Zimní nedostatek je u kompromisního FVE návrhu běžný.'));
+  txt('summaryAnnual', `<span class="${annualClass}">${annualPct} %</span>`);
+  txt('summarySummer', `<span class="${summerOk?'ok':'warn'}">${summerOk?'OK':'Omezení'}</span><br><span class="small">${summerPct} %</span>`);
+  txt('summaryWinter', `<span class="${winterOk?'ok':'warn'}">${winterOk?'OK':'Nedostatek'}</span><br><span class="small">${winterPct} %</span>`);
+  setStatusClass('coverage', coverage>=1?'ok':'warn');
+  setStatusClass('summerCoverage', summerCoverage>=1?'ok':'warn');
+  setStatusClass('winterCoverage', winterCoverage>=1?'ok':'warn');
+  setStatusClass('sunlessDays', daysWithoutSun>=1?'ok':'warn');
+  txt('coverage',`${round(coverage*100,1)} %`);
+  txt('summerCoverage',`<span class="${summerCoverage>=1?'ok':'bad'}">${round(summerCoverage*100,1)} %</span><br><span class="small">${summerCoverage>=1?'letní OK ✅':'letní deficit ⚠️'}</span>`);
+  txt('winterCoverage',`<span class="${winterCoverage>=1?'ok':'bad'}">${round(winterCoverage*100,1)} %</span><br><span class="small">${winterCoverage>=1?'zimní OK ✅':'zimní deficit ❄️'}</span>`);
+  txt('sysVoltage',`${sysV} V`);
+  txt('sunlessDays',`${round(daysWithoutSun,1)}`);
+  txt('worstMonth',`${worst.name}<br><span class="${worst.diff>=0?'ok':'bad'}">${round(worst.diff)} Wh</span>`);
+  txt('minDaily',`${round(worstDaily)} Wh/den`);
+  txt('clippingOut',`${round(totalClipped)} Wh`);
+
+  let warn='';
+  if(pvgisStatusText!=='aktuální' && pvgisStatusText!=='import JSON') warn+='⚠ PVGIS není aktuální – návrh je pouze orientační<br>';
+  if(manualVal>0 && batteryWh<recommendedWh) warn+='⚠ Požadovaná kapacita baterie je menší než výsledná doporučená baterie (spotřeba nebo měnič)<br>';
+  if(!inverterBatteryOk) warn+=`⚠ Měnič je moc silný pro baterii – doporučeno min. ${round(recBatteryAhByInverter,1)} Ah / ${round(recBatteryWhByInverter)} Wh podle měniče<br>`;
+  if(invCurrent>val('bmsMax')) warn+=`❌ Překročen max. proud BMS: ${round(invCurrent,1)} A > ${round(val('bmsMax'),1)} A<br>`;
+  else warn+='✅ Baterie velikostně odpovídá výkonu měniče<br>';
+  if(daysWithoutSun<1) warn+='⚠ Malá kapacita baterie – méně než 1 den bez slunce<br>';
+  if(summerCoverage>=1 && winterCoverage<1) warn+='❄️ Zimní deficit: běžný kompromisní návrh. Nezvětšovat FV pole automaticky jen kvůli zimě, pokud není požadována zimní soběstačnost.<br>';
+  else if(summerCoverage<1) warn+='⚠ Deficit i v letních měsících – FV pole je pravděpodobně malé vůči spotřebě<br>';
+  if(vocCold>val('maxVoc')) warn+='⚠ String překračuje max. Voc regulátoru při návrhové teplotě → sniž počet panelů v sérii<br>';
+  else if(vocCold>val('maxVoc')*0.9) warn+='⚠ Voc stringu je blízko limitu regulátoru (>90 %) – doporučena větší rezerva<br>';
+  if(!mpptStatus.ok) warn+='⚠ '+mpptStatus.text+'<br>';
+  if(autoString && (autoString.series!==series || autoString.parallel!==parallel)){
+    warn+='ℹ️ AUTO návrh stringů: '+stringText(autoString.series,autoString.parallel)+' ('+round(autoString.wp)+' Wp)<br>';
+  }
+  if(!pvFuse.ok||!regFuse.ok||!invFuse.ok) warn+='⚠ Pojistka/kabel nevychází – zvětšit kabel<br>';
+  if(!regPvPowerOk) warn+='⚠ FV pole '+round(fieldWp)+' Wp překračuje max. povolené FV pole regulátoru '+round(regMaxPvWp)+' Wp<br>';
+  if(totalClipped>0) warn+='⚠ Clipping měniče: část výroby se nevejde do AC výkonu měniče ('+round(totalClipped)+' Wh/rok)<br>';
+  if(fieldFromPanels>0 && Math.abs(fieldFromPanels-fieldWp)/Math.max(fieldWp,1)>0.15){
+    warn+='ℹ️ Zadané panely/stringy dávají '+round(fieldFromPanels)+' Wp, zatímco výpočet pracuje s '+round(fieldWp)+' Wp<br>';
+  }
+  if(regType==='mppt' && mpptInputCurrent>mpptPowerCurrent) warn+='⚠ MPPT proud vychází vyšší podle vstupního proudu panelů (Isc × paralelní stringy)<br>';
+  if(regType==='mppt' && vocCold<=val('maxVoc') && mpptRecommended>=mpptCurrent && regPvPowerOk) warn+='✅ Doporučení: zvolený MPPT návrh proudově i výkonově vychází, ověř ještě datasheet regulátoru pro rozsah MPPT napětí.<br>';
+  if(regType==='pwm' && pwmRecommended>=pwmCurrent && regPvPowerOk) warn+='✅ Doporučení: PWM proudově i výkonově vychází, vhodné hlavně pro menší systémy a panely s napětím blízkým baterii.<br>';
+  
+  
+  let rec='';
+  if(winterCoverage<1 && el('designPeriod').value==='winter') rec+='❄️ Pro zimní soběstačnost je nutné větší FV pole, nižší spotřeba nebo záložní zdroj.<br>';
+  if(winterCoverage<1 && el('designPeriod').value!=='winter') rec+='❄️ Zimní deficit je očekávaný u kompromisního návrhu; řešit záložním zdrojem nebo sezónním omezením spotřeby.<br>';
+  if(summerCoverage<1) rec+='☀️ Deficit i v létě: FV pole je malé vůči denní spotřebě.<br>';
+  if(daysWithoutSun<1) rec+='🔋 Zvětšit baterii pro vyšší autonomii bez slunce.<br>';
+  if(cRate>0.5 && el('batteryType').value==='lifepo') rec+='🔋 Zvětšit baterii nebo snížit výkon měniče – vyšší C-rate.<br>';
+  if(invCurrent>val('bmsMax')) rec+='⚡ Zvolit baterii/BMS s vyšším proudem nebo slabší měnič.<br>';
+  if(vocCold>val('maxVoc')) rec+='⚠️ Snížit počet panelů v sérii nebo zvolit regulátor s vyšším Voc.<br>';
+  if(!regPvPowerOk) rec+='⚡ Zvolit regulátor s vyšším povoleným výkonem FV pole.<br>';
+  if(!mpptStatus.ok) rec+='🔌 Upravit počet panelů v sérii nebo zvolit jiné MPPT okno regulátoru.<br>';
+  if(autoString && (autoString.series!==series || autoString.parallel!==parallel)) rec+='🔌 Doporučené zapojení: '+stringText(autoString.series,autoString.parallel)+' ('+round(autoString.wp)+' Wp).<br>';
+  if(totalClipped>0) rec+='⚡ Pokud je clipping velký, zvaž silnější měnič nebo menší FV pole.<br>';
+  if(!rec) rec='✅ Návrh je bez kritických doporučení. Ověř ještě datasheety komponent a normové podmínky instalace.';
+  txt('recommendations',rec);
+
+  txt('warning',warn||'OK');
+  updatePrintProtocol();
+
+  const fveStatusOk = fieldWp>0 && mpptStatus.ok && vocCold<=val('maxVoc');
+  const regStatusOk = ((regType!=='mppt') || (vocCold<=val('maxVoc') && mpptStatus.ok)) && regPvPowerOk;
+  const battStatusOk = batteryWh>=recommendedWh && daysWithoutSun>=val('backupDays') && inverterBatteryOk;
+  const cableStatusOk = pvFuse.ok && regFuse.ok && invFuse.ok;
+  const statusText = ok => ok ? 'OK' : 'NENÍ OK';
+  const statusClass = ok => ok ? 'ok' : 'bad';
+
+  txt('fveOut',`<div class="calc-highlight">
+    <div class="calc-metric"><div class="calc-label">Počítaný výkon FV pole</div><div class="calc-value">${round(fieldWp)} Wp</div></div>
+    <div class="calc-metric"><div class="calc-label">Zapojení panelů</div><div class="calc-value">${stringCode(series,parallel)}</div><div class="small">(${stringDetail(series,parallel)})</div></div>
+    <div class="calc-metric"><div class="calc-label">Voc při mrazu</div><div class="calc-value ${vocCold<=val('maxVoc')?'ok':'bad'}">${round(vocCold,1)} V</div></div>
+    <div class="calc-metric"><div class="calc-label">Stav FV pole</div><div class="calc-value ${statusClass(fveStatusOk)}">${statusText(fveStatusOk)}</div></div>
+    <div class="calc-note">FV pole je zvýrazněné, protože určuje dostupnou výrobu a zároveň musí sedět s napěťovým rozsahem regulátoru.</div>
+  </div><table>
+    <tr><td>Režim výpočtu</td><td><b>${el('mode').value==='pole'?'FV pole → denní spotřeba':'denní spotřeba → FV pole'}</b></td></tr>
+    <tr><td>Výkon jednoho panelu</td><td><b>${round(panelWp)} Wp</b></td></tr>
+    <tr><td>Zapojení panelů</td><td><b>${stringCode(series,parallel)}</b><br><span class="small">(${stringDetail(series,parallel)})</span></td></tr>
+    <tr><td>Panely podle zadaného zapojení</td><td>${round(fieldFromPanels)} Wp</td></tr>
+    <tr><td>Počítaný výkon FV pole</td><td><b>${round(fieldWp)} Wp</b></td></tr>
+    <tr><td>Porovnání FV pole</td><td>Zadané panely: ${round(fieldFromPanels)} Wp / výpočet: ${round(fieldWp)} Wp</td></tr>
+    ${el('mode').value==='spotreba'?`<tr><td>Dopočtené FV pole podle spotřeby</td><td>${round(calculatedFieldWp)} Wp</td></tr>`:`<tr><td>Dopočtená denní spotřeba podle FV pole</td><td>${round(dailyWh)} Wh/den</td></tr>`}
+    <tr><td>Jednotka PVGIS</td><td>kWh/kWp/měsíc</td></tr>
+    <tr><td>Návrhový režim</td><td>${el('designPeriod').value==='year'?'roční bilance':(el('designPeriod').value==='summer'?'sezónní léto':'zimní soběstačnost')}</td></tr>
+    <tr><td>Modelované ztráty</td><td>měnič ${round(val('invEff'))} %, kabely ${round(val('cableLossPct'))} %, stáří/znečištění ${round(val('agingLossPct'))} %</td></tr>
+    <tr><td>Pokrytí léto</td><td class="${summerCoverage>=1?'ok':'bad'}">${round(summerCoverage*100,1)} %</td></tr>
+    <tr><td>Pokrytí zima</td><td class="${winterCoverage>=1?'ok':'bad'}">${round(winterCoverage*100,1)} %</td></tr>
+    <tr><td>Vmp stringu</td><td class="${vmpString>=val('mpptMinV')&&vmpString<=(val('mpptMaxV')||val('maxVoc'))?'ok':'bad'}">${round(vmpString,2)} V</td></tr>
+    <tr><td>Voc stringu při −25 °C</td><td class='${vocCold<=val('maxVoc')?'ok':'bad'}'>${round(vocCold,1)} V</td></tr>
+    <tr><td>MPPT pracovní okno</td><td class="${mpptStatus.cls}">${mpptStatus.text}</td></tr>
+    <tr><td>AUTO návrh stringů</td><td>${autoString?stringText(autoString.series,autoString.parallel)+' / '+round(autoString.wp)+' Wp':'nelze určit'}</td></tr>
+  </table><p class='small'>Kontrola Voc počítána pro ${val('tmin')} °C.</p>`);
+
+  const inverterStatusLabel = inverterBatteryOk && invCurrent<=val('bmsMax') ? 'OK' : 'NENÍ OK';
+  const inverterStatusCls = inverterBatteryOk && invCurrent<=val('bmsMax') ? 'ok' : 'bad';
+  txt('regOut',`<div class="calc-highlight">
+    <div class="calc-metric"><div class="calc-label">Regulátor</div><div class="calc-value">${regType.toUpperCase()}</div></div>
+    <div class="calc-metric"><div class="calc-label">Doporučený proud</div><div class="calc-value">${regType==='mppt'?mpptRecommended:pwmRecommended} A</div></div>
+    <div class="calc-metric"><div class="calc-label">Max. FV pole regulátoru</div><div class="calc-value ${regPvPowerOk?'ok':'bad'}">${regMaxPvWp>0?round(regMaxPvWp)+' Wp':'—'}</div></div>
+    <div class="calc-metric"><div class="calc-label">Stav regulátoru</div><div class="calc-value ${statusClass(regStatusOk)}">${statusText(regStatusOk)}</div></div>
+    <div class="calc-note">Regulátor je zvýrazněný kvůli proudové rezervě, výkonu FV pole a napěťovému rozsahu MPPT.</div>
+  </div>
+  <div class="calc-highlight">
+    <div class="calc-metric"><div class="calc-label">Baterie</div><div class="calc-value">${round(batteryWh)} Wh</div></div>
+    <div class="calc-metric"><div class="calc-label">Kapacita baterie</div><div class="calc-value">${round(batteryAh,1)} Ah</div></div>
+    <div class="calc-metric"><div class="calc-label">Dny bez slunce</div><div class="calc-value ${daysWithoutSun>=val('backupDays')?'ok':'bad'}">${round(daysWithoutSun,2)}</div></div>
+    <div class="calc-metric"><div class="calc-label">Stav baterie</div><div class="calc-value ${statusClass(battStatusOk)}">${statusText(battStatusOk)}</div></div>
+    <div class="calc-note">Baterie je zvýrazněná, protože rozhoduje o využitelné energii, rezervě bez slunce a zatížení měničem.</div>
+  </div>
+  <div class="calc-highlight">
+    <div class="calc-metric"><div class="calc-label">Výkon měniče</div><div class="calc-value">${round(val('inverterW'))} W</div></div>
+    <div class="calc-metric"><div class="calc-label">Proud z baterie</div><div class="calc-value ${invCurrent<=val('bmsMax')?'ok':'bad'}">${round(invCurrent,1)} A</div></div>
+    <div class="calc-metric"><div class="calc-label">Zatížení baterie</div><div class="calc-value ${batteryLoad.cls}">${round(cRate,2)} C</div></div>
+    <div class="calc-metric"><div class="calc-label">Stav měniče</div><div class="calc-value ${inverterStatusCls}">${inverterStatusLabel}</div></div>
+    <div class="calc-note">Měnič je zvýrazněný, protože určuje odběr proudu z baterie a může rozhodnout, jestli je baterie nebo BMS dostatečná.</div>
+  </div><table>
+    <tr><th colspan="2" style="text-align:left">Regulátor</th></tr>
+    <tr><td>Zvolený regulátor</td><td><b>${regType.toUpperCase()}</b></td></tr>
+    <tr><td>Výkon FV pole</td><td>${round(fieldWp)} Wp</td></tr>
+    <tr><td>Max. FV pole regulátoru</td><td class="${regPvPowerOk?'ok':'bad'}"><b>${regMaxPvWp>0?round(regMaxPvWp)+' Wp':'nezadáno'}</b></td></tr>
+    ${regType === 'mppt' ? `
+      <tr><td>Návrhový proud regulátoru</td><td><b>${round(mpptCurrent,1)} A</b></td></tr>
+      <tr><td>Doporučený regulátor</td><td><b>${mpptRecommended} A MPPT</b></td></tr>
+      <tr><td colspan="2" class="small">Výpočet bere vyšší hodnotu z výkonu FV pole a vstupního proudu panelů. Technicky: P/U = ${round(mpptPowerCurrent,1)} A, Isc × stringy = ${round(mpptInputCurrent,1)} A.</td></tr>
+    ` : `
+      <tr><td>Návrhový proud regulátoru</td><td><b>${round(pwmCurrent,1)} A</b></td></tr>
+      <tr><td>Doporučený regulátor</td><td><b>${pwmRecommended} A PWM</b></td></tr>
+      <tr><td colspan="2" class="small">PWM návrh vychází ze vstupního proudu FV pole Isc × paralelní stringy s bezpečnostní rezervou.</td></tr>
+    `}
+    <tr><td>Doporučení regulátoru</td><td class="${(regType==='mppt' && vocCold>val('maxVoc'))||!regPvPowerOk?'bad':'ok'}"><b>${regType==='mppt' && vocCold>val('maxVoc')?'Návrh není OK – překročeno Voc regulátoru':(!regPvPowerOk?'Návrh není OK – překročen max. výkon FV pole regulátoru':'Regulátor OK, pokud odpovídá i napěťový rozsah podle datasheetu')}</b></td></tr>
+
+    <tr><th colspan="2" style="text-align:left">Baterie</th></tr>
+    <tr><td>Typ baterie</td><td>${batt.name}</td></tr>
+    <tr><td>Jmenovité napětí baterie</td><td>${round(batt.nominalV,1)} V</td></tr>
+    <tr><td>Systémové napětí</td><td>${round(batt.currentV,1)} V</td></tr>
+    <tr><td>Doporučená baterie – výsledná</td><td><b>${round(recommendedWh)} Wh / ${round(recommendedAh,1)} Ah</b></td></tr>
+    <tr><td>Výpočet baterie podle spotřeby</td><td>${round(batteryFromLoad)} Wh / ${round(batteryFromLoad/batt.nominalV,1)} Ah</td></tr>
+    <tr><td>Výpočet baterie podle měniče</td><td>${round(batteryFromInverter)} Wh / ${round(batteryFromInverter/batt.nominalV,1)} Ah</td></tr>
+    <tr><td>Použitá baterie</td><td><b>${round(batteryWh)} Wh / ${round(batteryAh,1)} Ah</b></td></tr>
+    <tr><td>Využitelná energie</td><td>${round(usableEnergyWh)} Wh</td></tr>
+    <tr><td>Dny bez slunce</td><td>${round(daysWithoutSun,2)}</td></tr>
+    <tr><td>Orientační C-rate baterie</td><td class="${batteryLoad.cls}"><b>${round(cRate,2)} C</b></td></tr>
+    <tr><td>Hodnocení zatížení baterie</td><td class="${batteryLoad.cls}">${batteryLoad.text}</td></tr>
+
+    <tr><th colspan="2" style="text-align:left">Měnič</th></tr>
+    <tr><td>Proud měniče z baterie</td><td class="${invCurrent<=val('bmsMax')?'ok':'bad'}">${round(invCurrent,1)} A</td></tr>
+    <tr><td>Max. proud BMS</td><td>${round(val('bmsMax'),1)} A</td></tr>
+    <tr><td>Kontrola podle měniče</td><td><b>${round(recBatteryWhByInverter)} Wh / ${round(recBatteryAhByInverter,1)} Ah</b></td></tr>
+  </table><p class="profi-note">Kabely a jištění jsou orientační návrh podle úbytku napětí, proudové rezervy a zjednodušené zatížitelnosti měděných vodičů. Finální realizaci je nutné ověřit podle způsobu uložení, teploty, délky vedení, vypínací schopnosti DC jištění a platných ČSN/IEC norem.</p>`);
+
+  
+  // Jednoduchá měsíční SOC orientační simulace: deficit snižuje baterii, přebytek ji dobíjí.
+  let soc=batteryWh;
+  let socMin=batteryWh;
+  let socSeries=[];
+  monthly.forEach(x=>{
+    soc=Math.max(0,Math.min(batteryWh,soc+x.diff));
+    socMin=Math.min(socMin,soc);
+    socSeries.push(batteryWh>0 ? round(soc/batteryWh*100,1) : 0);
+  });
+  txt('socOut',`<table>
+    <tr><td>Kapacita baterie</td><td>${round(batteryWh)} Wh</td></tr>
+    <tr><td>Nejnižší stav baterie (SOC)</td><td class="${socMin>0?'ok':'bad'}">${batteryWh>0?round(socMin/batteryWh*100,1):0} % <span class="small">(${round(socMin)} Wh)</span></td></tr>
+    <tr><td>Výsledek</td><td class="${socMin>0?'ok':'bad'}">${socMin>0?'OK – baterie se v modelu úplně nevybije':'NENÍ OK – baterie se může vybít na nulu'}</td></tr>
+  </table>
+  <p class="profi-note">SOC = stav nabití baterie. Pokud nejnižší stav baterie klesne na 0 %, systém v daném období nemusí mít dost energie a může dojít k výpadku. Výpočet je orientační měsíční model.</p>`);
+
+  drawChart('chartSoc','line',monthly.map(x=>x.name),[
+    {label:'SOC baterie %',data:socSeries}
+  ]);
+
+  const directUse=Math.min(totalProd,totalCons);
+  const deficit=Math.max(0,totalCons-totalProd);
+  const surplus=Math.max(0,totalProd-totalCons);
+  const batteryBuffer=Math.min(surplus,batteryWh);
+  const losses=Math.max(0,monthly.reduce((s,x)=>s+(x.unclipped||x.prod),0)-totalProd);
+  txt('energyFlow',`
+    <div class="flow-box"><div>Výroba FV</div><div class="flow-value">${round(totalProd)} Wh</div></div>
+    <div class="flow-box"><div>Spotřeba pokrytá</div><div class="flow-value">${round(directUse)} Wh</div></div>
+    <div class="flow-box"><div>Do baterie / rezerva</div><div class="flow-value">${round(batteryBuffer)} Wh</div></div>
+    <div class="flow-box"><div>Přebytek</div><div class="flow-value">${round(Math.max(0,surplus-batteryBuffer))} Wh</div></div>
+    <div class="flow-box"><div>Deficit</div><div class="flow-value">${round(deficit)} Wh</div></div>
+    <div class="flow-box"><div>Ztráty + clipping</div><div class="flow-value">${round(losses+totalClipped)} Wh</div></div>
+  `);
+
+  txt('connectionDiagram',`
+    <p class="small"><b>Tok zapojení:</b> FV pole → regulátor → baterie → měnič → spotřeba.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-box"><b>FV panely</b><br>${stringText(series,parallel)}<br>${round(fieldFromPanels)} Wp</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box"><b>${regType.toUpperCase()} regulátor</b><br>${regType==='mppt'?mpptRecommended+' A MPPT':pwmRecommended+' A PWM'}<br>Voc ${round(vocCold,1)} V</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box"><b>Baterie</b><br>${round(batteryWh)} Wh<br>${round(batteryAh,1)} Ah</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box"><b>Měnič</b><br>${round(val('inverterW'))} W<br>${round(invCurrent,1)} A</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box"><b>Spotřeba</b><br>${round(dailyWh)} Wh/den</div>
+    </div>
+  `);
+
+  txt('cableOut',`
+    <div class="calc-highlight cable-summary-highlight">
+      <div class="calc-metric"><div class="calc-label">FV kabel</div><div class="calc-value ${pvFuse.ok?'ok':'bad'}"><div class="cable-mini-table"><div class="cable-mini-cell"><span class="cable-mini-label">Průřez</span><span class="cable-mini-value">${pvCableStd} mm²</span></div><div class="cable-mini-cell"><span class="cable-mini-label">Jištění</span><span class="cable-mini-value">${pvFuse.fuse} A</span></div></div></div></div>
+      <div class="calc-metric"><div class="calc-label">Regulátor → baterie</div><div class="calc-value ${regFuse.ok?'ok':'bad'}"><div class="cable-mini-table"><div class="cable-mini-cell"><span class="cable-mini-label">Průřez</span><span class="cable-mini-value">${batCableStd} mm²</span></div><div class="cable-mini-cell"><span class="cable-mini-label">Jištění</span><span class="cable-mini-value">${regFuse.fuse} A</span></div></div></div></div>
+      <div class="calc-metric"><div class="calc-label">Baterie → měnič</div><div class="calc-value ${invFuse.ok?'ok':'bad'}"><div class="cable-mini-table"><div class="cable-mini-cell"><span class="cable-mini-label">Průřez</span><span class="cable-mini-value">${invCableStd} mm²</span></div><div class="cable-mini-cell"><span class="cable-mini-label">Jištění</span><span class="cable-mini-value">${invFuse.fuse} A</span></div></div></div></div>
+      <div class="calc-metric"><div class="calc-label">Celkový stav</div><div class="calc-value ${statusClass(cableStatusOk)}">${statusText(cableStatusOk)}</div></div>
+    </div>
+    <div class="open-panel-actions single" style="margin-top:8px">
+      <button type="button" id="cableToggleBtn" class="open-panel-btn" onclick="openCablePage()">Otevřít podrobnosti kabelů a jištění</button>
+    </div>
+  `);
+
+  txt('cableDetails',`
+    <div class="cable-card-list">
+      <div class="cable-card">
+        <h4>Fotovoltaické panely → regulátor nabíjení</h4>
+        <div class="cable-row"><div class="cable-label">Délka vedení</div><div class="cable-value">${pvLen} m</div></div>
+        <div class="cable-row"><div class="cable-label">Proud ve vedení</div><div class="cable-value">${round(pvCurrent,1)} A</div></div>
+        <div class="cable-row"><div class="cable-label">Napětí stringu</div><div class="cable-value">${round(vmpString,1)} V</div></div>
+        <div class="cable-row"><div class="cable-label">Povolený úbytek napětí</div><div class="cable-value">2 %</div></div>
+        <div class="cable-row"><div class="cable-label">Vypočtený minimální průřez kabelu</div><div class="cable-value">${round(pvCable,1)} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučený průřez kabelu</div><div class="cable-value ${cableLoadColor(pvCurrent,pvFuse.ampacity)}">${pvCableStd} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Orientační proudová zatížitelnost kabelu</div><div class="cable-value ${cableLoadColor(pvCurrent,pvFuse.ampacity)}">${pvFuse.ampacity} A</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučené jištění</div><div class="cable-value">${pvFuse.fuse} A</div></div>
+        <div class="cable-status ${pvFuse.ok?'ok':'bad'}">${pvFuse.ok?'OK':'NENÍ OK'}</div>
+      </div>
+
+      <div class="cable-card">
+        <h4>Regulátor nabíjení → baterie</h4>
+        <div class="cable-row"><div class="cable-label">Délka vedení</div><div class="cable-value">${batLen} m</div></div>
+        <div class="cable-row"><div class="cable-label">Proud ve vedení</div><div class="cable-value">${round(regCurrent,1)} A</div></div>
+        <div class="cable-row"><div class="cable-label">Napětí bateriového systému</div><div class="cable-value">${round(batt.currentV,1)} V</div></div>
+        <div class="cable-row"><div class="cable-label">Povolený úbytek napětí</div><div class="cable-value">1,5 %</div></div>
+        <div class="cable-row"><div class="cable-label">Vypočtený minimální průřez kabelu</div><div class="cable-value">${round(batCable,1)} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučený průřez kabelu</div><div class="cable-value ${cableLoadColor(regCurrent,regFuse.ampacity)}">${batCableStd} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Orientační proudová zatížitelnost kabelu</div><div class="cable-value ${cableLoadColor(regCurrent,regFuse.ampacity)}">${regFuse.ampacity} A</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučené jištění</div><div class="cable-value">${regFuse.fuse} A</div></div>
+        <div class="cable-status ${regFuse.ok?'ok':'bad'}">${regFuse.ok?'OK':'NENÍ OK'}</div>
+      </div>
+
+      <div class="cable-card">
+        <h4>Baterie → měnič napětí</h4>
+        <div class="cable-row"><div class="cable-label">Délka vedení</div><div class="cable-value">${invLen} m</div></div>
+        <div class="cable-row"><div class="cable-label">Proud ve vedení</div><div class="cable-value">${round(invCurrent,1)} A</div></div>
+        <div class="cable-row"><div class="cable-label">Napětí bateriového systému</div><div class="cable-value">${round(batt.currentV,1)} V</div></div>
+        <div class="cable-row"><div class="cable-label">Povolený úbytek napětí</div><div class="cable-value">1 %</div></div>
+        <div class="cable-row"><div class="cable-label">Vypočtený minimální průřez kabelu</div><div class="cable-value">${round(invCable,1)} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučený průřez kabelu</div><div class="cable-value ${cableLoadColor(invCurrent,invFuse.ampacity)}">${invCableStd} mm²</div></div>
+        <div class="cable-row"><div class="cable-label">Orientační proudová zatížitelnost kabelu</div><div class="cable-value ${cableLoadColor(invCurrent,invFuse.ampacity)}">${invFuse.ampacity} A</div></div>
+        <div class="cable-row"><div class="cable-label">Doporučené jištění</div><div class="cable-value">${invFuse.fuse} A</div></div>
+        <div class="cable-status ${invFuse.ok?'ok':'bad'}">${invFuse.ok?'OK':'NENÍ OK'}</div>
+      </div>
+    </div>  `);
+
+  let table=`<tr><th>Měsíc</th><th>PVGIS<br>kWh/kWp</th><th>Výroba Wh/měsíc</th><th>Průměrná výroba Wh/den</th><th>Spotřeba Wh/měsíc</th><th>Clipping Wh</th><th>Rozdíl Wh</th></tr>`;
+  let cards='';
+  monthly.forEach((x,i)=>{
+    const coveragePct = x.cons>0 ? round((x.prod/x.cons)*100) : 0;
+    const diffCls = x.diff>=0 ? 'ok' : 'bad';
+    const diffText = x.diff>=0 ? `+${round(x.diff)} Wh` : `${round(x.diff)} Wh`;
+    table+=`<tr><td>${x.name}</td><td><input type='number' value='${round(x.pvgis,2)}' oninput='pvgis[${i}]=Number(this.value)||0;pvgisValid=true;pvgisStatusText="ručně upravené";updatePVGISState();calculate()'></td><td>${round(x.prod)}</td><td>${round(x.avgDaily)}</td><td>${round(x.cons)}</td><td>${round(x.clippedEnergy||0)}</td><td class='${diffCls}'>${round(x.diff)}</td></tr>`;
+    cards+=`
+      <div class="month-card">
+        <div class="month-card-header">
+          <div class="month-card-title">${x.name}</div>
+          <div class="month-card-badge ${diffCls}">${coveragePct} %</div>
+        </div>
+        <div class="month-card-body">
+          <div class="month-row"><div class="month-label">PVGIS kWh/kWp</div><div class="month-value"><input type="number" step="0.01" value="${round(x.pvgis,2)}" oninput="pvgis[${i}]=Number(this.value)||0;pvgisValid=true;pvgisStatusText='ručně upravené';updatePVGISState();calculate()"></div></div>
+          <div class="month-row"><div class="month-label">Výroba za měsíc</div><div class="month-value">${round(x.prod)} Wh</div></div>
+          <div class="month-row"><div class="month-label">Průměrná výroba za den</div><div class="month-value">${round(x.avgDaily)} Wh</div></div>
+          <div class="month-row"><div class="month-label">Spotřeba za měsíc</div><div class="month-value">${round(x.cons)} Wh</div></div>
+          <div class="month-row"><div class="month-label">Clipping měniče</div><div class="month-value">${round(x.clippedEnergy||0)} Wh</div></div>
+          <div class="month-summary ${diffCls}">Rozdíl: ${diffText}</div>
+        </div>
+      </div>`;
+  });
+  el('monthTable').innerHTML=table;
+  if(el('monthCards')) el('monthCards').innerHTML=cards;
+
+  drawChart('chartProd','bar',monthly.map(x=>x.name),[
+    {label:'Výroba Wh',data:monthly.map(x=>round(x.prod))},
+    {label:'Spotřeba Wh',data:monthly.map(x=>round(x.cons))}
+  ]);
+  drawChart('chartDiff','bar',monthly.map(x=>x.name),[
+    {label:'Rozdíl Wh',data:monthly.map(x=>round(x.diff))}
+  ]);
+  updateProtocolChartImages();
+}
+
+function cssVar(name){
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function hexToRgba(hex, alpha){
+  hex = (hex || '#000000').replace('#','').trim();
+  if(hex.length === 3) hex = hex.split('').map(x=>x+x).join('');
+  const n = parseInt(hex,16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function refreshCharts(){
+  if(typeof calculate === 'function') calculate();
+}
+
+function updateProtocolChartImages(){
+  const pairs=[['chartProd','p_chart_prod_img'],['chartDiff','p_chart_diff_img']];
+  pairs.forEach(([canvasId,imgId])=>{
+    const canvas=document.getElementById(canvasId);
+    const img=document.getElementById(imgId);
+    if(!canvas || !img) return;
+    try{
+      // Před tiskem musí být graf převedený na obrázek. Chart.js někdy ještě animuje,
+      // proto graf zastavíme a vykreslíme bez animace, aby PDF nebylo prázdné.
+      if(charts && charts[canvasId]){
+        charts[canvasId].stop();
+        charts[canvasId].update('none');
+      }
+      const dataUrl=canvas.toDataURL('image/png',1.0);
+      if(dataUrl && dataUrl.length>100){
+        img.src=dataUrl;
+        img.style.display='block';
+        img.style.visibility='visible';
+      }
+    }catch(e){
+      console.log('Graf pro tisk se nepodařilo připravit:', canvasId, e);
+      img.removeAttribute('src');
+      img.style.display='none';
+    }
+  });
+}
+
+function drawChart(id,type,labels,datasets){
+  const canvas=el(id);
+  if(!canvas || typeof Chart==='undefined') return;
+  if(charts[id]) charts[id].destroy();
+
+  const prod = cssVar('--chart-prod') || '#2563eb';
+  const cons = cssVar('--chart-cons') || '#f59e0b';
+  const diff = cssVar('--chart-diff') || '#16a34a';
+  const neg = cssVar('--chart-diff-neg') || '#dc2626';
+  const soc = cssVar('--chart-soc') || '#7c3aed';
+  const tick = cssVar('--chart-tick') || '#475569';
+  const grid = cssVar('--chart-grid') || 'rgba(15,23,42,.10)';
+
+  const styledDatasets = datasets.map((ds, index)=>{
+    const label = String(ds.label || '');
+    let color = index === 0 ? prod : cons;
+    if(id === 'chartSoc') color = soc;
+    if(id === 'chartDiff') color = diff;
+    const values = Array.isArray(ds.data) ? ds.data : [];
+    const backgroundColor = id === 'chartDiff'
+      ? values.map(v => Number(v) >= 0 ? hexToRgba(diff,.72) : hexToRgba(neg,.72))
+      : type === 'line' ? hexToRgba(color,.16) : hexToRgba(color,.74);
+
+    return {
+      ...ds,
+      borderColor: color,
+      backgroundColor,
+      borderWidth: type === 'line' ? 3 : 1,
+      borderRadius: 0,
+      borderSkipped: false,
+      maxBarThickness: 34,
+      tension: .35,
+      pointRadius: type === 'line' ? 3 : 0,
+      pointHoverRadius: type === 'line' ? 6 : 0,
+      fill: type === 'line',
+    };
+  });
+
+  charts[id]=new Chart(canvas,{
+    type,
+    data:{labels,datasets:styledDatasets},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:{duration:420,easing:'easeOutQuart'},
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{
+          position:'top',
+          align:'end',
+          labels:{color:tick,usePointStyle:true,boxWidth:8,boxHeight:8,font:{size:12,weight:'600'}}
+        },
+        tooltip:{
+          backgroundColor:'rgba(0,0,0,.88)',
+          titleColor:'#fff',
+          bodyColor:'#fff',
+          borderColor:'rgba(255,255,255,.16)',
+          borderWidth:1,
+          padding:12,
+          cornerRadius:12,
+          displayColors:true,
+          callbacks:{
+            label:function(ctx){
+              const label = ctx.dataset.label ? ctx.dataset.label + ': ' : '';
+              const value = Number(ctx.parsed.y || 0).toLocaleString('cs-CZ');
+              return label + value + (id === 'chartSoc' ? ' %' : ' Wh');
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ticks:{color:tick,font:{size:12,weight:'600'}},grid:{display:false},border:{display:false}},
+        y:{ticks:{color:tick,font:{size:12},callback:function(v){return Number(v).toLocaleString('cs-CZ')}},grid:{color:grid,drawBorder:false},border:{display:false}}
+      }
+    }
+  });
+}
+
+
+function extractPVGISMonthlyValues(data){
+  // Podporované formáty:
+  // 1) oficiální PVGIS: data.outputs.monthly.fixed[].E_m
+  // 2) zjednodušený export: {pvgis:[...]}
+  // 3) pole objektů s E_m
+  if(Array.isArray(data?.outputs?.monthly?.fixed)){
+    return data.outputs.monthly.fixed.slice(0,12).map(x=>Number(x.E_m)||0);
+  }
+  if(Array.isArray(data?.pvgis)){
+    return data.pvgis.slice(0,12).map(x=>Number(x)||0);
+  }
+  if(Array.isArray(data) && data.length>=12 && data[0] && typeof data[0]==='object' && 'E_m' in data[0]){
+    return data.slice(0,12).map(x=>Number(x.E_m)||0);
+  }
+  return null;
+}
+
+function importPVGISJsonFile(file){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      const values=extractPVGISMonthlyValues(data);
+      if(!values || values.length<12){
+        throw new Error('Soubor neobsahuje 12 měsíčních hodnot PVGIS E_m.');
+      }
+      pvgis=values;
+      pvgisValid=true;
+      pvgisStatusText='import JSON';
+      updatePVGISState();
+      calculate();
+      saveProject();
+      txt('warning','✅ PVGIS JSON importován a výpočet přepočítán.');
+    }catch(e){
+      txt('warning','❌ Import PVGIS JSON se nepodařil: '+e.message);
+      console.log(e);
+    }
+  };
+  reader.onerror=()=>{
+    txt('warning','❌ Soubor PVGIS JSON se nepodařilo přečíst.');
+  };
+  reader.readAsText(file);
+}
+
+
+function setProtocolText(id, value){
+  const node=document.getElementById(id);
+  if(node) node.innerHTML=value;
+}
+
+function updatePrintProtocol(){
+  if(!document.getElementById('printProtocolPage')) return;
+
+  const dailyWh=val('dailyWh'), eff=val('eff'), series=val('series'), parallel=val('parallel'), panelWp=val('panelWp');
+  const fieldFromPanels=series*parallel*panelWp;
+  const fieldWp=val('fieldManual');
+  const sysV=Number(el('voltageMode').value);
+  const batt=getBatteryParams(el('batteryType').value,sysV);
+  const invCurrent=val('inverterW')/Math.max(batt.currentV,1);
+
+  // Protokol musí použít stejnou hodnotu baterie jako hlavní výpočet.
+  // Pokud uživatel nezadá vlastní baterii, bere se automaticky doporučená kapacita.
+  const usableNeededWh=dailyWh*val('backupDays');
+  const batteryFromLoad=usableNeededWh/(batt.dod*batt.efficiency);
+  const recBatteryAhByInverter=recommendedBatteryAhForInverter(invCurrent, el('batteryType').value);
+  const batteryFromInverter=recBatteryAhByInverter*batt.nominalV;
+  const recommendedWh=Math.max(batteryFromLoad,batteryFromInverter);
+  const manualRaw=String(el('batteryManual')?.value || '').trim();
+  const manualVal=manualRaw===''?0:Number(manualRaw.replace(',', '.'))||0;
+  const batteryWh=manualVal>0
+    ? (el('batUnit').value==='Ah' ? manualVal*batt.nominalV : manualVal)
+    : recommendedWh;
+  const batteryAh=batt.nominalV>0?batteryWh/batt.nominalV:0;
+  const vmpString=val('series')*val('vmp');
+  const vocCold=val('series')*val('voc')*(1+Math.abs(val('vocCoeff'))/100*(25-val('tmin')));
+  const regType=el('regType').value;
+  const pvCurrent=val('isc')*val('parallel');
+  const mpptPowerCurrent=fieldWp/Math.max(batt.regulatorV,1);
+  const mpptInputCurrent=val('isc')*val('parallel');
+  const mpptCurrent=Math.max(mpptPowerCurrent,mpptInputCurrent)*1.25;
+  const pwmCurrent=pvCurrent*1.25;
+  const regCurrent=regType==='mppt'?mpptCurrent:pwmCurrent;
+  const mpptRecommended=recommendRegulator(mpptCurrent);
+  const pwmRecommended=recommendRegulator(pwmCurrent);
+  const mpptStatus=mpptWindowStatus(vmpString,vocCold);
+
+  const monthly=months.map((m,i)=>{
+    const lossFactor=eff*(val('invEff')/100)*(1-val('cableLossPct')/100)*(1-val('agingLossPct')/100);
+    let prod=(fieldWp/1000)*pvgis[i]*1000*lossFactor;
+    const maxMonthAc=val('inverterW')>0 ? val('inverterW')*m[1]*24 : Infinity;
+    prod=Math.min(prod,maxMonthAc);
+    const cons=dailyWh*m[1];
+    return {prod,cons,diff:prod-cons};
+  });
+  const totalProd=monthly.reduce((s,x)=>s+x.prod,0);
+  const totalCons=monthly.reduce((s,x)=>s+x.cons,0);
+  const coverage=totalCons>0?totalProd/totalCons:0;
+  const summerIdx=[4,5,6,7,8], winterIdx=[10,11,0,1];
+  const summerProd=summerIdx.reduce((s,i)=>s+monthly[i].prod,0);
+  const summerCons=summerIdx.reduce((s,i)=>s+monthly[i].cons,0);
+  const winterProd=winterIdx.reduce((s,i)=>s+monthly[i].prod,0);
+  const winterCons=winterIdx.reduce((s,i)=>s+monthly[i].cons,0);
+  const summerCoverage=summerCons>0?summerProd/summerCons:0;
+  const winterCoverage=winterCons>0?winterProd/winterCons:0;
+
+  const usableEnergyWh=batteryWh*batt.dod*batt.efficiency;
+  const daysWithoutSun=dailyWh>0?usableEnergyWh/dailyWh:0;
+  const cRate=batteryAh>0?invCurrent/batteryAh:0;
+
+  const pvCable=cableSection(val('pvLen'),pvCurrent,vmpString,2);
+  const batCable=cableSection(val('batLen'),regCurrent,batt.currentV,1.5);
+  const invCable=cableSection(val('invLen'),invCurrent,batt.currentV,1);
+  const pvSelect=selectCableAndFuse(pvCable,pvCurrent,true);
+  const regSelect=selectCableAndFuse(batCable,regCurrent,false);
+  const invSelect=selectCableAndFuse(invCable,invCurrent,false);
+
+  setProtocolText('p_mode', el('mode').value==='pole'?'FV pole → spotřeba':'spotřeba → FV pole');
+  setProtocolText('p_field', `${round(fieldWp)} Wp`);
+  setProtocolText('p_string', stringText(series,parallel));
+  setProtocolText('p_daily', `${round(dailyWh)} Wh/den`);
+  setProtocolText('p_coverage', `${round(coverage*100,1)} %`);
+  setProtocolText('p_seasons', `${round(summerCoverage*100)} % / ${round(winterCoverage*100)} %`);
+  setProtocolText('p_battery', `${round(batteryWh)} Wh / ${round(batteryAh,1)} Ah${manualVal>0?'':' <span class="small">(AUTO)</span>'}`);
+  setProtocolText('p_days', `${round(daysWithoutSun,1)}`);
+  setProtocolText('p_inverter', `${round(val('inverterW'))} W / ${round(invCurrent,1)} A`);
+  setProtocolText('p_bms', `${round(val('bmsMax'))} A`);
+  setProtocolText('p_crate', `${round(cRate,2)} C`);
+  setProtocolText('p_reg', regType==='mppt'?`${mpptRecommended} A MPPT`:`${pwmRecommended} A PWM`);
+  setProtocolText('p_vmp', `${round(vmpString,1)} V`);
+  setProtocolText('p_voc', `${round(vocCold,1)} V`);
+  setProtocolText('p_mppt', mpptStatus.text);
+  setProtocolText('p_cable_pv', `${pvSelect.section} mm² / ${pvSelect.fuse} A`);
+  setProtocolText('p_cable_reg', `${regSelect.section} mm² / ${regSelect.fuse} A`);
+  setProtocolText('p_cable_inv', `${invSelect.section} mm² / ${invSelect.fuse} A`);
+  setProtocolText('p_recommendations', el('recommendations') ? el('recommendations').innerHTML : '');
+  updateProtocolChartImages();
+}
+
+function printProtocol(){
+  try{ calculate(); }catch(e){ console.log(e); }
+  try{ updatePrintProtocol(); updateProtocolChartImages(); }catch(e){ console.log(e); }
+  const modal=document.getElementById('pdfPreviewModal');
+  const previewWasOpen = !!(modal && modal.style.display !== 'none');
+  if(modal) modal.style.display='none';
+  document.body.classList.remove('print-preview-open');
+  document.body.classList.add('print-protocol');
+
+  const restoreAfterPrint = ()=>{
+    document.body.classList.remove('print-protocol');
+    if(previewWasOpen && modal){
+      cloneProtocolForPreview();
+      modal.style.display='flex';
+      document.body.classList.add('print-preview-open');
+    }else if(modal){
+      modal.style.display='none';
+      document.body.classList.remove('print-preview-open');
+    }
+  };
+
+  window.addEventListener('afterprint', restoreAfterPrint, {once:true});
+  setTimeout(()=>{
+    try{ updateProtocolChartImages(); }catch(e){ console.log(e); }
+    window.print();
+    setTimeout(()=>{
+      if(document.body.classList.contains('print-protocol')) restoreAfterPrint();
+    },900);
+  },180);
+}
+
+
+function cloneProtocolForPreview(){
+  try{ calculate(); }catch(e){ console.log(e); }
+  try{ updatePrintProtocol(); updateProtocolChartImages(); }catch(e){ console.log(e); }
+  const src=document.getElementById('printProtocolPage');
+  const target=document.getElementById('printPreviewContent');
+  if(!src || !target) return;
+  const clone=src.cloneNode(true);
+  clone.style.setProperty('display','block','important');
+  clone.style.visibility='visible';
+  clone.style.width='190mm';
+  clone.id='printProtocolPreviewClone';
+  target.innerHTML='';
+  target.appendChild(clone);
+  if(!target.textContent.trim()){
+    target.innerHTML='<div class="protocol-box"><b>Náhled tisku/PDF se nepodařilo sestavit.</b><br>Zkus tlačítko Tisk / PDF.</div>';
+  }
+}
+
+function showPdfPreview(){
+  cloneProtocolForPreview();
+  document.body.classList.add('print-preview-open');
+  const modal=document.getElementById('pdfPreviewModal');
+  if(modal) modal.style.display='flex';
+}
+
+function hidePdfPreview(){
+  const modal=document.getElementById('pdfPreviewModal');
+  if(modal) modal.style.display='none';
+  document.body.classList.remove('print-preview-open');
+}
+
+
+function updateMobileButtonState(){
+  const btn=document.getElementById('mobileToggleBtn');
+  if(!btn) return;
+
+  const active=document.body.classList.contains('mobile-mode');
+
+  btn.classList.remove('mobile-on','mobile-off','mobile-active');
+  btn.classList.add(active ? 'mobile-on' : 'mobile-off');
+  btn.textContent = active
+    ? 'Mobilní režim zapnutý'
+    : 'Mobilní režim vypnutý';
+}
+
+function toggleMobile(){
+  const active=document.body.classList.toggle('mobile-mode');
+  localStorage.setItem('mobileMode', active ? '1' : '0');
+  updateMobileButtonState();
+}
+
+
+function normalizeCoverageSelect(){
+  const c=el('targetCoverage');
+  if(!c) return;
+  const allowed=['70','90','110'];
+  if(!allowed.includes(String(c.value))){
+    const n=Number(c.value)||90;
+    c.value = n<=75 ? '70' : (n>=105 ? '110' : '90');
+  }
+}
+
+function updateCoverageInfo(){
+  const info=el('coverageInfo');
+  if(!info) return;
+  const v=val('targetCoverage');
+  if(v<=70){
+    info.innerHTML='Menší systém s nižší pořizovací cenou. Vhodné, když nevadí větší závislost na dodávce energie.';
+  }else if(v<=90){
+    info.innerHTML='Doporučená volba: vyvážený systém s dobrým poměrem cena/výkon.';
+  }else{
+    info.innerHTML='Větší systém pro maximální výrobu. Může mít vyšší letní přebytky energie.';
+  }
+}
+
+
+function closeAnySubpage(){
+  closeInfoPage();
+  closeCablePage();
+  closeMonthPage();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadProject();
+  normalizeCoverageSelect();
+  updateCoverageInfo();
+  updatePVGISState();
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAnySubpage(); });
+  ['infoPage','cablePage','monthBlock'].forEach(id=>{ const p=el(id); if(p) p.addEventListener('click', ev=>{ if(ev.target===p) { if(id==='infoPage') closeInfoPage(); else if(id==='cablePage') closeCablePage(); else closeMonthPage(); } }); });
+  initMap();
+document.querySelectorAll('input,select,textarea').forEach(x=>{
+    x.addEventListener('input',()=>{
+      if(['lat','lon','angle','aspect','loss'].includes(x.id)){invalidatePVGIS();autoPVGIS();}
+      else { if(x.id==='targetCoverage') updateCoverageInfo(); syncModeInputs(x.id); calculate(); }
+      saveProject();
+    });
+    x.addEventListener('change',()=>{
+      if(['lat','lon','angle','aspect','loss'].includes(x.id)){invalidatePVGIS();autoPVGIS();}
+      else { if(x.id==='targetCoverage') updateCoverageInfo(); syncModeInputs(x.id); calculate(); }
+      saveProject();
+    });
+  });
+
+  setMonthTableState(false);
+
+  try{ calculate(); }catch(e){ console.log(e); txt('warning','⚠ Výpočet se nepodařilo dokončit: '+e.message); }
+  // Statická omezená verze: PVGIS se nenačítá automaticky po startu.
+  updatePVGISState();
+  // Prioritní stav: mobilní režim je při prvním otevření VYPNUTÝ.
+  document.body.classList.remove('mobile-mode');
+  if(localStorage.getItem('mobileMode') === '1'){
+    document.body.classList.add('mobile-mode');
+  }
+  updateMobileButtonState();
+  updateThemeButton();
+});
+
+function exportProjectFile(){
+  const data={};
+  document.querySelectorAll('input,select,textarea').forEach(x=>{
+    if(x.id && x.type !== 'file') data[x.id]=x.value;
+  });
+  data._app='FVE konfigurátor';
+  data._version='2.7';
+  data._exportedAt=new Date().toISOString();
+
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='fve_konfigurator_projekt.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function importProjectFile(event){
+  const file=event?.target?.files?.[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      Object.keys(data).forEach(id=>{
+        const input=document.getElementById(id);
+        if(input && input.type !== 'file') input.value=data[id];
+      });
+      saveProject();
+      if(typeof calculate==='function') calculate();
+      alert('Projekt byl načten.');
+    }catch(e){
+      alert('Soubor projektu se nepodařilo načíst.');
+      console.error(e);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+function savePrintPDF(){
+  printProtocol();
+}
+
+
+function importPVGISFile(event){
+  const file=event?.target?.files?.[0];
+  if(!file) return;
+  if(typeof importPVGISJsonFile === 'function'){
+    importPVGISJsonFile(file);
+  }
+  if(event?.target) event.target.value='';
+}
+
+</script>
+
+<div class="sticky-actions">
+  <button type="button" id="mobileToggleBtn" onclick="toggleMobile()" class="mobile-off">Mobilní režim vypnutý</button>
+  <button type="button" id="themeToggleBtn" onclick="toggleTheme()">Tmavý režim</button>
+  <button type="button" onclick="showPdfPreview()">Tisk / PDF</button>
+
+
+
+<button type="button" onclick="exportProjectFile()">Export projektu</button>
+<button type="button" onclick="document.getElementById('projectImportFile').click()">Import projektu</button>
+<button type="button" onclick="document.getElementById('pvgisJsonFile').click()">Import PVGIS JSON</button>
+</div>
+
+<div id="pdfPreviewModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-actions">
+      <button type="button" onclick="printProtocol()">Tisk / PDF</button>
+      <button type="button" onclick="hidePdfPreview()">Zavřít</button>
+    </div>
+    <div id="printPreviewContent"></div>
+  </div>
+</div>
+
+<input id="projectImportFile" type="file" accept=".json,application/json" style="display:none" onchange="importProjectFile(event)">
+<input id="pvgisJsonFile" type="file" accept=".json,application/json" style="display:none" onchange="importPVGISFile(event)">
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => console.log('Service worker registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
