@@ -1,0 +1,31 @@
+# FVE konfigurátor – nasazení na Vercel
+
+Tahle složka je připravená k nahrání na Vercel.
+
+## Nejjednodušší postup
+
+1. Otevři https://vercel.com
+2. Přihlas se nebo se zaregistruj.
+3. Klikni na **Add New**.
+4. Klikni na **Project**.
+5. Zvol možnost nahrání projektu / drag & drop, případně nejdřív nahraj ZIP na GitHub.
+6. Nahraj obsah této složky nebo celý ZIP.
+7. Framework nech jako **Other**.
+8. Build command nech prázdný.
+9. Output directory nech prázdný.
+10. Klikni **Deploy**.
+
+Po deployi dostaneš adresu například:
+
+https://fve-konfigurator.vercel.app
+
+## Co je uvnitř
+
+- `index.html` – hlavní stránka aplikace
+- `manifest.webmanifest` – nastavení instalace jako aplikace
+- `icons/` – ikony aplikace
+- `vercel.json` – jednoduché nastavení pro Vercel
+
+## Důležité
+
+Neměň název `index.html`. Vercel ho používá jako hlavní stránku.
