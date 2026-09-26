@@ -1,0 +1,16 @@
+'use strict';
+const fs=require('fs');
+const path=require('path');
+const zlib=require('zlib');
+const crypto=require('crypto');
+const dir=path.join(__dirname,'source');
+const names=fs.readdirSync(dir).filter(n=>/^o131\.b64\.\d{2}$/.test(n)).sort();
+if(names.length!==16) throw new Error('O131: chybí zdrojové části.');
+const b64=names.map(n=>fs.readFileSync(path.join(dir,n),'utf8')).join('');
+const html=zlib.gunzipSync(Buffer.from(b64,'base64'));
+const sha=crypto.createHash('sha256').update(html).digest('hex');
+const expected='080e862f3696adff8585cbeebe208210e95b0e120dca533e0797e07a29b7e09a';
+if(sha!==expected) throw new Error('O131 SHA-256 nesouhlasí: '+sha);
+fs.mkdirSync(path.join(__dirname,'public'),{recursive:true});
+fs.writeFileSync(path.join(__dirname,'public','index.html'),html);
+console.log('O131 OK',html.length,'bytes',sha);
