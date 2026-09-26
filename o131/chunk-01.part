@@ -1,0 +1,5000 @@
+.system-type-wrap,
+.typ-systemu-wrap{
+  justify-content:flex-start!important;
+  text-align:left!important;
+  align-items:flex-start!important;
+  background:#ffffff!important;
+}
+
+.system-type-wrap *,
+.typ-systemu-wrap *{
+  text-align:left!important;
+}
+
+/* Bílé pozadí plochy Typ systému */
+select[id*="system"],
+select[name*="system"]{
+  background:#ffffff!important;
+  color:#000000!important;
+}
+
+/* Typ systému – zarovnání textu v poli i v rozbalené nabídce vlevo */
+#systemType,
+#systemMode,
+select[name="systemType"],
+select[name="systemMode"],
+select[id*="system" i],
+select[name*="system" i]{
+  text-align:left!important;
+  text-align-last:left!important;
+  padding-left:14px!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  appearance:auto!important;
+  -webkit-appearance:menulist!important;
+}
+
+#systemType option,
+#systemMode option,
+select[name="systemType"] option,
+select[name="systemMode"] option,
+select[id*="system" i] option,
+select[name*="system" i] option{
+  text-align:left!important;
+  background:#ffffff!important;
+  color:#000000!important;
+}
+
+/* Modal pro export projektu */
+.project-export-grid{
+  display:grid;
+  gap:10px;
+}
+
+.project-export-grid label{
+  margin-top:0;
+}
+
+.project-export-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+.project-export-actions button{
+  width:auto;
+  min-width:150px;
+}
+
+.project-export-note{
+  margin-top:8px;
+  padding:9px 10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card-soft,#f8fafc);
+}
+
+@media(max-width:700px){
+.project-export-actions{display:grid;grid-template-columns:1fr;}
+
+.project-export-actions button{width:100%;}
+}
+
+
+html input,
+html select,
+html textarea{
+  color:#111827 !important;
+  -webkit-text-fill-color:#111827 !important;
+  opacity:1 !important;
+}
+
+.profi-main-evaluation{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);}
+
+.profi-main-evaluation .calc-highlight{margin-bottom:8px!important;}
+
+@media print{
+.profi-main-evaluation{margin-top:5px!important;padding-top:5px!important;border-top:1px solid #ccc!important;}
+}
+
+/* Přehledné uspořádání rozklikávacích Podrobností systému */
+.system-details-layout{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.details-section{
+  background:var(--card,#fff);
+  border:1px solid var(--line,#d1d5db);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(15,23,42,.06);
+}
+
+.details-section h3{
+  margin:0 0 10px!important;
+  font-size:16px;
+  letter-spacing:-.01em;
+}
+
+.details-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:10px;
+}
+
+.details-kpi{
+  border:1px solid var(--line,#d1d5db);
+  border-radius:15px;
+  padding:10px 12px;
+  background:linear-gradient(180deg,var(--card,#fff),var(--card-soft,#f8fafc));
+}
+
+.details-kpi span{
+  display:block;
+  font-size:12px;
+  color:var(--muted,#4b5563);
+  margin-bottom:5px;
+  font-weight:700;
+}
+
+.details-kpi b{
+  display:block;
+  font-size:20px;
+  line-height:1.15;
+  color:var(--text,#111827);
+  overflow-wrap:anywhere;
+}
+
+.details-table{
+  width:100%;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  border:1px solid var(--line,#d1d5db)!important;
+  border-radius:14px!important;
+  overflow:hidden;
+  table-layout:fixed;
+}
+
+.details-table td{
+  padding:10px 12px!important;
+  border-bottom:1px solid var(--line-soft,#e5e7eb)!important;
+  vertical-align:top;
+}
+
+.details-table tr:last-child td{border-bottom:none!important;}
+
+.details-table td:first-child{
+  width:42%;
+  color:var(--muted,#4b5563);
+  font-weight:700;
+  text-align:left!important;
+}
+
+.details-table td:last-child{
+  text-align:right!important;
+  font-weight:800;
+  color:var(--text,#111827);
+}
+
+.details-message-box{
+  border:1px solid var(--line,#d1d5db);
+  border-radius:14px;
+  padding:10px 12px;
+  background:var(--card-soft,#f8fafc);
+  min-height:42px;
+  line-height:1.4;
+}
+
+.details-message-box ul{margin:0;padding-left:18px;}
+
+@media(max-width:700px){
+.details-section{padding:11px;border-radius:15px;}
+
+.details-kpi-grid{grid-template-columns:1fr 1fr;gap:8px;}
+
+.details-kpi{padding:9px;}
+
+.details-kpi b{font-size:16px;}
+
+.details-table td{display:block;width:100%!important;text-align:left!important;padding:8px 10px!important;}
+
+.details-table td:last-child{padding-top:0!important;}
+}
+
+@media print{
+.system-details-layout{gap:6px!important;}
+
+.details-section{box-shadow:none!important;border:1px solid #ccc!important;padding:6px!important;border-radius:6px!important;}
+
+.details-kpi-grid{grid-template-columns:repeat(4,1fr)!important;gap:4px!important;}
+
+.details-kpi{padding:5px!important;border-radius:5px!important;background:#fff!important;}
+
+.details-kpi span{font-size:7.5px!important;color:#333!important;}
+
+.details-kpi b{font-size:10px!important;color:#000!important;}
+
+.details-table td{font-size:8px!important;padding:3px!important;display:table-cell!important;}
+}
+
+/* Kompaktní rozložení Podrobností systému */
+.customer-summary-compact-note{
+  margin-top:8px;
+  padding:8px 10px;
+  border:1px solid var(--line,#d1d5db);
+  border-radius:12px;
+  background:var(--card-soft,#f8fafc);
+}
+
+.details-compact-section{
+  padding:12px!important;
+}
+
+.details-compact-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  align-items:start;
+}
+
+.details-mini-table td{
+  padding:7px 10px!important;
+}
+
+.details-mini-table td:first-child{
+  width:46%!important;
+  font-size:12px!important;
+}
+
+.details-mini-table td:last-child{
+  font-size:13px!important;
+  font-weight:850!important;
+}
+
+.details-compact-note{
+  margin-top:8px;
+  padding:7px 9px;
+  border-radius:10px;
+  background:rgba(148,163,184,.10);
+}
+
+@media(max-width:700px){
+.details-compact-grid{grid-template-columns:1fr;gap:8px;}
+
+.details-mini-table td{display:table-cell!important;width:auto!important;text-align:left!important;padding:7px 8px!important;}
+
+.details-mini-table td:last-child{text-align:right!important;padding-top:7px!important;}
+}
+
+@media print{
+.details-compact-grid{grid-template-columns:1fr 1fr!important;gap:4px!important;}
+
+.details-mini-table td{display:table-cell!important;padding:3px!important;font-size:8px!important;}
+
+.customer-summary-compact-note{display:none!important;}
+}
+
+
+.pvgis-pulse,
+.pvgis-pulse-glow,
+.pvgis-feed-pulse,
+.pvgis-loading-pulse{
+  animation-duration:2.8s!important;
+  animation-timing-function:ease-in-out!important;
+}
+
+.pvgis-pulse.finished,
+.pvgis-pulse.idle,
+.pvgis-feed-pulse.finished,
+.pvgis-feed-pulse.idle,
+.pvgis-loading-pulse.finished,
+.pvgis-loading-pulse.idle{
+  box-shadow:0 8px 20px rgba(0,0,0,.30),0 0 13px rgba(127,29,29,.42)!important;
+  filter:saturate(.62)!important;
+}
+
+/* FINÁLNÍ OPRAVA – celý software */
+.pvgis-pulse,
+.pvgis-pulse-glow,
+.pvgis-feed-pulse,
+.pvgis-loading-pulse{
+  animation-duration:2.8s!important;
+  animation-timing-function:ease-in-out!important;
+}
+
+.pvgis-pulse.finished,
+.pvgis-pulse.idle,
+.pvgis-feed-pulse.finished,
+.pvgis-feed-pulse.idle,
+.pvgis-loading-pulse.finished,
+.pvgis-loading-pulse.idle{
+  box-shadow:0 8px 20px rgba(0,0,0,.30),0 0 13px rgba(127,29,29,.42)!important;
+  filter:saturate(.62)!important;
+}
+
+/* Oprava: ve světlém režimu po doběhnutí mezicyklu zůstává černý text v bílém poli */
+html .pvgis-pulse.finished,
+html .pvgis-pulse.idle,
+html .pvgis-feed-pulse.finished,
+html .pvgis-feed-pulse.idle,
+html .pvgis-loading-pulse.finished,
+html .pvgis-loading-pulse.idle{
+  color:#000000!important;
+}
+
+html .pvgis-pulse.finished *,
+html .pvgis-pulse.idle *,
+html .pvgis-feed-pulse.finished *,
+html .pvgis-feed-pulse.idle *,
+html .pvgis-loading-pulse.finished *,
+html .pvgis-loading-pulse.idle *{
+  color:#000000!important;
+}
+
+/* ===== final-map-fix ===== */
+.protocol-map-img,
+.protocol-map-frame,
+.protocol-map-static{
+  height:240px!important;
+  max-height:240px!important;
+}
+
+@media print{
+body.print-protocol #printProtocolPage .protocol-map-img,
+body.print-protocol #printProtocolPage .protocol-map-frame,
+body.print-protocol #printProtocolPage .protocol-map-static,
+#printProtocolPreviewClone .protocol-map-img,
+#printProtocolPreviewClone .protocol-map-frame,
+#printProtocolPreviewClone .protocol-map-static{
+    height:240px!important;
+    max-height:240px!important;
+  }
+}
+
+/* ===== protocol-2page-fix ===== */
+@media print{
+  body.print-protocol #printProtocolPage{
+    height:auto!important;
+    overflow:visible!important;
+  }
+
+  body.print-protocol .protocol-box,
+  body.print-protocol .protocol-chart-card,
+  body.print-protocol .protocol-charts{
+    break-inside:auto!important;
+    page-break-inside:auto!important;
+  }
+
+  body.print-protocol .protocol-chart-img{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:260px!important;
+    max-height:none!important;
+    object-fit:contain!important;
+  }
+
+  body.print-protocol .chart-box,
+  body.print-protocol canvas{
+    max-height:none!important;
+  }
+}
+
+/* ===== restore-original-chart-size ===== */
+.protocol-charts{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:12px!important;
+}
+
+.protocol-chart-card{
+  min-height:320px!important;
+  padding:10px!important;
+}
+
+.protocol-chart-img{
+  width:100%!important;
+  min-height:260px!important;
+  max-height:none!important;
+  object-fit:contain!important;
+}
+
+@media print{
+body.print-protocol .protocol-charts{
+    grid-template-columns:1fr 1fr!important;
+    gap:10px!important;
+  }
+
+body.print-protocol .protocol-chart-card{
+    min-height:320px!important;
+    padding:8px!important;
+  }
+
+body.print-protocol .protocol-chart-img{
+    width:100%!important;
+    min-height:260px!important;
+    max-height:none!important;
+    object-fit:contain!important;
+  }
+}
+
+/* ===== final-protocol-layout-fix ===== */
+/* mapa v protokolu */
+.protocol-map-img,
+.protocol-map-frame,
+.protocol-map-static{
+  height:240px!important;
+  max-height:240px!important;
+}
+
+/* protokol může mít více stran */
+@media print{
+  body.print-protocol .protocol-box,
+  body.print-protocol .protocol-chart-card,
+  body.print-protocol .protocol-charts{
+    break-inside:auto!important;
+    page-break-inside:auto!important;
+  }
+}
+
+/* velikost grafů jako původní software */
+.protocol-charts{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+  align-items:start!important;
+}
+
+.protocol-chart-card{
+  border:1px solid #cccccc!important;
+  border-radius:6px!important;
+  padding:6px!important;
+  background:#ffffff!important;
+  min-height:auto!important;
+}
+
+.protocol-chart-img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  object-fit:contain!important;
+}
+
+@media print{
+body.print-protocol .protocol-charts{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+
+body.print-protocol .protocol-chart-card{
+    padding:6px!important;
+    min-height:auto!important;
+  }
+
+body.print-protocol .protocol-chart-img{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    object-fit:contain!important;
+  }
+}
+
+/* ===== graphs-directly-under-cables-print-fix ===== */
+@media print{
+  /* Grafy mají v protokolu následovat hned po bloku Kabely a jištění, bez nuceného zalomení na další stranu. */
+  body.print-protocol #printProtocolPage .protocol-graphs-box,
+  body.print-protocol #printProtocolPage .protocol-graphs-page{
+    page-break-before:auto!important;
+    break-before:auto!important;
+    margin-top:0!important;
+  }
+
+  body.print-protocol #printProtocolPage .protocol-graphs-box .protocol-charts,
+  body.print-protocol #printProtocolPage .protocol-graphs-page .protocol-charts{
+    page-break-before:auto!important;
+    break-before:auto!important;
+    margin-top:0!important;
+  }
+
+  body.print-protocol #printProtocolPage .protocol-graphs-box,
+  body.print-protocol #printProtocolPage .protocol-graphs-box .protocol-chart-card,
+  body.print-protocol #printProtocolPage .protocol-graphs-page,
+  body.print-protocol #printProtocolPage .protocol-graphs-page .protocol-chart-card{
+    break-inside:auto!important;
+    page-break-inside:auto!important;
+  }
+
+  body.print-protocol #printProtocolPage .protocol-graphs-box .protocol-chart-img,
+  body.print-protocol #printProtocolPage .protocol-graphs-page .protocol-chart-img{
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    object-fit:contain!important;
+  }
+}
+
+/* ===== bms-only-lifepo-style ===== */
+.bms-hidden-for-non-lifepo{
+  display:none!important;
+}
+
+/* ===== v5-clean-heading-style ===== */
+/* Verze 1 – čisté sjednocené zvýraznění nadpisů bez duplicitních CSS bloků.
+   Výsledky a Podrobnosti systému jsou bez boční odrážky podle posledního zadání. */
+body > h2,
+.card > h2,
+.card > h3,
+.merged-card-section > h3,
+.subpage-header > h2,
+#monthBlock > h3,
+#cableOut h4,
+.month-card-title,
+.protocol-box h3{
+  border-left:4px solid #000000!important;
+  padding-left:10px!important;
+  font-weight:850!important;
+  -webkit-print-color-adjust:exact!important;
+  print-color-adjust:exact!important;
+}
+
+body > h2,
+.card > h2,
+.card > h3,
+.merged-card-section > h3,
+.subpage-header > h2,
+#monthBlock > h3,
+.protocol-box h3{
+  background:rgba(244,246,248,.96)!important;
+  color:#000000!important;
+  border-radius:8px!important;
+  padding-top:7px!important;
+  padding-bottom:7px!important;
+}
+
+.protocol-box h3{
+  border-bottom:1px solid #cbd5e1!important;
+  margin:0 0 7px 0!important;
+  font-size:12px!important;
+  letter-spacing:.01em!important;
+}
+
+.protocol-title{
+  padding:5px 0 7px!important;
+  border-bottom:2px solid #111827!important;
+  margin-bottom:7px!important;
+}
+
+/* Výjimka podle zadání: hlavní nadpis Výsledky bez boční odrážky. */
+#resultsTitle{
+  border-left:none!important;
+  padding-left:0!important;
+  background:transparent!important;
+  color:var(--text,#111827)!important;
+  border-radius:0!important;
+}
+
+/* Vnitřní nadpisy Regulátor / Baterie / Měnič / Kabely ve výsledkové tabulce zůstávají zvýrazněné. */
+#regOut table th[colspan="2"]{
+  background:rgba(244,246,248,.96)!important;
+  color:#000000!important;
+  border-left:4px solid #000000!important;
+  text-align:left!important;
+  font-weight:900!important;
+  font-size:14px!important;
+  padding:8px 10px!important;
+  letter-spacing:.01em!important;
+}
+
+@media print{
+body > h2,
+.card > h2,
+.card > h3,
+.merged-card-section > h3,
+.subpage-header > h2,
+#monthBlock > h3,
+#cableOut h4,
+.month-card-title,
+.protocol-box h3,
+#regOut table th[colspan="2"]{
+    border-left:3px solid #000000!important;
+    background:#f3f4f6!important;
+    color:#000000!important;
+    border-radius:4px!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+#resultsTitle{
+    border-left:none!important;
+    background:transparent!important;
+    color:#000000!important;
+    border-radius:0!important;
+    padding-left:0!important;
+  }
+
+body.print-protocol #printProtocolPage .protocol-title{
+    border-bottom:2px solid #000000!important;
+    margin-bottom:5px!important;
+  }
+}
+
+/* Verze 1 – sjednocený jemný vzhled akčních/otevíracích tlačítek
+   Cíl: stejný font a klidný styl jako u tlačítka „Otevřít SOC baterie a graf nabití“.
+   Platí i pro tlačítka v náhledu Tisk/PDF. */
+.action-light-btn,
+button.action-light-btn,
+a.action-light-btn,
+.open-panel-btn,
+.subpage-close-btn,
+.soc-open-btn button.secondary,
+a[href*="pvg_tools"].buttonlink,
+button[onclick="autoDesignStrings()"],
+button[onclick="autoBattery()"],
+#pdfPreviewModal .modal-actions button,
+
+.open-panel-btn,
+.subpage-close-btn{
+  margin:0!important;
+}
+
+.action-light-btn:hover,
+button.action-light-btn:hover,
+a.action-light-btn:hover,
+.open-panel-btn:hover,
+.subpage-close-btn:hover,
+.soc-open-btn button.secondary:hover,
+a[href*="pvg_tools"].buttonlink:hover,
+button[onclick="autoDesignStrings()"]:hover,
+button[onclick="autoBattery()"]:hover,
+#pdfPreviewModal .modal-actions button:hover,
+
+html .action-light-btn,
+html button.action-light-btn,
+html a.action-light-btn,
+html .open-panel-btn,
+html .subpage-close-btn,
+html .soc-open-btn button.secondary,
+html a[href*="pvg_tools"].buttonlink,
+html button[onclick="autoDesignStrings()"],
+html button[onclick="autoBattery()"],
+html #pdfPreviewModal .modal-actions button,
+body.print-preview-open #pdfPreviewModal .modal-actions button{
+  background:#ffffff!important;
+  color:#111827!important;
+  border-color:#d1d5db!important;
+  box-shadow:0 2px 8px rgba(15,23,42,.08)!important;
+}
+
+html .action-light-btn:hover,
+html button.action-light-btn:hover,
+html a.action-light-btn:hover,
+html .open-panel-btn:hover,
+html .subpage-close-btn:hover,
+html .soc-open-btn button.secondary:hover,
+html a[href*="pvg_tools"].buttonlink:hover,
+html button[onclick="autoDesignStrings()"]:hover,
+html button[onclick="autoBattery()"]:hover,
+html #pdfPreviewModal .modal-actions button:hover,
+body.print-preview-open #pdfPreviewModal .modal-actions button:hover{
+  background:#f8fafc!important;
+  color:#111827!important;
+  border-color:#cbd5e1!important;
+}
+
+/* Úprava: viditelné ohraničení spodních tlačítek ve světlém režimu */
+
+
+
+
+
+
+/* ===== v5-only-light-bottom-nav-black-white-final ===== */
+
+
+
+
+
+
+
+
+
+/* ===== v5-light-bottom-nav-mobile-green-red-final ===== */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== v5-final-theme-toggle-button-exact-fix ===== */
+
+
+/* Když je aplikace ve světlém režimu{
+  background:#111111!important;
+  background-image:none!important;
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  border:1px solid #111111!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+
+
+
+html a[href*="pvg_tools"].buttonlink,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink,
+html button[onclick="autoDesignStrings()"],
+html button[onclick="autoBattery()"],
+html #cableToggleBtn,
+html .soc-open-btn button,
+html #pdfPreviewModal .modal-actions button,
+html .subpage-close-btn,
+body.print-preview-open #pdfPreviewModal .modal-actions button{
+  background:#f1f3f5!important;
+  background-image:none!important;
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  border:1px solid #c7ccd1!important;
+  border-radius:12px!important;
+  box-shadow:0 2px 7px rgba(15,23,42,.10)!important;
+  text-shadow:none!important;
+}
+
+html a[href*="pvg_tools"].buttonlink:hover,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink:hover,
+html button[onclick="autoDesignStrings()"]:hover,
+html button[onclick="autoBattery()"]:hover,
+html #cableToggleBtn:hover,
+html .soc-open-btn button:hover,
+html #pdfPreviewModal .modal-actions button:hover,
+html .subpage-close-btn:hover,
+body.print-preview-open #pdfPreviewModal .modal-actions button:hover{
+  background:#e5e7eb!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border-color:#9ca3af!important;
+  box-shadow:0 3px 9px rgba(15,23,42,.14)!important;
+}
+
+html a[href*="pvg_tools"].buttonlink:active,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink:active,
+html button[onclick="autoDesignStrings()"]:active,
+html button[onclick="autoBattery()"]:active,
+html #cableToggleBtn:active,
+html .soc-open-btn button:active,
+html #pdfPreviewModal .modal-actions button:active,
+html .subpage-close-btn:active,
+body.print-preview-open #pdfPreviewModal .modal-actions button:active{
+  background:#d1d5db!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border-color:#6b7280!important;
+  transform:scale(.985)!important;
+}
+
+/* ===== v5-final-light-blue-action-buttons-only-soc-fix ===== */
+
+html a.buttonlink.action-light-btn[href*="pvg_tools"],
+html a.buttonlink.action-light-btn[href*="re.jrc.ec.europa.eu"],
+html a[href*="pvg_tools"].buttonlink,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink,
+html button.action-light-btn[onclick="autoDesignStrings()"],
+html button.action-light-btn[onclick="autoBattery()"],
+html button[onclick="autoDesignStrings()"],
+html button[onclick="autoBattery()"],
+html #cableToggleBtn,
+html .soc-open-btn button,
+html .soc-open-btn button.secondary,
+html .soc-open-btn button.action-light-btn,
+html #pdfPreviewModal .modal-actions button,
+html #pdfPreviewModal button,
+html .subpage-close-btn,
+body.print-preview-open #pdfPreviewModal .modal-actions button{
+  background:#eaf3ff!important;
+  background-image:linear-gradient(180deg,#f5faff,#dbeafe)!important;
+  color:#0f172a!important;
+  -webkit-text-fill-color:#0f172a!important;
+  border:1px solid #93c5fd!important;
+  border-radius:12px!important;
+  box-shadow:0 3px 9px rgba(37,99,235,.14)!important;
+  text-shadow:none!important;
+}
+
+html a.buttonlink.action-light-btn[href*="pvg_tools"]:hover,
+html a.buttonlink.action-light-btn[href*="re.jrc.ec.europa.eu"]:hover,
+html a[href*="pvg_tools"].buttonlink:hover,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink:hover,
+html button.action-light-btn[onclick="autoDesignStrings()"]:hover,
+html button.action-light-btn[onclick="autoBattery()"]:hover,
+html button[onclick="autoDesignStrings()"]:hover,
+html button[onclick="autoBattery()"]:hover,
+html #cableToggleBtn:hover,
+html .soc-open-btn button:hover,
+html .soc-open-btn button.secondary:hover,
+html .soc-open-btn button.action-light-btn:hover,
+html #pdfPreviewModal .modal-actions button:hover,
+html #pdfPreviewModal button:hover,
+html .subpage-close-btn:hover,
+body.print-preview-open #pdfPreviewModal .modal-actions button:hover{
+  background:#dbeafe!important;
+  background-image:linear-gradient(180deg,#eff6ff,#bfdbfe)!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border-color:#60a5fa!important;
+  box-shadow:0 4px 12px rgba(37,99,235,.20)!important;
+}
+
+html a.buttonlink.action-light-btn[href*="pvg_tools"]:active,
+html a.buttonlink.action-light-btn[href*="re.jrc.ec.europa.eu"]:active,
+html a[href*="pvg_tools"].buttonlink:active,
+html a[href*="re.jrc.ec.europa.eu"].buttonlink:active,
+html button.action-light-btn[onclick="autoDesignStrings()"]:active,
+html button.action-light-btn[onclick="autoBattery()"]:active,
+html button[onclick="autoDesignStrings()"]:active,
+html button[onclick="autoBattery()"]:active,
+html #cableToggleBtn:active,
+html .soc-open-btn button:active,
+html .soc-open-btn button.secondary:active,
+html .soc-open-btn button.action-light-btn:active,
+html #pdfPreviewModal .modal-actions button:active,
+html #pdfPreviewModal button:active,
+html .subpage-close-btn:active,
+body.print-preview-open #pdfPreviewModal .modal-actions button:active{
+  background:#bfdbfe!important;
+  background-image:none!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border-color:#3b82f6!important;
+  transform:scale(.985)!important;
+}
+
+/* FINÁLNÍ POZICE: Údaje zákazníka jsou v levém sloupci nad Výroba / poloha */
+.left-input-column{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  min-width:0!important;
+}
+
+.left-input-column .card{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+
+.customer-card-main{
+  grid-column:auto!important;
+}
+
+.customer-card-main > h2{
+  margin:0 0 8px 0!important;
+}
+
+.customer-card-main .customer-box{
+  margin-top:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+
+.customer-order-line{
+  grid-template-columns:minmax(0,1fr) minmax(150px,33.333%)!important;
+  margin-bottom:8px!important;
+}
+
+.customer-order-line .customer-order-main{
+  width:100%!important;
+  min-width:150px!important;
+  max-width:260px!important;
+  justify-self:end!important;
+  margin-left:auto!important;
+}
+
+@media(max-width:700px){
+.left-input-column{display:block!important;}
+
+.customer-order-line{grid-template-columns:1fr!important;}
+
+.customer-order-line > div:first-child{display:none!important;}
+
+.customer-order-line .customer-order-main{max-width:none!important;width:100%!important;}
+}
+
+/* FINAL FIX: hlavní strana – hlavička Údaje zákazníka se šedým podkladem,
+levou odrážkou a číslem zakázky v řádku */
+.customer-card-main .customer-title-bar{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(170px,32%)!important;
+  gap:12px!important;
+  align-items:center!important;
+  margin:0 0 10px 0!important;
+  padding:10px 12px 10px 14px!important;
+  border:1px solid var(--line,#d1d5db)!important;
+  border-left:5px solid var(--blue,#2563eb)!important;
+  border-radius:14px!important;
+  background:rgba(148,163,184,.14)!important;
+  box-sizing:border-box!important;
+}
+
+.customer-card-main .customer-title-bar h2{
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  line-height:1.15!important;
+}
+
+.customer-card-main .customer-title-bar .customer-order-main{
+  justify-self:end!important;
+  width:100%!important;
+  max-width:260px!important;
+  min-width:170px!important;
+  margin:0!important;
+}
+
+.customer-card-main .customer-title-bar .customer-order-main label{
+  margin:0 0 3px 0!important;
+  font-size:11px!important;
+  line-height:1.1!important;
+  color:var(--muted,#4b5563)!important;
+  font-weight:700!important;
+  text-align:left!important;
+}
+
+.customer-card-main .customer-title-bar .customer-order-main input{
+  margin:0!important;
+  min-height:34px!important;
+  padding:6px 8px!important;
+  text-align:right!important;
+}
+
+@media(max-width:700px){
+.customer-card-main .customer-title-bar{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+
+.customer-card-main .customer-title-bar .customer-order-main{
+    max-width:none!important;
+    min-width:0!important;
+    justify-self:stretch!important;
+  }
+
+.customer-card-main .customer-title-bar .customer-order-main input{
+    text-align:left!important;
+  }
+}
+
+/* ===== customer-title-bar-final-color-fix ===== */
+/* Oprava: odrážka hlavičky Údaje zákazníka má stejnou barvu jako ostatní tabulky. */
+.customer-card-main .customer-title-bar{
+  border-left-color:#000000!important;
+}
+
+@media print{
+.customer-card-main .customer-title-bar{
+    border-left-color:#000000!important;
+  }
+}
+
+/* ===== customer-print-layout-final-fix ===== */
+/* FINAL FIX: Údaje zákazníka – stejná poloha a šířky v náhledu i při skutečném tisku */
+.protocol-customer-detail{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin:6px 0!important;
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
+}
+
+.protocol-customer-detail h3{
+  display:block!important;
+  margin:0 0 5px 0!important;
+  padding:0 0 4px 0!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:700!important;
+  text-align:left!important;
+  color:#000!important;
+  border-bottom:1px solid #cccccc!important;
+}
+
+.protocol-customer-table{
+  width:100%!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+
+.protocol-customer-table .protocol-customer-label-col{width:32%!important;}
+
+.protocol-customer-table .protocol-customer-value-col{width:68%!important;}
+
+.protocol-customer-table td{
+  box-sizing:border-box!important;
+  vertical-align:top!important;
+  padding:3px 4px!important;
+  line-height:1.25!important;
+  font-size:10px!important;
+  background:#ffffff!important;
+  border-bottom:1px solid #e5e5e5!important;
+}
+
+.protocol-customer-table td:first-child{
+  width:32%!important;
+  min-width:32%!important;
+  max-width:32%!important;
+  text-align:left!important;
+  font-weight:400!important;
+  color:#333333!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+
+.protocol-customer-table td:last-child{
+  width:68%!important;
+  min-width:68%!important;
+  max-width:68%!important;
+  text-align:left!important;
+  font-weight:400!important;
+  color:#000000!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-detail,
+body.print-protocol #printProtocolPage .protocol-customer-detail{
+  display:block!important;
+  position:static!important;
+  float:none!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:6px 0!important;
+  padding:6px!important;
+  border:1px solid #bbbbbb!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  box-sizing:border-box!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-detail h3,
+body.print-protocol #printProtocolPage .protocol-customer-detail h3{
+  display:block!important;
+  margin:0 0 5px 0!important;
+  padding:0 0 4px 0!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:700!important;
+  text-align:left!important;
+  color:#000000!important;
+  border-bottom:1px solid #cccccc!important;
+  background:#ffffff!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table,
+body.print-protocol #printProtocolPage .protocol-customer-table{
+  width:100%!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td,
+body.print-protocol #printProtocolPage .protocol-customer-table td{
+  box-sizing:border-box!important;
+  vertical-align:top!important;
+  padding:3px 4px!important;
+  line-height:1.25!important;
+  font-size:10px!important;
+  background:#ffffff!important;
+  border-bottom:1px solid #e5e5e5!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:first-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:first-child{
+  width:32%!important;
+  min-width:32%!important;
+  max-width:32%!important;
+  text-align:left!important;
+  font-weight:400!important;
+  color:#333333!important;
+  white-space:nowrap!important;
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:last-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:last-child{
+  width:68%!important;
+  min-width:68%!important;
+  max-width:68%!important;
+  text-align:left!important;
+  font-weight:400!important;
+  color:#000000!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+@media print{
+body.print-protocol #printProtocolPage .protocol-customer-detail{
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+}
+
+/* ===== customer-print-alignment-final-real ===== */
+/* FINÁLNÍ OPRAVA Tisk/PDF – Údaje zákazníka: nadpis s odsazením od levé odrážky,
+hodnoty zarovnané doprava */
+.protocol-customer-detail h3,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-detail h3,
+body.print-protocol #printProtocolPage .protocol-customer-detail h3{
+  margin:0 0 5px 0!important;
+  padding:0 0 4px 10px!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:700!important;
+  text-align:left!important;
+  color:#000000!important;
+  border-bottom:1px solid #cccccc!important;
+  background:#ffffff!important;
+  box-sizing:border-box!important;
+}
+
+.protocol-customer-table td:first-child,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:first-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:first-child{
+  text-align:left!important;
+  font-weight:400!important;
+  color:#333333!important;
+}
+
+.protocol-customer-table td:last-child,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:last-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:last-child{
+  text-align:right!important;
+  font-weight:400!important;
+  color:#000000!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+@media print{
+body.print-protocol #printProtocolPage .protocol-customer-detail h3{
+    padding-left:10px!important;
+  }
+
+body.print-protocol #printProtocolPage .protocol-customer-table td:last-child{
+    text-align:right!important;
+  }
+}
+
+/* ===== final-print-pdf-customer-above-map-titlebars ===== */
+/* FINAL: Tisk/PDF – Údaje zákazníka nad mapou + jednotné rámečky nadpisů */
+#printProtocolPage .protocol-box > h3,
+body.print-preview-open #printProtocolPreviewClone .protocol-box > h3,
+body.print-protocol #printProtocolPage .protocol-box > h3{
+  display:block!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:0 0 5px 0!important;
+  padding:4px 6px 4px 10px!important;
+  min-height:22px!important;
+  line-height:1.2!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  text-align:left!important;
+  color:#000000!important;
+  background:#ffffff!important;
+  border:1px solid #cccccc!important;
+  border-left:4px solid #000000!important;
+  border-radius:4px!important;
+}
+
+#printProtocolPage .protocol-customer-detail,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-detail,
+body.print-protocol #printProtocolPage .protocol-customer-detail{
+  order:1!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0 0 5px 0!important;
+  padding:6px!important;
+  box-sizing:border-box!important;
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
+}
+
+#printProtocolPage .protocol-map-top,
+body.print-preview-open #printProtocolPreviewClone .protocol-map-top,
+body.print-protocol #printProtocolPage .protocol-map-top{
+  order:2!important;
+  margin-top:0!important;
+}
+
+#printProtocolPage .protocol-customer-table,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table,
+body.print-protocol #printProtocolPage .protocol-customer-table{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+
+#printProtocolPage .protocol-customer-table td:first-child,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:first-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:first-child{
+  width:32%!important;
+  text-align:left!important;
+  font-weight:400!important;
+  color:#333333!important;
+  white-space:nowrap!important;
+}
+
+#printProtocolPage .protocol-customer-table td:last-child,
+body.print-preview-open #printProtocolPreviewClone .protocol-customer-table td:last-child,
+body.print-protocol #printProtocolPage .protocol-customer-table td:last-child{
+  width:68%!important;
+  text-align:right!important;
+  font-weight:400!important;
+  color:#000000!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+@media print{
+body.print-protocol #printProtocolPage .protocol-box > h3{
+    padding-left:10px!important;
+    border-left:4px solid #000000!important;
+  }
+}
+
+/* ===== battery-inverter-second-page-print-fix ===== */
+@media print{
+  body.print-protocol #printProtocolPage .protocol-battery-inverter-page{
+    break-before:page!important;
+    page-break-before:always!important;
+  }
+}
+
+body.print-preview-open #printProtocolPreviewClone .protocol-battery-inverter-page{
+  break-before:page!important;
+  page-break-before:always!important;
+  margin-top:12mm!important;
+}
+
+/* ===== step-number-circles-final ===== */
+/* Číslování postupu návrhu – výrazné malé kroužky v hlavičkách sekcí */
+.step-title{display:inline-flex;align-items:center;gap:12px;line-height:1.2;}
+
+.step-circle{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;min-width:22px;border-radius:999px;
+  background:#2563eb;color:#ffffff;font-size:12px;font-weight:900;
+  box-shadow:0 2px 8px rgba(37,99,235,.28);
+}
+
+.customer-card-main .customer-title-bar h2.step-title{display:flex!important;}
+
+.customer-card-main .customer-title-bar h2.step-title .step-circle{margin-right:0;}
+
+.protocol-box h3 .step-circle,
+.protocol-customer-detail h3 .step-circle{
+  width:18px;height:18px;min-width:18px;font-size:10px;box-shadow:none;
+}
+
+@media print{
+.step-circle{display:none!important;}
+
+.protocol-box h3,
+.protocol-customer-detail h3{display:block!important;}
+}
+
+/* ===== step-circle-unified-spacing-fix ===== */
+/* Finální sjednocení odsazení názvů sekcí od číselného kroužku */
+.step-title{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:16px!important;
+  line-height:1.2!important;
+}
+
+.customer-card-main .customer-title-bar h2.step-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:16px!important;
+}
+
+.merged-card-section > h3.step-title,
+.card > h2.step-title,
+.card h2.step-title,
+.card h3.step-title{
+  gap:16px!important;
+}
+
+.step-circle{
+  flex:0 0 22px!important;
+  margin-right:0!important;
+}
+
+@media print{
+.step-circle{display:none!important;}
+}
+
+/* ===== step-circle-final-main-only-spacing ===== */
+/* Finální oprava: číslování pouze na hlavní obrazovce,
+jednotný odskok názvů od kroužků */
+body:not(.print-protocol) .step-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:0!important;
+  line-height:1.2!important;
+}
+
+body:not(.print-protocol) .step-title .step-circle{
+  flex:0 0 22px!important;
+  width:22px!important;
+  height:22px!important;
+  min-width:22px!important;
+  margin-right:18px!important;
+}
+
+body:not(.print-protocol) .customer-card-main .customer-title-bar h2.step-title,
+body:not(.print-protocol) .card > h2.step-title,
+body:not(.print-protocol) .card h2.step-title,
+body:not(.print-protocol) .card h3.step-title,
+body:not(.print-protocol) .merged-card-section > h3.step-title{
+  gap:0!important;
+}
+
+#printProtocolPage .step-circle,
+#printProtocolPreviewClone .step-circle{
+  display:none!important;
+}
+
+#printProtocolPage h3,
+#printProtocolPreviewClone h3{
+  display:block!important;
+}
+
+@media print{
+.step-circle{display:none!important;}
+
+#printProtocolPage h3{display:block!important;}
+}
+
+/* ===== step-circle-softer-contrast-final ===== */
+/* Jemnější méně kontrastní číselné kroužky pouze na hlavní obrazovce; Tisk/PDF zůstává bez čísel */
+body:not(.print-protocol) .step-circle{
+  background:#f8fafc!important;
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  border:1px solid #cbd5e1!important;
+  box-shadow:0 1px 4px rgba(15,23,42,.08)!important;
+  font-weight:800!important;
+}
+
+#printProtocolPage .step-circle,
+#printProtocolPreviewClone .step-circle{
+  display:none!important;
+}
+
+@media print{
+.step-circle{display:none!important;}
+}
+
+/* ===== workflow-v11-styles ===== */
+.workflow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;align-items:end}
+
+.workflow-inline-grid{margin:8px 0 12px!important;padding:10px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:rgba(148,163,184,.08)!important;}
+
+.workflow-inline-note{margin:4px 0 6px!important;}
+
+.advanced-subtitle{font-size:13px;font-weight:900;margin:12px 0 4px;color:var(--text);}
+
+.workflow-info{margin-top:10px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:rgba(148,163,184,.10)}
+
+.design-linked-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0 12px;}
+
+.design-linked-field{position:relative;}
+
+.design-linked-field input{padding-right:42px!important;}
+
+.design-lock-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:none;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:#dbeafe;color:#1e3a8a;font-size:14px;font-weight:900;pointer-events:none;border:1px solid #93c5fd;}
+
+.design-linked-field.is-locked .design-lock-icon{display:flex;}
+
+.locked-field,
+input.auto-locked{background:#eef2ff!important;color:#1e3a8a!important;border-color:#93c5fd!important;cursor:not-allowed!important;font-weight:800!important}
+
+.print-hidden{visibility:hidden!important;pointer-events:none!important}
+
+.print-visible{visibility:visible!important;pointer-events:auto!important}
+
+.validation-groups{display:grid;gap:8px}
+
+.validation-group{border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--card-soft,#f8fafc)}
+
+.validation-group h4{margin:0 0 5px;font-size:13px}
+
+.validation-group div{font-size:12px;line-height:1.35}
+
+@media(min-width:1050px){
+.top-input-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+
+.left-input-column{display:block!important}
+}
+
+@media print{
+.print-hidden,
+.print-visible{visibility:hidden!important}
+}
+
+/* GRAFICKÉ ÚPRAVY PŘENESENÉ Z NEJNOVĚJŠÍ VERZE */
+.advanced-losses-details summary{display:block!important;padding:0!important;}
+
+.advanced-toggle-btn{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;width:100%!important;box-sizing:border-box!important;
+  border:1px solid var(--line)!important;border-radius:14px!important;padding:10px 12px!important;font-size:13px!important;font-weight:800!important;
+  background:#dbeafe!important;color:#111827!important;text-align:left!important;min-width:0!important;cursor:pointer!important;
+}
+
+.advanced-toggle-btn::before{content:'Pokročilé nastavení systému';}
+
+.advanced-toggle-btn::after{content:'▼';font-size:14px;line-height:1;color:currentColor;opacity:.9;}
+
+.advanced-losses-details[open] .advanced-toggle-btn::after{content:'▲';}
+
+@media print{
+.advanced-losses-details summary{display:none!important}
+}
+
+input::placeholder,
+textarea::placeholder{color:#9ca3af;font-weight:400}
+
+.empty-results-note{font-size:12px;color:var(--muted);padding:8px 10px;border:1px dashed var(--line);border-radius:12px;background:var(--card-soft);margin-top:8px}
+
+.clean-arrow-toggle{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;text-align:left!important;}
+
+.clean-arrow-toggle .toggle-arrow,
+.clean-arrow-toggle::after{margin-left:auto!important;}
+
+@media print{
+.clean-arrow-toggle{display:none!important;}
+}
+
+[data-bottom-print-pdf-btn="1"].print-hidden{visibility:hidden!important;opacity:0!important;pointer-events:none!important;}
+
+.user-value-field{transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;}
+
+.user-value-field:focus{border-color:var(--blue)!important;box-shadow:0 0 0 3px rgba(37,99,235,.14)!important;outline:none!important;}
+
+.workflow-card .workflow-grid select,
+.workflow-card .workflow-grid input{min-height:42px;border-radius:12px;}
+
+/* Úprava názvů rozbalovacích sekcí: bez slov Otevřít/Zavřít */
+.clean-arrow-toggle .toggle-label{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.clean-arrow-toggle .toggle-arrow{font-size:14px;line-height:1;color:currentColor;opacity:.9;margin-left:auto;}
+
+/* ===== guide-input-cleanup-final ===== */
+/* Finální UX průvodce: zvýrazňuje se celý blok,
+ne jednotlivé vstupní pole.
+   Modrá = aktuální blok,
+zelená = hotový blok,
+vstupy zůstávají neutrální. */
+.guide-field-next,
+.guide-field-next:focus,
+.guide-field-done,
+.guide-field-done:focus{
+  animation:none!important;
+  background:var(--card)!important;
+  border-color:var(--line)!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+
+.guide-required-label{
+  color:var(--muted)!important;
+  font-weight:700!important;
+}
+
+.guide-card-next{
+  border-color:rgba(37,99,235,.95)!important;
+  background:linear-gradient(180deg,rgba(37,99,235,.13),rgba(37,99,235,.035))!important;
+  box-shadow:0 0 0 2px rgba(37,99,235,.18),0 16px 38px rgba(37,99,235,.16)!important;
+}
+
+.guide-card-done{
+  border-color:rgba(4,120,87,.55)!important;
+  background:linear-gradient(180deg,rgba(4,120,87,.10),rgba(4,120,87,.025))!important;
+}
+
+/* ===== poloha-prvni-krok-final ===== */
+.location-start-link{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin:0 0 10px 0;
+  padding:11px 13px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card-soft,#f8fafc);
+  color:#111827;
+  font-weight:850;
+  text-align:center;
+  text-decoration:none;
+  cursor:pointer;
+  transition:box-shadow .18s ease, transform .12s ease, border-color .18s ease, background .18s ease;
+}
+
+.location-start-link:hover{
+  border-color:#9ca3af;
+  background:#eef2f7;
+  box-shadow:0 6px 18px rgba(15,23,42,.10);
+}
+
+.location-start-link:active{transform:scale(.99);}
+
+#mapWrap.guide-map-pulse{
+  animation:mapGuidePulse 1.6s ease-in-out 2;
+}
+
+
+@keyframes mapGuidePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}
+  50%{box-shadow:0 0 0 5px rgba(37,99,235,.24);}
+}
+@keyframes mapGuidePulseDark{
+  0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,0);}
+  50%{box-shadow:0 0 0 5px rgba(96,165,250,.28);}
+}
+@media print{
+.location-start-link{display:none!important}
+}
+
+/* ===== customer-print-step-modal-styles ===== */
+/* Údaje zákazníka jsou nově jen v kroku Tisk/PDF,
+ne na hlavní obrazovce. */
+.print-customer-step{
+  border:1px solid var(--line,#d1d5db);
+  border-radius:16px;
+  padding:12px;
+  margin:0 0 12px;
+  background:var(--card-soft,#f8fafc);
+}
+
+.print-customer-step h3{
+  margin:0 0 8px;
+  font-size:18px;
+  border-bottom:1px solid var(--line,#d1d5db);
+  padding-bottom:6px;
+}
+
+.print-customer-toggle{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin:8px 0 10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.print-customer-toggle input{
+  width:auto!important;
+  min-height:auto!important;
+  margin:0!important;
+}
+
+.print-customer-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 12px;
+}
+
+.print-customer-grid .full-row{grid-column:1 / -1;}
+
+.print-preview-open #printProtocolPreviewClone .protocol-customer-detail.customer-hidden,
+body.print-protocol #printProtocolPage .protocol-customer-detail.customer-hidden{
+  display:none!important;
+}
+
+@media(max-width:700px){
+.print-customer-grid{grid-template-columns:1fr;}
+}
+
+/* ===== always-visible-print-pdf-button-fix ===== */
+/* Zámek rozpracovaného kombinovaného systému */
+.system-type-lock-wrap{
+  display:block;
+  width:100%;
+  position:relative;
+}
+
+.system-type-lock-wrap select{
+  width:100%!important;
+  max-width:100%!important;
+}
+
+/* Zámek kombinovaného systému je pouze v textu volby v rozbalovacím seznamu,
+ne vedle celého pole. */
+@media(max-width:700px){
+  .system-type-lock-wrap{display:block;width:100%;}
+}
+
+/* Tisk/PDF je vždy viditelné a klikatelné,
+nezávisle na validaci konfigurátoru. */
+[data-bottom-print-pdf-btn="1"]{visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+
+[data-bottom-print-pdf-btn="1"].print-hidden{visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+
+
+/* ===== design-lock-neutral-style ===== */
+#dailyWhWrap.locked-field .design-lock-icon,
+#fieldManualWrap.locked-field .design-lock-icon,
+#inverterDesignWrap.locked-field .design-lock-icon{
+  display:inline-block !important;
+  margin-left:6px;
+}
+
+#dailyWhWrap.unlocked-field .design-lock-icon,
+#fieldManualWrap.unlocked-field .design-lock-icon,
+#inverterDesignWrap.unlocked-field .design-lock-icon{
+  display:none !important;
+}
+
+#dailyWhWrap.locked-field,
+#fieldManualWrap.locked-field,
+#inverterDesignWrap.locked-field,
+#dailyWhWrap.unlocked-field,
+#fieldManualWrap.unlocked-field,
+#inverterDesignWrap.unlocked-field{
+  opacity:1 !important;
+  border:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+}
+
+#dailyWhWrap.locked-field input,
+#fieldManualWrap.locked-field input,
+#inverterDesignWrap.locked-field input,
+#dailyWhWrap.locked-field select,
+#fieldManualWrap.locked-field select,
+#inverterDesignWrap.locked-field select{
+  cursor:default !important;
+}
+
+/* ===== system-voltage-auto-display-style ===== */
+.system-voltage-auto-wrap{margin-top:10px;}
+
+#systemVoltageAutoDisplay{font-weight:900;background:#eef2ff!important;color:#1e3a8a!important;border-color:#93c5fd!important;cursor:default!important;}
+
+/* ===== daily-consumption-lock-icon-final-fix ===== */
+/* Zámek patří přímo k poli Denní spotřeba; jednotky Wh/kWh zůstávají vždy ovladatelné. */
+.daily-consumption-control-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 125px!important;
+  gap:8px!important;
+  align-items:center!important;
+}
+
+.daily-consumption-input-shell{
+  position:relative!important;
+  min-width:0!important;
+}
+
+.daily-consumption-input-shell #dailyEnergyInput{
+  width:100%!important;
+  padding-right:42px!important;
+  margin-top:0!important;
+}
+
+#dailyEnergyUnit{
+  width:100%!important;
+  max-width:none!important;
+  margin-top:0!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+#dailyWhWrap .daily-lock-icon{
+  position:absolute!important;
+  right:10px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  margin-left:0!important;
+  z-index:4!important;
+}
+
+#dailyWhWrap.locked-field #dailyEnergyUnit,
+#dailyWhWrap.is-locked #dailyEnergyUnit{
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  opacity:1!important;
+}
+
+#dailyWhWrap.locked-field #dailyEnergyInput,
+#dailyWhWrap.is-locked #dailyEnergyInput{
+  cursor:default!important;
+}
+
+@media(max-width:700px){
+.daily-consumption-control-row{grid-template-columns:minmax(0,1fr) 112px!important;gap:7px!important;}
+}
+
+/* ===== final-inline-lock-icons-system-daily ===== */
+/* Finální umístění ikon zámku přímo uvnitř polí: Denní spotřeba,
+Výkon FV pole a Kombinovaný systém. */
+.design-lock-field,
+.system-type-lock-wrap,
+.daily-consumption-input-shell,
+.design-linked-field{
+  position:relative!important;
+}
+
+.design-linked-field > input,
+.design-lock-field > select,
+.system-type-lock-wrap > select{
+  padding-right:42px!important;
+}
+
+.daily-consumption-input-shell #dailyEnergyInput{
+  padding-right:42px!important;
+}
+
+.design-linked-field > .design-lock-icon,
+.daily-consumption-input-shell > .design-lock-icon,
+.system-type-lock-wrap > .design-lock-icon{
+  position:absolute!important;
+  right:10px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  width:24px!important;
+  height:24px!important;
+  border-radius:999px!important;
+  margin:0!important;
+  z-index:5!important;
+  pointer-events:none!important;
+}
+
+.design-linked-field.locked-field > .design-lock-icon,
+.design-linked-field.is-locked > .design-lock-icon,
+.daily-consumption-input-shell .design-lock-icon[style*="inline"],
+#systemTypeWrap.system-type-locked > .system-type-lock-icon{
+  display:flex!important;
+}
+
+#dailyWhWrap.locked-field .daily-consumption-input-shell > .daily-lock-icon,
+#dailyWhWrap.is-locked .daily-consumption-input-shell > .daily-lock-icon{
+  display:flex!important;
+}
+
+#systemTypeWrap #systemType{
+  width:100%!important;
+}
+
+#systemTypeWrap.system-type-locked #systemType{
+  padding-right:42px!important;
+}
+
+@media(max-width:700px){
+.design-linked-field > input,
+.design-lock-field > select,
+.system-type-lock-wrap > select,
+.daily-consumption-input-shell #dailyEnergyInput{padding-right:40px!important;}
+}
+
+/* ===== unified-right-lock-icons-final-authoritative ===== */
+/* Autoritativní sjednocení ikon: vzorem je Denní spotřeba. Ikona je vždy uvnitř vlastního pole vpravo,
+ne v textu selectu ani mimo wrapper. */
+.daily-consumption-input-shell,
+.lock-input-shell,
+.system-type-lock-wrap{
+  position:relative!important;
+  width:100%!important;
+}
+
+.daily-consumption-input-shell > input,
+.lock-input-shell > input,
+.system-type-lock-wrap > select{
+  width:100%!important;
+  padding-right:70px!important;
+  box-sizing:border-box!important;
+}
+
+.daily-consumption-input-shell > .design-lock-icon,
+.lock-input-shell > .design-lock-icon,
+.system-type-lock-wrap > .design-lock-icon{
+  position:absolute!important;
+  right:34px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  min-height:24px!important;
+  max-width:24px!important;
+  max-height:24px!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:999px!important;
+  background:#dbeafe!important;
+  color:#1e3a8a!important;
+  border:1px solid #93c5fd!important;
+  box-shadow:none!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  z-index:6!important;
+  pointer-events:none!important;
+}
+
+#dailyWhWrap.locked-field .daily-consumption-input-shell > .daily-lock-icon,
+#dailyWhWrap.is-locked .daily-consumption-input-shell > .daily-lock-icon,
+#fieldManualWrap.locked-field .field-manual-input-shell > .field-manual-lock-icon,
+#fieldManualWrap.is-locked .field-manual-input-shell > .field-manual-lock-icon,
+#systemTypeWrap.system-type-locked > .system-type-lock-icon{
+  display:flex!important;
+}
+
+/* Starší pravidla nesmí udělat z ikon inline prvek vedle pole. */
+#dailyWhWrap.locked-field > .design-lock-icon,
+#fieldManualWrap.locked-field > .design-lock-icon,
+#inverterDesignWrap.locked-field > .design-lock-icon{
+  display:none!important;
+}
+
+#dailyWhWrap.locked-field,
+#fieldManualWrap.locked-field,
+#dailyWhWrap.unlocked-field,
+#fieldManualWrap.unlocked-field{
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+}
+
+#dailyEnergyUnit{
+  padding-right:32px!important;
+}
+
+@media(max-width:700px){
+.daily-consumption-input-shell > input,
+.lock-input-shell > input,
+.system-type-lock-wrap > select{padding-right:44px!important;}
+}
+
+/* ===== field-manual-locked-font-unification-final ===== */
+/* Finální oprava: Výkon FV pole má stejné písmo při zamčeném i odemčeném stavu.
+   Zamčení ponechává pouze logiku readonly + ikonu zámku,
+nepřebarvuje typografii hodnoty. */
+#fieldManual,
+#fieldManual.auto-locked,
+#fieldManual[readonly],
+#fieldManualWrap.locked-field #fieldManual,
+#fieldManualWrap.is-locked #fieldManual,
+#fieldManualWrap.unlocked-field #fieldManual{
+  font-family:Arial,sans-serif!important;
+  font-size:16px!important;
+  font-weight:400!important;
+  font-style:normal!important;
+  line-height:1.25!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+  opacity:1!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+
+#fieldManual.auto-locked,
+#fieldManual[readonly],
+#fieldManualWrap.locked-field #fieldManual,
+#fieldManualWrap.is-locked #fieldManual{
+  cursor:default!important;
+}
+
+@media print{
+#fieldManual,
+#fieldManual.auto-locked,
+#fieldManual[readonly]{
+    font-size:10px!important;
+    font-weight:400!important;
+    line-height:1.2!important;
+    letter-spacing:normal!important;
+  }
+}
+
+/* ===== authoritative-fieldmanual-dailyenergy-unified-style ===== */
+
+#dailyEnergyInput,
+#fieldManual,
+#dailyEnergyInput:read-only,
+#fieldManual:read-only,
+#dailyEnergyInput.auto-locked,
+#fieldManual.auto-locked,
+#dailyWhWrap.locked-field #dailyEnergyInput,
+#fieldManualWrap.locked-field #fieldManual{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  min-height:42px !important;
+  margin-top:4px !important;
+  padding:8px 46px 8px 8px !important;
+  border:1px solid #d1d5db !important;
+  border-radius:12px !important;
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  caret-color:#000000 !important;
+  opacity:1 !important;
+  filter:none !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+  font-family:Arial,sans-serif !important;
+  font-size:14px !important;
+  font-weight:400 !important;
+  line-height:1.25 !important;
+  letter-spacing:0 !important;
+}
+
+/* Jednotka u Denní spotřeby zůstává ovladatelná,
+ale barevně je sjednocená. */
+#dailyEnergyUnit{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  min-height:42px !important;
+  border:1px solid #d1d5db !important;
+  border-radius:12px !important;
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  opacity:1 !important;
+  filter:none !important;
+  text-shadow:none !important;
+  font-family:Arial,sans-serif !important;
+  font-size:14px !important;
+  font-weight:400 !important;
+}
+
+/* Wrapper nesmí dávat modré pozadí ani modrou barvu zamčenému stavu. */
+#dailyWhWrap.locked-field,
+#fieldManualWrap.locked-field,
+#dailyWhWrap.is-locked,
+#fieldManualWrap.is-locked{
+  background:transparent !important;
+  background-color:transparent !important;
+  color:#000000 !important;
+  opacity:1 !important;
+  border:0 !important;
+}
+
+/* ===== runtime-modes-like-advanced-settings-style ===== */
+/* SJEDNOCENÍ ROZBALOVACÍHO POLE:
+   „Výdrž baterie v různých režimech provozu [h]“
+   má stejný vzhled otevřeno/zavřeno jako „Pokročilé nastavení systému“. */
+
+.runtime-modes-box{
+  border:1px solid var(--line) !important;
+  border-radius:16px !important;
+  padding:10px 12px !important;
+  margin-top:10px !important;
+  background:var(--card-soft,#f8fafc) !important;
+  box-shadow:none !important;
+}
+
+.runtime-modes-box summary{
+  display:block !important;
+  padding:0 !important;
+  margin:0 !important;
+  cursor:pointer !important;
+  list-style:none !important;
+  color:inherit !important;
+  font-size:inherit !important;
+  font-weight:inherit !important;
+}
+
+.runtime-modes-box summary::-webkit-details-marker{
+  display:none !important;
+}
+
+.runtime-modes-box summary::before,
+.runtime-modes-box summary::after{
+  content:none !important;
+  display:none !important;
+}
+
+.runtime-toggle-btn{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  border:1px solid var(--line) !important;
+  border-radius:14px !important;
+  padding:10px 12px !important;
+  font-size:13px !important;
+  line-height:1.2 !important;
+  font-weight:800 !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif !important;
+  background:#dbeafe !important;
+  color:#111827 !important;
+  text-align:left !important;
+  min-width:0 !important;
+  cursor:pointer !important;
+  -webkit-font-smoothing:antialiased !important;
+  text-rendering:optimizeLegibility !important;
+}
+
+.runtime-toggle-btn::before{
+  content:'Výdrž baterie v různých režimech provozu [h]' !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+.runtime-toggle-btn::after{
+  content:'▼' !important;
+  font-size:14px !important;
+  line-height:1 !important;
+  color:currentColor !important;
+  opacity:.9 !important;
+  margin-left:auto !important;
+  flex:0 0 auto !important;
+}
+
+.runtime-modes-box[open] .runtime-toggle-btn::after{
+  content:'▲' !important;
+}
+
+/* Obsah výdrže zůstává čitelný,
+ale bez odlišného modrého „jiného pole“. */
+.runtime-modes-grid{
+  display:grid !important;
+  gap:6px !important;
+  margin-top:10px !important;
+}
+
+.runtime-mode-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:10px !important;
+  align-items:center !important;
+  padding:8px 0 !important;
+  border-top:1px solid rgba(148,163,184,.28) !important;
+}
+
+.runtime-mode-row span{
+  color:var(--muted) !important;
+  font-weight:500 !important;
+}
+
+.runtime-mode-row b{
+  font-size:18px !important;
+  color:var(--blue) !important;
+  white-space:nowrap !important;
+  font-weight:700 !important;
+}
+
+@media(max-width:700px){
+.runtime-toggle-btn{
+    font-size:13px !important;
+    padding:10px 12px !important;
+  }
+
+.runtime-toggle-btn::before{
+    white-space:normal !important;
+  }
+}
+
+@media print{
+.runtime-modes-box{
+    border:1px solid #ccc !important;
+    background:#fff !important;
+    padding:5px !important;
+    margin-top:4px !important;
+  }
+
+.runtime-modes-box summary{
+    display:none !important;
+  }
+
+.runtime-mode-row{
+    padding:2px 0 !important;
+  }
+
+.runtime-mode-row span,
+.runtime-mode-row b{
+    font-size:8px !important;
+    color:#000 !important;
+  }
+}
+
+/* ===== global-unified-font-like-advanced-settings ===== */
+/* GLOBÁLNÍ SJEDNOCENÍ PÍSMA PODLE:
+   „Pokročilé nastavení systému“ */
+
+html,
+body,
+input,
+select,
+textarea,
+button,
+label,
+.small,
+.card,
+table,
+td,
+th,
+div,
+span,
+summary,
+details,
+.calc-label,
+.calc-value,
+.metric,
+.cable-value,
+.month-value,
+.month-label,
+.runtime-mode-row,
+.runtime-mode-row span,
+.runtime-mode-row b,
+.protocol-table,
+.protocol-box,
+.workflow-grid,
+.workflow-inline-grid,
+.advanced-losses-details,
+.advanced-toggle-btn,
+.runtime-toggle-btn{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif !important;
+  -webkit-font-smoothing:antialiased !important;
+  -moz-osx-font-smoothing:grayscale !important;
+  text-rendering:optimizeLegibility !important;
+  letter-spacing:0 !important;
+}
+
+/* Stejná tloušťka jako „Pokročilé nastavení systému“ */
+body,
+input,
+select,
+textarea,
+button,
+label,
+.small,
+.card,
+table,
+td,
+th,
+div,
+span{
+  font-weight:500 !important;
+}
+
+/* Nadpisy a hlavní prvky */
+h1,
+h2,
+h3,
+summary,
+.advanced-toggle-btn,
+.runtime-toggle-btn,
+.calc-value,
+.metric{
+  font-weight:700 !important;
+}
+
+/* Inputy a selecty stejně čitelné */
+input,
+select,
+textarea{
+  font-size:16px !important;
+  line-height:1.25 !important;
+}
+
+/* ===== runtime-exact-font-like-advanced-final ===== */
+/* PŘESNÉ SJEDNOCENÍ PÍSMA:
+   Výdrž baterie = Pokročilé nastavení systému
+   hlavní řádek i vnitřní obsah */
+
+#batteryRuntimeModes,
+#batteryRuntimeModes *,
+#batteryRuntimeModes summary,
+#batteryRuntimeModes .runtime-toggle-btn,
+#batteryRuntimeModes .runtime-modes-grid,
+#batteryRuntimeModes .runtime-mode-row,
+#batteryRuntimeModes .runtime-mode-row span,
+#batteryRuntimeModes .runtime-mode-row b,
+#batteryRuntimeModes .small{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif !important;
+  -webkit-font-smoothing:antialiased !important;
+  -moz-osx-font-smoothing:grayscale !important;
+  text-rendering:optimizeLegibility !important;
+  letter-spacing:0 !important;
+}
+
+/* hlavní zavřené/otevřené pole přesně jako Pokročilé nastavení systému */
+#batteryRuntimeModes summary{
+  display:block !important;
+  padding:0 !important;
+  margin:0 !important;
+  cursor:pointer !important;
+  list-style:none !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+}
+
+#batteryRuntimeModes summary::-webkit-details-marker{
+  display:none !important;
+}
+
+#batteryRuntimeModes summary::before,
+#batteryRuntimeModes summary::after{
+  content:none !important;
+  display:none !important;
+}
+
+#batteryRuntimeModes .runtime-toggle-btn{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  border:1px solid var(--line) !important;
+  border-radius:14px !important;
+  padding:10px 12px !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  background:#dbeafe !important;
+  color:#111827 !important;
+  text-align:left !important;
+  min-width:0 !important;
+  cursor:pointer !important;
+}
+
+#batteryRuntimeModes .runtime-toggle-btn::before{
+  content:'Výdrž baterie v různých režimech provozu [h]' !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+#batteryRuntimeModes .runtime-toggle-btn::after{
+  content:'▼' !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  color:currentColor !important;
+  opacity:.9 !important;
+  margin-left:auto !important;
+  flex:0 0 auto !important;
+}
+
+#batteryRuntimeModes[open] .runtime-toggle-btn::after{
+  content:'▲' !important;
+}
+
+/* vnitřní stránka / obsah po otevření:
+   stejné písmo,
+stejná velikost a stejná tloušťka jako pokročilé nastavení */
+#batteryRuntimeModes .runtime-modes-grid{
+  margin-top:10px !important;
+  gap:6px !important;
+}
+
+#batteryRuntimeModes .runtime-mode-row{
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.35 !important;
+}
+
+#batteryRuntimeModes .runtime-mode-row span{
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.35 !important;
+  color:var(--muted) !important;
+}
+
+#batteryRuntimeModes .runtime-mode-row b{
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.35 !important;
+  color:var(--text) !important;
+  white-space:nowrap !important;
+}
+
+#batteryRuntimeModes .small{
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.35 !important;
+  color:var(--muted) !important;
+}
+
+@media(max-width:700px){
+#batteryRuntimeModes .runtime-toggle-btn,
+#batteryRuntimeModes .runtime-toggle-btn::before{
+    font-size:13px !important;
+    font-weight:800 !important;
+    line-height:1.2 !important;
+  }
+
+#batteryRuntimeModes .runtime-toggle-btn::before{
+    white-space:normal !important;
+  }
+}
+
+/* ===== runtime-toggle-fontweight-fix ===== */
+/* OPRAVA: tloušťka hlavního textu musí být stejná jako Pokročilé nastavení systému */
+#batteryRuntimeModes summary,
+#batteryRuntimeModes .runtime-toggle-btn,
+#batteryRuntimeModes .runtime-toggle-btn::before{
+  font-weight:700 !important;
+}
+
+/* ===== pwm-allowed-system-voltage-style ===== */
+/* PWM: zakázaná systémová napětí jsou vizuálně neaktivní */
+#voltageMode option:disabled{
+  color:#9ca3af !important;
+}
+
+#pwmVoltageLockNote{
+  margin-top:6px;
+  padding:7px 9px;
+  border:1px solid rgba(180,83,9,.35);
+  border-radius:10px;
+  background:rgba(251,191,36,.12);
+  color:var(--warn);
+  font-size:12px;
+  font-weight:700;
+}
+
+/* ===== regulator-card-pwm-field-audit-style ===== */
+/* PWM: MPPT pracovní okno se u PWM nepoužívá,
+proto ho při PWM schováme. */
+.pwm-hidden-field{
+  display:none !important;
+}
+
+#pwmFieldAuditNote{
+  margin-top:8px;
+  padding:8px 10px;
+  border:1px solid rgba(37,99,235,.24);
+  border-radius:12px;
+  background:rgba(37,99,235,.08);
+  color:var(--text);
+  font-size:12px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+/* ===== pv-power-empty-state-final ===== */
+/* KROK 2W: Zadaný výkon FV pole má při prázdném konfigurátoru stejný čekací stav jako ostatní automatické hodnoty. */
+#pvTotalField{
+  font-weight:700 !important;
+}
+
+#enteredPvPower,
+input#enteredPvPower{
+  opacity:1 !important;
+  text-shadow:none !important;
+  filter:none !important;
+  mix-blend-mode:normal !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+}
+
+html #enteredPvPower,
+html input#enteredPvPower{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#111827 !important;
+  -webkit-text-fill-color:#111827 !important;
+  caret-color:#111827 !important;
+  border:1px solid #d1d5db !important;
+}
+
+#enteredPvPower::placeholder,
+input#enteredPvPower::placeholder{
+  color:#64748b !important;
+  -webkit-text-fill-color:#64748b !important;
+  opacity:1 !important;
+}
+
+html #pvTotalField,
+html input#pvTotalField{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#111827 !important;
+  -webkit-text-fill-color:#111827 !important;
+}
+
+/* ===== pv-total-empty-filled-color-final ===== */
+
+html #pvTotalField.pv-empty-auto,
+html input#pvTotalField.pv-empty-auto{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#6b7280 !important;
+  -webkit-text-fill-color:#6b7280 !important;
+}
+
+html #pvTotalField.pv-filled-auto,
+html input#pvTotalField.pv-filled-auto{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+html #dodDisplay,
+html input#dodDisplay{
+  background:#f8fafc !important;
+  background-color:#f8fafc !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  opacity:1 !important;
+}
+
+/* ===== version-4-final-stability-marker ===== */
+/* FVE konfigurátor verze 4 – finální stabilizační značka.
+   Výpočtová logika,
+feed{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border-color:#cbd5e1 !important;
+}
+
+/* ===== profi-engine-full-css ===== */
+.profi-main-evaluation{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+
+.profi-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:10px}
+
+.profi-detail-card{border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--card-soft,#f8fafc)}
+
+.profi-detail-card h4{margin:0 0 8px;font-size:14px}
+
+.profi-detail-card table{font-size:12px}
+
+.profi-detail-card td{padding:4px 2px}
+
+.profi-pill{display:inline-block;border-radius:999px;padding:3px 8px;border:1px solid currentColor;font-weight:800;font-size:11px}
+
+.profi-recommendations{margin-top:10px;padding:10px;border-radius:14px;border:1px solid var(--line);background:var(--card-soft,#f8fafc)}
+
+.profi-recommendations ul{margin:6px 0 0 18px;padding:0}
+
+.profi-recommendations li{margin:3px 0}
+
+@media print{
+.profi-detail-grid{grid-template-columns:1fr 1fr!important;gap:5px!important}
+
+.profi-detail-card,
+.profi-recommendations{padding:5px!important;border-radius:6px!important}
+
+.profi-detail-card h4{font-size:9px!important}
+
+.profi-detail-card table{font-size:8px!important}
+
+.profi-pill{font-size:8px!important;padding:1px 4px!important}
+}
+
+/* ===== deduplicated-details-style ===== */
+/* ===== component-feed-pickers-final ===== */
+/* Výběr komponent z XML katalogu – stejný princip jako regulátor:
+   bílá plocha,
+barvou pracuje hlavně rámeček/stav. */
+.component-feed-picker{
+  margin-top:12px;
+  padding:10px;
+  border:1px solid var(--line,#d1d5db);
+  border-radius:14px;
+  background:#ffffff!important;
+  color:#000000!important;
+  box-shadow:none!important;
+}
+
+.component-feed-picker label{font-weight:700;color:#111827!important;}
+
+.component-feed-picker select{
+  background:#ffffff!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid #9ca3af!important;
+  border-radius:14px!important;
+  min-height:46px!important;
+  font-weight:700!important;
+  text-align:center!important;
+  text-align-last:center!important;
+  box-shadow:none!important;
+  opacity:1!important;
+}
+
+.component-feed-picker select:focus{
+  outline:none!important;
+  border-color:var(--blue,#2563eb)!important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.16)!important;
+}
+
+.component-feed-picker select.component-feed-loaded{border-color:#cbd5e1!important;}
+
+.component-feed-picker select.component-feed-empty{border-color:#9ca3af!important;}
+
+.component-feed-picker select.component-feed-warn{border-color:var(--warn,#b45309)!important;}
+
+.component-feed-card{
+  display:grid;
+  grid-template-columns:86px minmax(0,1fr);
+  gap:10px;
+  margin-top:10px;
+  padding:10px;
+  border:1px solid var(--ok,#047857);
+  border-radius:14px;
+  background:#ffffff!important;
+  color:#000000!important;
+  box-shadow:none!important;
+}
+
+.component-feed-img{
+  width:86px;height:86px;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:#ffffff!important;
+  overflow:hidden;
+}
+
+.component-feed-img img{max-width:100%;max-height:100%;object-fit:contain;}
+
+.component-feed-title{font-weight:800;line-height:1.2;margin-bottom:4px;color:#000000!important;}
+
+.component-feed-meta{font-size:12px;color:#4b5563!important;line-height:1.25;margin-bottom:6px;}
+
+.component-feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;}
+
+.component-feed-param{border:1px solid #e5e7eb;border-radius:10px;padding:6px;background:#ffffff!important;}
+
+.component-feed-param span{display:block;font-size:11px;color:#64748b!important;}
+
+.component-feed-param b{display:block;font-size:13px;color:#000000!important;}
+
+.component-feed-picker .small{color:#4b5563!important;}
+
+@media(max-width:700px){
+.component-feed-card{grid-template-columns:1fr}
+
+.component-feed-img{width:100%;height:120px}
+}
+
+/* ===== delayed-warning-colors-final ===== */
+/* Finální pravidlo:
+   Modré/zelené zvýraznění průvodce zůstává.
+   Červené/žluté varovné zbarvení vstupních polí/karet nad vyhodnocením systému
+   se zobrazí až po vyplnění všech viditelných vstupních hodnot. */
+body:not(.print-protocol):not(.all-inputs-complete) input.warn,
+body:not(.print-protocol):not(.all-inputs-complete) input.warning,
+body:not(.print-protocol):not(.all-inputs-complete) input.bad,
+body:not(.print-protocol):not(.all-inputs-complete) input.error,
+body:not(.print-protocol):not(.all-inputs-complete) input.invalid,
+body:not(.print-protocol):not(.all-inputs-complete) input.calc-error-field,
+body:not(.print-protocol):not(.all-inputs-complete) select.warn,
+body:not(.print-protocol):not(.all-inputs-complete) select.warning,
+body:not(.print-protocol):not(.all-inputs-complete) select.bad,
+body:not(.print-protocol):not(.all-inputs-complete) select.error,
+body:not(.print-protocol):not(.all-inputs-complete) select.invalid,
+body:not(.print-protocol):not(.all-inputs-complete) select.calc-error-field,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.warn,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.warning,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.bad,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.error,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.invalid,
+body:not(.print-protocol):not(.all-inputs-complete) textarea.calc-error-field{
+  background:inherit!important;
+  border-color:var(--line)!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+
+/* Po kompletním vyplnění: neplatná pole červeně včetně pozadí. */
+body:not(.print-protocol).all-inputs-complete input.calc-error-field,
+body:not(.print-protocol).all-inputs-complete select.calc-error-field,
+body:not(.print-protocol).all-inputs-complete textarea.calc-error-field,
+body:not(.print-protocol).all-inputs-complete input.invalid,
+body:not(.print-protocol).all-inputs-complete select.invalid,
+body:not(.print-protocol).all-inputs-complete textarea.invalid,
+body:not(.print-protocol).all-inputs-complete input.error,
+body:not(.print-protocol).all-inputs-complete select.error,
+body:not(.print-protocol).all-inputs-complete textarea.error,
+body:not(.print-protocol).all-inputs-complete input.bad,
+body:not(.print-protocol).all-inputs-complete select.bad,
+body:not(.print-protocol).all-inputs-complete textarea.bad{
+  background:rgba(220,38,38,.12)!important;
+  border-color:var(--bad)!important;
+  box-shadow:0 0 0 2px rgba(220,38,38,.18)!important;
+}
+
+/* Po kompletním vyplnění: varovná pole žlutě,
+pokud je používá výpočet. */
+body:not(.print-protocol).all-inputs-complete input.warn,
+body:not(.print-protocol).all-inputs-complete input.warning,
+body:not(.print-protocol).all-inputs-complete select.warn,
+body:not(.print-protocol).all-inputs-complete select.warning,
+body:not(.print-protocol).all-inputs-complete textarea.warn,
+body:not(.print-protocol).all-inputs-complete textarea.warning{
+  background:rgba(245,158,11,.13)!important;
+  border-color:var(--warn)!important;
+  box-shadow:0 0 0 2px rgba(245,158,11,.18)!important;
+}
+
+/* Bezpečná oprava: hodnoty výdrže baterie jako běžné input písmo */
+#batteryRuntime .metric,
+#batteryRuntime .calc-value,
+.battery-runtime-card .metric,
+.battery-runtime-card .calc-value,
+[class*="runtime"] .metric,
+[class*="runtime"] .calc-value,
+[class*="vydrz"] .metric,
+[class*="vydrz"] .calc-value{
+  font-size:16px !important;
+  font-weight:400 !important;
+  font-family:Arial, sans-serif !important;
+  line-height:1.25 !important;
+  letter-spacing:0 !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+/* FINÁLNÍ OPRAVA: hodnoty výdrže baterie stejně jako input 200 */
+details:has(summary),
+details:has(summary) *{
+  box-sizing:border-box;
+}
+
+details:has(summary) summary{
+  font-weight:700!important;
+}
+
+/* Sekce podle textu výdrže baterie – hodnoty vpravo */
+details:has(summary) table td,
+details:has(summary) table th,
+details:has(summary) .metric,
+details:has(summary) .value,
+details:has(summary) b,
+details:has(summary) strong{
+  font-size:16px!important;
+  font-weight:400!important;
+  font-family:Arial,sans-serif!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+/* Pokud jsou výsledky vykreslené jako pravý sloupec řádků */
+details:has(summary) div,
+details:has(summary) span{
+  font-size:16px!important;
+}
+
+/* Konkrétní textové hodnoty výdrže – cílení na ID,
+pokud existují */
+#runtimeFull,
+#runtimeNormal,
+#runtimeNight,
+#runtimeEmergency,
+#batteryRuntimeFull,
+#batteryRuntimeNormal,
+#batteryRuntimeNight,
+#batteryRuntimeEmergency,
+[id*="runtime" i],
+[id*="vydrz" i],
+[id*="výdrž" i],
+[class*="runtime" i],
+[class*="vydrz" i],
+[class*="výdrž" i]{
+  font-size:16px!important;
+  font-weight:400!important;
+  font-family:Arial,sans-serif!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+/* Hodnoty v pravém sloupci nesmí být tučné */
+[id*="runtime" i] *,
+[id*="vydrz" i] *,
+[id*="výdrž" i] *,
+[class*="runtime" i] *,
+[class*="vydrz" i] *,
+[class*="výdrž" i] *{
+  font-size:16px!important;
+  font-weight:400!important;
+  font-family:Arial,sans-serif!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+/* ===== fix-small-text-same-as-label ===== */
+/* Oprava: spodní informační text má stejnou barvu a tloušťku jako horní popisky polí. */
+.small{
+  font-size:13px!important;
+  color:var(--muted)!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+}
+
+/* Verze 4: bílé pozadí rozkliknuté tabulky zboží */
+#selectedRegulatorCard,
+#selectedRegulatorCard .card,
+.feed-product-card,
+.regulator-product-card{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+}
+
+/* Typ systému – hlavní pole i rozbalovací položky: bílé pozadí,
+černý text */
+#systemType,
+#systemMode,
+#systemVoltage,
+#dcVoltage,
+#batteryVoltage,
+select[name="systemType"],
+select[name="systemMode"],
+select[id*="system" i],
+select[name*="system" i],
+select[id*="voltage" i],
+select[name*="voltage" i],
+select[id*="napeti" i],
+select[name*="napeti" i],
+select[id*="napětí" i],
+select[name*="napětí" i]{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border:2px solid #9ca3af !important;
+  text-align:left !important;
+  text-align-last:left !important;
+  opacity:1 !important;
+  appearance:auto !important;
+  -webkit-appearance:menulist !important;
+}
+
+#systemType option,
+#systemMode option,
+#systemVoltage option,
+#dcVoltage option,
+#batteryVoltage option,
+select[name="systemType"] option,
+select[name="systemMode"] option,
+select[id*="system" i] option,
+select[name*="system" i] option,
+select[id*="voltage" i] option,
+select[name*="voltage" i] option,
+select[id*="napeti" i] option,
+select[name*="napeti" i] option,
+select[id*="napětí" i] option,
+select[name*="napětí" i] option{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+/* Dvě hlavní pole – nikdy bílé písmo */
+#fvPower,
+#dailyConsumption,
+#invPower,
+input[name="fvPower"],
+input[name="dailyConsumption"],
+input[name="invPower"],
+input[placeholder="Zadejte výkon měniče"],
+input[value="Zadejte výkon měniče"]{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  caret-color:#000000 !important;
+  border:2px solid #9ca3af !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+
+#fvPower::placeholder,
+#dailyConsumption::placeholder,
+#invPower::placeholder,
+input[placeholder="Zadejte výkon měniče"]::placeholder{
+  color:#374151 !important;
+  -webkit-text-fill-color:#374151 !important;
+  opacity:1 !important;
+}
+
+
+html input,
+html select,
+html textarea{
+  color:#111827 !important;
+  -webkit-text-fill-color:#111827 !important;
+  opacity:1 !important;
+}
+
+html input::placeholder,
+html textarea::placeholder{
+  color:#6b7280 !important;
+  -webkit-text-fill-color:#6b7280 !important;
+  opacity:1 !important;
+}
+
+/* ==========================================================
+   FIX 7 – tvrdá oprava nečitelných polí bez závislosti na tématu
+   Důvod: některé starší přepisy / inline styly přebíjely tematicka pravidla.
+   Cíleně nastavujeme konkrétní problémové prvky podle ID.
+   ========================================================== */
+
+/* Automaticky zvolené systémové napětí podle výkonu měniče:
+   vždy bílé pole a černé písmo,
+aby hodnota 12/24/48 V byla čitelná. */
+#systemVoltageAutoDisplay,
+input#systemVoltageAutoDisplay,
+input#systemVoltageAutoDisplay.auto-calculated,
+#systemVoltageAutoDisplayWrap input#systemVoltageAutoDisplay,
+.system-voltage-card #systemVoltageAutoDisplayWrap input#systemVoltageAutoDisplay{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  caret-color:#000000 !important;
+  border:1px solid #94a3b8 !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+  filter:none !important;
+  mix-blend-mode:normal !important;
+  box-shadow:none !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+}
+
+#systemVoltageAutoDisplay::placeholder,
+input#systemVoltageAutoDisplay::placeholder{
+  color:#374151 !important;
+  -webkit-text-fill-color:#374151 !important;
+  opacity:1 !important;
+}
+
+html input#dodDisplay,
+html #dodDisplay{
+    background:#f8fafc !important;
+    background-color:#f8fafc !important;
+    color:#000000 !important;
+    -webkit-text-fill-color:#000000 !important;
+    opacity:1 !important;
+}
+
+/* ===== dod-border-match-battery-type-final ===== */
+/* DoD pole – stejné jemné ohraničení jako horní select Typ baterie */
+#dodDisplay{
+  border:1px solid #cbd5e1 !important;
+  border-radius:18px !important;
+  box-shadow:none !important;
+}
+
+/* ===== restore-design-linked-fields-vertical-final ===== */
+/* Vrácení původního rozložení: Denní spotřeba a Výkon FV pole jsou pod sebou */
+.design-linked-inputs{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+  margin:10px 0 12px !important;
+}
+
+#dailyWhWrap,
+#fieldManualWrap{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+/* Uvnitř Denní spotřeby zůstane vstup + jednotka ve stabilní řádce */
+#dailyWhWrap .daily-consumption-control-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 125px !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+
+@media(max-width:700px){
+#dailyWhWrap .daily-consumption-control-row{
+    grid-template-columns:minmax(0,1fr) 112px !important;
+    gap:7px !important;
+  }
+}
+
+/* ===== final-regulator-category-browser-style ===== */
+#regulatorTypeBrowser{margin-top:10px;border:1px solid var(--line);border-radius:16px;background:var(--card-soft,#f8fafc);padding:10px}
+
+.reg-browser-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:8px}
+
+.reg-browser-tabs{display:flex;gap:8px;flex-wrap:wrap}
+
+.reg-browser-tab{width:auto!important;margin:0!important;padding:8px 12px!important;min-height:34px!important;border-radius:999px!important;font-size:13px!important;background:#e5e7eb!important;color:#111827!important;border:1px solid #cbd5e1!important;box-shadow:none!important}
+
+.reg-browser-tab.active{background:#ecfdf5!important;color:#047857!important;border-color:#059669!important}
+
+.reg-browser-list{display:grid;grid-template-columns:1fr;gap:6px;max-height:280px;overflow:auto;padding-right:2px}
+
+.reg-browser-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid rgba(148,163,184,.35);border-radius:12px;background:rgba(255,255,255,.6);padding:8px 10px;cursor:pointer}
+
+.reg-browser-item:hover{border-color:#2563eb;background:rgba(37,99,235,.07)}
+
+.reg-browser-title{font-weight:800;font-size:13px;line-height:1.25;overflow-wrap:anywhere}
+
+.reg-browser-meta{font-size:11px;color:var(--muted);margin-top:2px}
+
+.reg-browser-pill{font-size:11px;font-weight:900;border-radius:999px;padding:4px 7px;border:1px solid currentColor;white-space:nowrap}
+
+.pill-mppt{color:#2563eb}
+
+.pill-pwm{color:#b45309}
+
+/* ===== final-no-extra-regulator-table-style ===== */
+/* Finální oprava: žádná spodní tabulka/prohlížeč regulátorů – jen jeden select s optgroup MPPT/PWM. */
+#regulatorTypeBrowser{display:none!important}
+
+/* ===== regulator-current-white-surface-border-only-final ===== */
+/* Proud zvoleného regulátoru [A]: při validaci zůstává plocha vždy bílá,
+mění se pouze barva rámečku. */
+#regulatorCurrentA{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  opacity:1 !important;
+}
+
+/* ===== component-feed-same-as-regulator-final ===== */
+.component-feed-picker{
+  border:1px solid var(--line,#d1d5db)!important;
+  border-radius:16px!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  padding:10px!important;
+}
+
+.component-feed-picker label{
+  color:#111827!important;
+  font-weight:800!important;
+}
+
+.component-feed-picker select{
+  background:#ffffff!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  border:1px solid #9ca3af!important;
+  border-radius:14px!important;
+  min-height:46px!important;
+  font-weight:800!important;
+  text-align:center!important;
+  text-align-last:center!important;
+  box-shadow:none!important;
+  opacity:1!important;
+}
+
+.component-feed-picker select.component-feed-loaded{border-color:#cbd5e1!important;}
+
+.component-feed-picker select.component-feed-warn{border-color:var(--warn,#b45309)!important;}
+
+.component-feed-picker select.component-feed-empty{border-color:#9ca3af!important;}
+
+.component-feed-picker select option{background:#ffffff!important;color:#000000!important;}
+
+.component-feed-picker .small{
+  color:#4b5563!important;
+  margin-top:7px!important;
+  line-height:1.35!important;
+}
+
+.component-feed-card{
+  display:grid!important;
+  grid-template-columns:92px minmax(0,1fr)!important;
+  gap:10px!important;
+  margin-top:10px!important;
+  padding:10px!important;
+  border:1px solid #cbd5e1!important;
+  border-radius:14px!important;
+  background:#ffffff!important;
+  color:#000000!important;
+  box-shadow:none!important;
+}
+
+.component-feed-card.component-feed-card-ok{border-color:var(--ok,#047857)!important;}
+
+.component-feed-card.component-feed-card-warn{border-color:var(--warn,#b45309)!important;}
+
+.component-feed-img{width:92px!important;height:92px!important;background:#ffffff!important;border:1px solid #e5e7eb!important;border-radius:12px!important;}
+
+.component-feed-title{font-weight:900!important;color:#000000!important;line-height:1.2!important;}
+
+.component-feed-meta{font-size:12px!important;color:#4b5563!important;line-height:1.25!important;margin:4px 0 7px!important;}
+
+.component-feed-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))!important;gap:6px!important;}
+
+.component-feed-param{border:1px solid #e5e7eb!important;border-radius:10px!important;padding:6px!important;background:#ffffff!important;}
+
+.component-feed-param span{display:block!important;font-size:11px!important;color:#64748b!important;}
+
+.component-feed-param b{display:block!important;font-size:13px!important;color:#000000!important;}
+
+.component-feed-status{
+  margin-top:8px!important;
+  padding:8px 10px!important;
+  border-radius:999px!important;
+  border:1px solid currentColor!important;
+  font-weight:900!important;
+  text-align:center!important;
+}
+
+.component-feed-status-ok{color:var(--ok,#047857)!important;background:rgba(4,120,87,.06)!important;}
+
+.component-feed-status-warn{color:var(--warn,#b45309)!important;background:rgba(180,83,9,.06)!important;}
+
+@media(max-width:700px){
+.component-feed-card{grid-template-columns:1fr!important}
+
+.component-feed-img{width:100%!important;height:120px!important}
+}
+
+/* ===== component-feed-left-and-regulator-card-final ===== */
+/* Levé zarovnání všech polí ve výběrech komponent z feedu */
+.component-feed-picker,
+.component-feed-picker *,
+.component-feed-card,
+.component-feed-card *{
+  text-align:left!important;
+  justify-content:flex-start!important;
+}
+
+.component-feed-picker select,
+#batteryFeedPicker select,
+#inverterFeedPicker select,
+#pvFeedPicker select,
+#feedBatterySelect,
+#feedInverterSelect,
+#feedPvSelect{
+  text-align:left!important;
+  text-align-last:left!important;
+  padding-left:12px!important;
+}
+
+.component-feed-picker select option,
+#feedBatterySelect option,
+#feedInverterSelect option,
+#feedPvSelect option{
+  text-align:left!important;
+}
+
+}
+
+/* ===== keep-open-product-link-style ===== */
+}
+
+/* FORCE WHITE INPUTS IN ALL MODES */
+input,
+select,
+textarea,
+input:focus,
+select:focus,
+textarea:focus{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border-color:#cbd5e1 !important;
+  caret-color:#000000 !important;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#6b7280 !important;
+}
+
+html input,
+html select,
+html textarea{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border-color:#cbd5e1 !important;
+}
+
+/* FINAL FIX: Údaje zákazníka + Tisk/PDF vstupy a tabulková pole vždy bílé v každém režimu */
+#customerCard,
+#customerCard *,
+#customerFields,
+#customerFields *,
+#customerInputs,
+#customerInputs *,
+.customer-card,
+.customer-card *,
+.customer-fields,
+.customer-fields *,
+#printProtocolPage .protocol-box,
+#printProtocolPage .protocol-box *,
+#printPreviewContent .protocol-box,
+#printPreviewContent .protocol-box *,
+#printProtocolPreviewClone .protocol-box,
+#printProtocolPreviewClone .protocol-box *{
+  color:#000000 !important;
+}
+
+#customerCard input,
+#customerCard select,
+#customerCard textarea,
+#customerFields input,
+#customerFields select,
+#customerFields textarea,
+#customerInputs input,
+#customerInputs select,
+#customerInputs textarea,
+.customer-card input,
+.customer-card select,
+.customer-card textarea,
+.customer-fields input,
+.customer-fields select,
+.customer-fields textarea,
+#printProtocolPage input,
+#printProtocolPage select,
+#printProtocolPage textarea,
+#printPreviewContent input,
+#printPreviewContent select,
+#printPreviewContent textarea,
+#printProtocolPreviewClone input,
+#printProtocolPreviewClone select,
+#printProtocolPreviewClone textarea{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border:1px solid #cbd5e1 !important;
+  caret-color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+#customerCard input::placeholder,
+#customerCard textarea::placeholder,
+#customerFields input::placeholder,
+#customerFields textarea::placeholder,
+#customerInputs input::placeholder,
+#customerInputs textarea::placeholder,
+.customer-card input::placeholder,
+.customer-card textarea::placeholder,
+.customer-fields input::placeholder,
+.customer-fields textarea::placeholder,
+#printProtocolPage input::placeholder,
+#printProtocolPage textarea::placeholder,
+#printPreviewContent input::placeholder,
+#printPreviewContent textarea::placeholder,
+#printProtocolPreviewClone input::placeholder,
+#printProtocolPreviewClone textarea::placeholder{
+  color:#6b7280 !important;
+  opacity:1 !important;
+  -webkit-text-fill-color:#6b7280 !important;
+}
+
+
+#printProtocolPage .protocol-table,
+#printProtocolPage .protocol-table td,
+#printPreviewContent .protocol-table,
+#printPreviewContent .protocol-table td,
+#printProtocolPreviewClone .protocol-table,
+#printProtocolPreviewClone .protocol-table td{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border-color:#e5e7eb !important;
+}
+
+/* ABSOLUTNÍ FIX - ÚDAJE ZÁKAZNÍKA */
+#customerDataCard input,
+#customerDataCard select,
+#customerDataCard textarea,
+#customerSection input,
+#customerSection select,
+#customerSection textarea,
+.card input[type="text"],
+.card input[type="email"],
+.card input[type="tel"]{
+    background:#ffffff !important;
+    background-color:#ffffff !important;
+    color:#000000 !important;
+    -webkit-text-fill-color:#000000 !important;
+    border:1px solid #cbd5e1 !important;
+    box-shadow:none !important;
+}
+
+#customerDataCard input::placeholder,
+#customerSection input::placeholder,
+.card input[type="text"]::placeholder,
+.card input[type="email"]::placeholder,
+.card input[type="tel"]::placeholder{
+    color:#6b7280 !important;
+    opacity:1 !important;
+}
+
+/* =========================================================
+   NATVRDO: OKNO TISK/PDF - ÚDAJE ZÁKAZNÍKA VŽDY JAKO SVĚTLÝ REŽIM
+   ========================================================= */
+#printCustomerStep,
+html #printCustomerStep{
+  background:#ffffff !important;
+  color:#000000 !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:14px !important;
+  padding:12px !important;
+  box-shadow:none !important;
+}
+
+#printCustomerStep *,
+html #printCustomerStep *{
+  color:#000000 !important;
+  text-shadow:none !important;
+}
+
+#printCustomerStep h3{
+  color:#000000 !important;
+  border-bottom:1px solid #111827 !important;
+  padding-bottom:8px !important;
+  margin:0 0 10px 0 !important;
+  font-size:18px !important;
+}
+
+#printCustomerStep label,
+#printCustomerStep p,
+#printCustomerStep .small{
+  color:#334155 !important;
+}
+
+#printCustomerStep .print-customer-grid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:12px !important;
+  background:#ffffff !important;
+}
+
+#printCustomerStep .print-customer-grid .full-row{
+  grid-column:1 / -1 !important;
+}
+
+#printCustomerStep input,
+html #printCustomerStep input{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:8px !important;
+  box-shadow:none !important;
+  outline:none !important;
+  caret-color:#000000 !important;
+}
+
+#printCustomerStep input::placeholder{
+  color:#64748b !important;
+  opacity:1 !important;
+  -webkit-text-fill-color:#64748b !important;
+}
+
+#printCustomerStep input[type="checkbox"]{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  width:18px !important;
+  height:18px !important;
+  min-width:18px !important;
+  min-height:18px !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  border:1px solid #94a3b8 !important;
+  border-radius:6px !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.75) !important;
+  outline:none !important;
+  cursor:pointer !important;
+  position:relative !important;
+}
+
+#printCustomerStep input[type="checkbox"]:checked{
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  border-color:#64748b !important;
+}
+
+#printCustomerStep input[type="checkbox"]:checked::after{
+  content:'' !important;
+  position:absolute !important;
+  left:4px !important;
+  top:5px !important;
+  width:9px !important;
+  height:5px !important;
+  background:transparent !important;
+  border-left:1.45px solid #111827 !important;
+  border-bottom:1.45px solid #111827 !important;
+  border-radius:1.5px !important;
+  transform:rotate(-45deg) !important;
+  transform-origin:center !important;
+}
+
+#printCustomerStep .print-customer-toggle{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  color:#000000 !important;
+  margin:8px 0 12px 0 !important;
+}
+
+/* celé modální okno Tisk/PDF nesmí přebarvit zákaznickou tabulku do tmavemu rezimu */
+#pdfPreviewModal .modal{
+  background:#ffffff !important;
+  color:#000000 !important;
+}
+
+@media(max-width:700px){
+#printCustomerStep .print-customer-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* Layout konfigurátoru – požadované pořadí */
+.custom-config-layout{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.custom-top-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+
+.custom-top-row > .card{
+  margin-bottom:0!important;
+}
+
+.custom-config-layout > .card{
+  width:100%;
+}
+
+@media(max-width:1200px){
+.custom-top-row{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Měnič: tabulka a výběr z feedu vedle sebe */
+.inverter-inline-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(320px,0.72fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+}
+
+.inverter-feed-panel{
+  border:1px solid var(--line)!important;
+  border-radius:14px!important;
+  padding:12px!important;
+  background:var(--card-soft,#f8fafc)!important;
+}
+
+@media(max-width:1100px){
+.inverter-inline-layout{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* Systémové napětí přesunuté pod tabulku Měnič */
+.inverter-main-panel > .card{
+  margin-top:14px!important;
+  margin-bottom:0!important;
+}
+
+/* OPRAVA ROZLOŽENÍ: FV pole / Baterie / Regulátor – výběr z feedu vpravo ve stejné řadě
+   a se STEJNOU ŠÍŘKOU jako výběr z feedu u měniče */
+.component-inline-card > .component-inline-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(320px,0.72fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+}
+
+.component-inline-card .component-main-panel,
+.component-inline-card .component-feed-panel{
+  min-width:0!important;
+}
+
+.component-inline-card .component-feed-panel{
+  border:1px solid var(--line)!important;
+  border-radius:14px!important;
+  padding:12px!important;
+  background:var(--card-soft,#f8fafc)!important;
+  box-sizing:border-box!important;
+}
+
+.component-inline-card .component-feed-panel .component-feed-picker{
+  margin-top:0!important;
+}
+
+.component-inline-card .component-feed-picker label:first-child{
+  margin-top:0!important;
+}
+
+.component-inline-card .component-feed-picker select{
+  width:100%!important;
+}
+
+@media(max-width:1100px){
+.component-inline-card > .component-inline-layout{
+    grid-template-columns:1fr!important;
+  }
+}
+
+@media print{
+.component-inline-card > .component-inline-layout{
+    display:block!important;
+  }
+
+.component-inline-card .component-feed-panel{
+    border:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+}
+
+/* ===== FINAL FIX: výběr z feedu – regulátor bez dvojitých rámečků a nižší výška =====
+   Regulátor měl navíc starší vlastní rámečky na #regulatorFeedPicker a #feedRegulatorSelect.
+   Tady se přebije jen regulátorový výběr,
+aby vypadal stejně čistě jako ostatní výběry z feedu. */
+.standalone-feed-card-regulator-inline-card .component-feed-panel{
+  padding:10px!important;
+  border:1px solid var(--line,#d1d5db)!important;
+  border-radius:14px!important;
+  background:var(--card-soft,#f8fafc)!important;
+  box-shadow:none!important;
+}
+
+.standalone-feed-card-regulator-inline-card #regulatorFeedPicker{
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:var(--text,#111827)!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+
+.standalone-feed-card-regulator-inline-card #regulatorFeedPicker label{
+  margin:0 0 4px 0!important;
+  color:var(--muted,#4b5563)!important;
+  -webkit-text-fill-color:var(--muted,#4b5563)!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+}
+
+.standalone-feed-card-regulator-inline-card #feedRegulatorSelect,
+.standalone-feed-card-regulator-inline-card #regulatorFeedPicker #feedRegulatorSelect{
+  width:100%!important;
+  min-height:38px!important;
+  height:38px!important;
+  margin:0!important;
+  padding:6px 10px!important;
+  border:1px solid #9ca3af!important;
+  border-radius:12px!important;
+  background:#ffffff!important;
+  background-color:#ffffff!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  box-shadow:none!important;
+  font-size:14px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  text-align-last:left!important;
+  appearance:auto!important;
+  -webkit-appearance:menulist!important;
+}
+
+.standalone-feed-card-regulator-inline-card #feedRegulatorSelect option{
+  background:#ffffff!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+}
+
+.standalone-feed-card-regulator-inline-card #selectedRegulatorCard{
+  margin-top:8px!important;
+}
+
+@media(max-width:700px){
+.standalone-feed-card-regulator-inline-card .component-feed-panel{padding:9px!important;}
+
+.standalone-feed-card-regulator-inline-card #feedRegulatorSelect{min-height:36px!important;height:36px!important;font-size:13px!important;}
+}
+
+
+
+
+/* Odstraněno: omylem vložená samostatná univerzální feed karta na konec konfigurátoru. Původní integrované feed karty zůstávají zachované. */
+
+/* VERZE 275: přehledné severity validace */
+.validation-errors-box,
+.validation-warnings-box,
+.validation-recommendations-box{
+  border-left:4px solid var(--line);
+}
+.validation-errors-box{border-left-color:var(--bad)!important;}
+.validation-warnings-box{border-left-color:var(--warn)!important;}
+.validation-recommendations-box{border-left-color:var(--ok)!important;}
+.validation-status-pill{
+  display:inline-block;
+  margin-top:6px;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid currentColor;
+  font-size:12px;
+  font-weight:800;
+}
+.calc-value.warn{color:var(--warn)!important}
+.customer-summary-note .validation-status-pill{margin-right:6px;}
+</style>
+<!-- VERZE 38: návrat na stabilní jádro verze 35; opraven startovací dialog a přístup k MENU bez agresivního čištění CSS. -->
+<!-- FINAL FIX 2026-06-01: verze 5 - Tisk/PDF nesmi zablokovat start-lock a validacni bunky musi zustat barevne -->
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FVE konfigurátor K7L – funkční centrální feed okno</title>
+<!-- VERZE 66: oprava syntaktických chyb ve vložených skriptech a sjednocení označení verze. -->
+<meta content="#f4f6f8" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="FVE konfigurátor" name="apple-mobile-web-app-title"/>
+<script id="static-light-theme-only">
+(function(){
+  document.documentElement.removeAttribute('data-theme');
+  document.documentElement.style.colorScheme = 'light';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f4f6f8');
+})();
+</script>
+<!-- Oprava: v hlavní kartě Vyhodnocení systému nejsou duplicitně zobrazené KPI hodnoty; zůstávají jen v rozklikávacích Podrobnostech systému. -->
+<!-- Finální upravená verze: údaje zákazníka v Tisk/PDF nad mapou, sjednocené hlavičky protokolu. -->
+<!-- Úprava: pokročilé technické hodnoty jsou viditelné v UI; SOC a řízení baterie zůstávají dostupné v sekci Baterie. -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+if (window.Chart) {
+  Chart.defaults.elements.bar.borderRadius = 0;
+  Chart.defaults.elements.bar.borderSkipped = false;
+}
+</script>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js"></script>
+<script id="complete-graphs-section-second-page-runtime">
+function markProtocolGraphsPage(){
+  document.querySelectorAll('.protocol-box').forEach(function(box){
+    var title = (box.querySelector('h3') || box.querySelector('h2'));
+    if(title && title.textContent.trim().toLowerCase() === 'grafy'){
+      box.classList.add('protocol-graphs-page');
+    }
+    if(box.querySelector('.protocol-charts')){
+      box.classList.add('protocol-graphs-page');
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', markProtocolGraphsPage);
+window.addEventListener('beforeprint', markProtocolGraphsPage);
+</script>
+<script id="poloha-prvni-krok-js">
+function focusMapForLocation(){
+  const wrap=document.getElementById('mapWrap');
+  const map=document.getElementById('map');
+  if(wrap){
+    wrap.scrollIntoView({behavior:'smooth',block:'center'});
+    wrap.classList.remove('guide-map-pulse');
+    void wrap.offsetWidth;
+    wrap.classList.add('guide-map-pulse');
+    setTimeout(()=>wrap.classList.remove('guide-map-pulse'),3400);
+  }else if(map){
+    map.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+}
+</script>
+<!-- PWM AUDIT:
+Profesionální logika PWM:
+1) proud regulátoru = Isc panelu × paralelní stringy × 1,25;
+2) Voc za mrazu nesmí překročit max. Voc regulátoru;
+3) Vmp stringu musí být přizpůsobeno baterii, ne MPPT oknu;
+4) měsíční výroba PWM je krácena koeficientem batt.regulatorV / VmpString;
+5) doporučení stringu používá pro PWM ideální poměr Vmp/absorpční napětí cca 1,25.
+-->
+<!-- Údržba 2026-05-17: oprava labelu feedu, validní umístění stylu v head, robustnější parser čísel, doplněné souhrnné KPI prvky a workflow info. -->
+<!-- FINAL DARK MODE READABILITY OVERRIDE – oprava nečitelných přepisů -->
+<!-- Čistá verze: regulátorová pole nejsou předvyplněná; feed se načítá až ručním importem. -->
+<!-- ULTRA PROTOKOL UPGRADE -->
+<script>
+window.PROFI_PROTOCOL_FEATURES = {
+  enabled:true,
+  features:[
+    "Celkové technické hodnocení systému",
+    "Zimní autonomie a deficit",
+    "Kontrola rozběhové rezervy měniče",
+    "Rozdělení FV energie",
+    "Kontrola C-rate baterie",
+    "Odhad životnosti baterie",
+    "Kontrola přepanelování MPPT",
+    "Kategorie systému",
+    "Automaticky doporučení projektanta",
+    "Technické skóre systému"
+  ]
+};
+</script>
+<!-- Úprava 2026-05-22: rozšířen parser FV panelů z Parametry a specifikace pro TIPA/Victron zápisy Voc/Vmpp/Isc/Impp. -->
+<meta content="K16C218: robustní XML obrázky pro nový TIPA web/CDN; více kandidátů src/srcset/lazy + fallback." name="build-note"/>
+<style id="fix-product-card-compare-header-font-weight-final">
+/* Oprava karty zboží: hlavička validační tabulky nemá být tučná. */
+#selectedBatteryCard .product-compare-table thead th,
+#selectedInverterCard .product-compare-table thead th,
+#selectedPvCard .product-compare-table thead th,
+#selectedRegulatorCard .product-compare-table thead th,
+</style>
+<style id="final-feed-modal-thin-font-css">
+/* Finální úprava: tenké/normální písmo v otevřených seznamech zboží */
+.feed-modal-picker,
+.feed-modal-picker *{
+  font-weight:400!important;
+}
+
+.feed-modal-picker-title{
+  font-weight:500!important;
+}
+
+.feed-modal-picker-group{
+  font-weight:500!important;
+}
+
+.feed-modal-picker-row{
+  font-weight:400!important;
+}
+
+.feed-modal-picker-search{
+  font-weight:400!important;
+}
+
+
+</style>
+<script id="feed-manual-mode-session-only">
+/* Ruční režim bez seznamu platí jen pro aktuální otevřenou stránku.
+   Po novém spuštění softwaru se úvodní okno znovu zobrazí. */
+window.productFeedManualMode = false;
+try{ localStorage.removeItem('fve_product_feed_manual_mode'); }catch(e){}
+</script>
+<!-- VERZE 25: čistý základ validací – bez starých validačních záplat -->
+<!-- VERZE 27: stabilní přebarvování tabulek při vyplňování -->
+<style id="v65-clean-start-choice-base-css">
+/* VERZE 65: čistý stabilní start bez starých anti-flicker/modal přepisů */
+html,body{scroll-behavior:auto!important;}
+#feedChoiceModal,#feedChoiceModal *,#feedChoiceModal *::before,#feedChoiceModal *::after{animation:none!important;transition:none!important;}
+#feedChoiceModal{color-scheme:light!important;}
+body.feed-start-locked{overflow:hidden!important;}
+</style>
+<style id="fve-clean-input-neutral-authority-css">
+/* Čisté zadávání: vstupní pole nemají technickou validaci ani po přepočtu. */
+html body:not(.print-protocol) input,
+html body:not(.print-protocol) select,
+html body:not(.print-protocol) textarea{
+  border-color:#d1d5db!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+html body:not(.print-protocol) input:focus,
+html body:not(.print-protocol) select:focus,
+html body:not(.print-protocol) textarea:focus{
+  border-color:#2563eb!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+</style>
+<style id="fve-clean-start-unlock-css">
+html:not(.fve-hard-booting) body > *{visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
+html:not(.fve-hard-booting) #fveStartupOverlay{display:none!important;}
+body:not(.print-protocol) #feedChoiceModal:not(.v65-open){display:none!important;}
+</style>
+<style id="fve-clean-map-visual-visibility-css">
+/* Čistá obnova vzhledu mapy a vizualizace bez validačních barev vstupů */
+#mapWrap,#map,.energy-flow,.flow-box,.diagram-box,.chart-box{display:block;visibility:visible;}
+.energy-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;}
+#map{min-height:330px;}
+</style>
+<style id="fve-remove-feed-filter-toolbar-final">
+/* FINÁLNÍ ČISTKA: feed filtr/řazení se nesmí zobrazovat.
+   Zůstává jen seznam/karty produktů, bez staré horní lišty. */
+#feedCategory,
+#feedSearch,
+#feedSort,
+.feed-toolbar,
+.product-feed-toolbar,
+.feed-filter-toolbar,
+.feed-sort-toolbar{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  height:0!important;
+  min-height:0!important;
+  max-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+</style>
+<style id="fve-14u-step5-blue-info-fields-css">
+/* Krok 5: modrá informační pole jsou pouze textové/info bloky, bez validačního významu. */
+.fve-blue-info,
+.info-blue,
+.blue-info,
+.fve-collapsible-title,
+.fve-section-subtitle-blue{
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  font-family:Arial,sans-serif!important;
+}
+.fve-blue-info *,
+.info-blue *,
+.blue-info *,
+.fve-collapsible-title *,
+.fve-section-subtitle-blue *{
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+}
+</style>
+<style id="fve-14u-clean-step7-feed-static-css">
+/* Krok 7: feed je statický katalog. Žádné validační stavy, žádné animace, žádné přepočítávání vzhledu karet. */
+html body:not(.print-protocol) .component-feed-card,
+html body:not(.print-protocol) .fve-v12-feed-card{
+  animation:none!important;
+  transition:none!important;
+  transform:none!important;
+  will-change:auto!important;
+  border-color:#cbd5e1!important;
+  background:#ffffff!important;
+}
+html body:not(.print-protocol) .component-feed-card-ok,
+html body:not(.print-protocol) .component-feed-card-warn,
+html body:not(.print-protocol) .component-feed-card-bad{
+  border-color:#cbd5e1!important;
+  background:#ffffff!important;
+}
+html body:not(.print-protocol) .component-feed-status,
+html body:not(.print-protocol) .component-feed-status-ok,
+html body:not(.print-protocol) .component-feed-status-warn,
+html body:not(.print-protocol) .component-feed-status-bad,
+html body:not(.print-protocol) .fve-v11-feed-extra,
+html body:not(.print-protocol) .fve-v12-feed-state,
+html body:not(.print-protocol) [data-fve-v12-validation]{
+  display:none!important;
+}
+</style>
+<style id="fve-krok26-cable-goods-core-css">
+html body:not(.print-protocol) .unified-feed-row-cable-goods-card{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(280px,420px)!important;gap:14px!important;align-items:start!important;}
+html body:not(.print-protocol) .unified-feed-row-cable-goods-card > .standalone-feed-main-card{grid-column:1!important;}
+html body:not(.print-protocol) .unified-feed-row-cable-goods-card > .standalone-feed-side-card{grid-column:2!important;}
+html body:not(.print-protocol) #selectedCableGoodsCard:empty{display:none!important;}
+@media(max-width:900px){html body:not(.print-protocol) .unified-feed-row-cable-goods-card{grid-template-columns:1fr!important;}html body:not(.print-protocol) .unified-feed-row-cable-goods-card > .standalone-feed-side-card{grid-column:1!important;}}
+</style>
+<style id="logical-detailed-results-layout-final-style">
+.logical-results-grid{align-items:start!important;}
+.logical-result-card h3{margin-top:0!important;}
+.logical-result-card table th[colspan="2"]{background:#f8fafc!important;color:#111827!important;font-weight:800!important;text-align:left!important;}
+.logical-result-card .calc-highlight{margin-bottom:8px!important;}
+.result-battery-card .calc-metric::before{background:linear-gradient(90deg,var(--ok),rgba(4,120,87,.18))!important;}
+.result-inverter-card .calc-metric::before{background:linear-gradient(90deg,var(--blue),rgba(37,99,235,.18))!important;}
+.result-cables-card{margin-top:0!important;}
+@media(max-width:900px){.logical-results-grid{grid-template-columns:1fr!important;}}
+@media print{.logical-results-grid{grid-template-columns:1fr 1fr!important;gap:4px!important}.logical-result-card{break-inside:avoid!important;}}
+</style>
+<style id="fve-results-thin-validation-font-fix">
+/* KROK 43: pouze výsledková část – sjednocené jemné písmo i pro barevně validované hodnoty.
+   Nezasahuje do vstupních tabulek ani feedu. */
+#resultsTitle,
+#customerSummary, #customerSummaryNote,
+#fveOut, #regOut, #batteryOut, #inverterOut, #cableOut, #socOut{
+  font-family: Arial, sans-serif !important;
+  font-weight:400 !important;
+}
+#customerSummary *, #customerSummaryNote *,
+#fveOut *, #regOut *, #batteryOut *, #inverterOut *, #cableOut *, #socOut *{
+  font-family: Arial, sans-serif !important;
+}
+/* Barevná validace zůstává, ale bez agresivního tučného řezu. */
+#fveOut .ok, #fveOut .warn, #fveOut .bad,
+#regOut .ok, #regOut .warn, #regOut .bad,
+#batteryOut .ok, #batteryOut .warn, #batteryOut .bad,
+#inverterOut .ok, #inverterOut .warn, #inverterOut .bad,
+#cableOut .ok, #cableOut .warn, #cableOut .bad,
+#socOut .ok, #socOut .warn, #socOut .bad{
+  font-weight:400 !important;
+}
+/* Hodnoty v kartách zůstávají čitelné, ale ne extrémně tučné. */
+#fveOut .calc-value, #regOut .calc-value, #batteryOut .calc-value, #inverterOut .calc-value, #cableOut .calc-value,
+#fveOut .details-kpi b, #regOut .details-kpi b, #batteryOut .details-kpi b, #inverterOut .details-kpi b, #cableOut .details-kpi b{
+  font-weight:500 !important;
+}
+#fveOut table td:last-child, #regOut table td:last-child, #batteryOut table td:last-child, #inverterOut table td:last-child, #cableOut table td:last-child,
+.details-table td:last-child, .details-mini-table td:last-child, .customer-summary-value{
+  font-weight:400 !important;
+}
+.details-message-box li{
+  font-weight:400 !important;
+}
+.safety-note, .safety-note.warn, .safety-note.bad{
+  font-weight:400 !important;
+}
+</style>
+<style id="fve-results-dashboard-unify">
+.customer-summary-card,
+.calc-metric,
+.cable-card,
+.month-card,
+.result-card,
+.result-section{
+    font-family: Arial, sans-serif !important;
+}
+
+.customer-summary-card{
+    border:1px solid #c98a52 !important;
+    border-radius:22px !important;
+    background:#f8fafc !important;
+    box-shadow:none !important;
+}
+
+.customer-summary-headline{
+    font-size:26px !important;
+    font-weight:500 !important;
+    letter-spacing:-0.01em;
+}
+
+.customer-summary-note,
+.calc-label,
+.month-label,
+.cable-label{
+    font-weight:400 !important;
+    color:#374151 !important;
+}
+
+.calc-value,
+.calc-metric .calc-value,
+.customer-summary-value,
+.cable-value,
+.month-value,
+.ok,
+.warn,
+.bad{
+    font-family: Arial, sans-serif !important;
+    font-weight:400 !important;
+    letter-spacing:0 !important;
+}
+
+.ok{color:#15803d !important;}
+.warn{color:#b45309 !important;}
+.bad{color:#b91c1c !important;}
+
+.customer-summary-card ul,
+.customer-summary-card li{
+    font-weight:400 !important;
+}
+
+.customer-summary-card li::marker{
+    color:#111827 !important;
+}
+
+.customer-summary-card strong,
+.calc-metric strong,
+.result-card strong{
+    font-weight:600 !important;
+}
+
+h2,h3,h4{
+    font-family: Arial, sans-serif !important;
+}
+</style>
+<style id="fve-dashboard-visual-like-generated-image">
+/* KROK 45: výsledkový dashboard podle schváleného vizuálu obrázku.
+   Zásah je omezený na výsledkovou část, vstupní tabulky a feed nejsou dotčené. */
+html body:not(.print-protocol) #resultsTitle{
+  margin:14px 0 8px!important;
+  font-family:Arial,sans-serif!important;
+  font-size:20px!important;
+  font-weight:500!important;
+  color:#111827!important;
+}
+
+html body:not(.print-protocol) :is(#customerSummaryCard,#wWaterEvaluation){
+  margin-top:16px!important;
+  padding:16px 18px!important;
+  border:1px solid #c46a1c!important;
+  border-left:6px solid #c46a1c!important;
+  border-radius:18px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+}
+
+html body:not(.print-protocol) :is(#customerSummaryCard,#wWaterEvaluation)>h3{
+  margin:0 0 12px!important;
+  padding:8px 12px!important;
+  border:1px solid #cbd5e1!important;
+  border-left:4px solid #111827!important;
+  border-radius:12px!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:20px!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #customerSummary,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>h3{
+  margin:0 0 10px!important;
+  color:#b45309!important;
+  font-family:Arial,sans-serif!important;
+  font-size:26px!important;
+  line-height:1.18!important;
+  font-weight:500!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>p,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>ul{
+  font-family:Arial,sans-serif!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+  color:#111827!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote b,
+html body:not(.print-protocol) #customerSummaryNote strong,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus b,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus strong{
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results > .logical-result-card{
+  margin:0!important;
+  padding:12px 14px!important;
+  min-height:0!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  font-family:Arial,sans-serif!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results > .logical-result-card h3{
+  margin:0 0 10px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:#0b4ea2!important;
+  font-family:Arial,sans-serif!important;
+  font-size:18px!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results table,
+html body:not(.print-protocol) .fve-dashboard-results .fve-dashboard-table{
+  width:100%!important;
+  border-collapse:collapse!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:#ffffff!important;
+  table-layout:auto!important;
+  font-family:Arial,sans-serif!important;
+  font-size:13px!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results th,
+html body:not(.print-protocol) .fve-dashboard-results td{
+  padding:4px 2px!important;
+  border:0!important;
+  border-bottom:1px solid #e5e7eb!important;
+  background:#ffffff!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:400!important;
+  text-align:left!important;
+  vertical-align:top!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results td:last-child{
+  text-align:left!important;
+  white-space:nowrap!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results th[colspan],
+html body:not(.print-protocol) .fve-dashboard-results th[colspan="2"]{
+  padding-top:9px!important;
+  border-bottom:1px solid #bfdbfe!important;
+  color:#111827!important;
+  background:#ffffff!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  text-align:left!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results b,
+html body:not(.print-protocol) .fve-dashboard-results strong{
+  font-weight:500!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results .ok,
+html body:not(.print-protocol) .fve-dashboard-results .warn,
+html body:not(.print-protocol) .fve-dashboard-results .bad{
+  font-family:Arial,sans-serif!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results .ok{color:#15803d!important;}
+html body:not(.print-protocol) .fve-dashboard-results .warn{color:#c2410c!important;}
+html body:not(.print-protocol) .fve-dashboard-results .bad{color:#b91c1c!important;}
+
+/* Obrázkový vizuál nemá velké KPI dlaždice v podrobných kartách.
+   Ponecháváme tabulkové hodnoty a validační texty, aby se výsledky nemazaly. */
+html body:not(.print-protocol) .fve-dashboard-results .calc-highlight{
+  display:none!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results .profi-note,
+html body:not(.print-protocol) .fve-dashboard-results .small{
+  color:#111827!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .open-panel-actions,
+html body:not(.print-protocol) .result-cables-card button{
+  display:none!important;
+}
+
+html body:not(.print-protocol) .result-cables-card{
+  min-height:220px!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-card-list{
+  display:grid!important;
+}
+
+html body:not(.print-protocol) .card:has(#monthBlock),
+html body:not(.print-protocol) #monthBlock{
+  border:1px solid #bfdbfe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+}
+
+html body:not(.print-protocol) .grid-2:has(#chartProd),
+html body:not(.print-protocol) .grid-2:has(#chartDiff){
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+}
+
+html body:not(.print-protocol) .chart-box{
+  border:1px solid #dbeafe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  height:260px!important;
+}
+
+@media(max-width:900px){
+  html body:not(.print-protocol) .fve-dashboard-results{
+    grid-template-columns:1fr!important;
+  }
+  html body:not(.print-protocol) #customerSummary,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>h3{
+    font-size:22px!important;
+  }
+}
+
+@media print{
+  .fve-dashboard-results{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:4px!important;
+  }
+  .fve-dashboard-results .calc-highlight{display:none!important;}
+}
+</style>
+<style id="fve-krok-46-cable-wrap-and-visible-calculations">
+/* KROK 46: oprava výsledků – kabely/jištění nesmí skrývat výpočty.
+   Současně zalamujeme dlouhé názvy a hodnoty, aby se nerozhazovaly sloupce. */
+
+/* Vrací detailní kabelové výpočty zpět do výsledků. */
+html body:not(.print-protocol) .result-cables-card .cable-card-list{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-card{
+  display:block!important;
+  padding:0!important;
+  margin:0!important;
+  border:1px solid #dbeafe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-card h4{
+  margin:0!important;
+  padding:7px 9px!important;
+  border-bottom:1px solid #dbeafe!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1.25!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important;
+  gap:8px!important;
+  align-items:start!important;
+  min-height:0!important;
+  padding:5px 9px!important;
+  border-top:1px solid #e5e7eb!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-row:first-of-type{
+  border-top:0!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-label,
+html body:not(.print-protocol) .result-cables-card .cable-value{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  line-height:1.25!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  color:#111827!important;
+  text-align:left!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-label{
+  color:#374151!important;
+}
+
+html body:not(.print-protocol) .result-cables-card .cable-value.ok{color:#15803d!important;}
+html body:not(.print-protocol) .result-cables-card .cable-value.warn{color:#c2410c!important;}
+html body:not(.print-protocol) .result-cables-card .cable-value.bad{color:#b91c1c!important;}
+
+html body:not(.print-protocol) .result-cables-card .cable-status{
+  margin:8px 9px 9px!important;
+  padding:7px 8px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Obecné zalamování ve výsledkových tabulkách. */
+html body:not(.print-protocol) .fve-dashboard-results,
+html body:not(.print-protocol) .fve-dashboard-results *{
+  box-sizing:border-box!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results table,
+html body:not(.print-protocol) .fve-dashboard-results .fve-dashboard-table{
+  table-layout:fixed!important;
+  width:100%!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results th,
+html body:not(.print-protocol) .fve-dashboard-results td{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results td:first-child{
+  width:52%!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results td:last-child{
+  width:48%!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-align:left!important;
+}
+
+/* U kabelové karty mohou být hodnoty delší, proto necháme pružnější šířky. */
+html body:not(.print-protocol) .result-cables-card table{
+  table-layout:fixed!important;
+}
+
+html body:not(.print-protocol) .result-cables-card th,
+html body:not(.print-protocol) .result-cables-card td{
+  font-size:12px!important;
+  padding:4px 3px!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Nezobrazovat tlačítka podrobností ve výsledkovém dashboardu, ale data uvnitř ponechat. */
+html body:not(.print-protocol) .result-cables-card .open-panel-actions,
+html body:not(.print-protocol) .result-cables-card button{
+  display:none!important;
+}
+
+@media(max-width:900px){
+  html body:not(.print-protocol) .result-cables-card .cable-row{
+    grid-template-columns:1fr!important;
+    gap:3px!important;
+  }
+}
+</style>
+<style id="fve-krok-47-cable-result-table-same-visual">
+/* KROK 47: Kabely a jištění jako stejná výsledková tabulka jako ostatní bloky. */
+html body:not(.print-protocol) .result-cables-card{
+  min-height:0!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) #cableOut{
+  display:block!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) #cableOut .calc-highlight,
+html body:not(.print-protocol) #cableOut .cable-card-list,
+html body:not(.print-protocol) #cableOut .open-panel-actions,
+html body:not(.print-protocol) #cableOut button{
+  display:none!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table{
+  display:table!important;
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  border:0!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12.5px!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th,
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td{
+  padding:4px 4px!important;
+  border:0!important;
+  border-bottom:1px solid #e5e7eb!important;
+  background:#ffffff!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.25!important;
+  font-weight:400!important;
+  text-align:left!important;
+  vertical-align:top!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th{
+  color:#111827!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th[colspan]{
+  padding-top:8px!important;
+  border-bottom:1px solid #bfdbfe!important;
+  color:#111827!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(1){
+  width:30%!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(2){
+  width:38%!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(3){
+  width:32%!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table .ok{
+  color:#15803d!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table .warn{
+  color:#c2410c!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table .bad{
+  color:#b91c1c!important;
+  font-weight:400!important;
+}
+
+@media(max-width:900px){
+  html body:not(.print-protocol) #cableOut .fve-cable-result-table th,
+  html body:not(.print-protocol) #cableOut .fve-cable-result-table td{
+    font-size:12px!important;
+  }
+}
+</style>
+<style id="fve-krok-48-cable-summary-plus-compact-results">
+/* KROK 48: Kabely a jištění vložené do nových výsledků podle ukázky:
+   horní souhrn + podrobná tabulka, kompaktní velikost, stejné písmo a vizuál. */
+
+html body:not(.print-protocol) .result-cables-card{
+  grid-column:1 / -1!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results{
+  gap:7px!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results > .logical-result-card{
+  padding:9px 11px!important;
+  border-radius:9px!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results > .logical-result-card h3{
+  font-size:15px!important;
+  margin-bottom:7px!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results table,
+html body:not(.print-protocol) .fve-dashboard-results .fve-dashboard-table{
+  font-size:12px!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results th,
+html body:not(.print-protocol) .fve-dashboard-results td{
+  padding:3px 3px!important;
+  font-size:12px!important;
+  line-height:1.18!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) #cableOut{
+  display:block!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-dashboard-block{
+  display:block!important;
+  width:100%!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-summary-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:7px!important;
+  margin:0 0 9px!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-summary-box{
+  border:1px solid #bfdbfe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  padding:7px!important;
+  min-width:0!important;
+  overflow:hidden!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-summary-title{
+  color:#111827!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:500!important;
+  margin:0 0 5px!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-mini{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:6px!important;
+  align-items:end!important;
+  padding:4px 0!important;
+  border-top:1px solid #e5e7eb!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-mini:first-of-type{
+  border-top:0!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-mini span{
+  color:#374151!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-mini b{
+  font-size:20px!important;
+  line-height:1!important;
+  font-weight:400!important;
+  text-align:right!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-total-state{
+  font-size:20px!important;
+  line-height:1.1!important;
+  font-weight:500!important;
+  margin-top:5px!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table{
+  display:table!important;
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:#ffffff!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th,
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td{
+  padding:3px 4px!important;
+  border:0!important;
+  border-bottom:1px solid #e5e7eb!important;
+  background:#ffffff!important;
+  font-size:11.5px!important;
+  line-height:1.16!important;
+  font-weight:400!important;
+  text-align:left!important;
+  vertical-align:top!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th{
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table th[colspan]{
+  padding-top:7px!important;
+  border-bottom:1px solid #bfdbfe!important;
+  color:#111827!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(1){width:20%!important;}
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(2){width:25%!important;}
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(3){width:35%!important;}
+html body:not(.print-protocol) #cableOut .fve-cable-result-table td:nth-child(4){width:20%!important;}
+
+html body:not(.print-protocol) #cableOut .ok,
+html body:not(.print-protocol) .fve-dashboard-results .ok{
+  color:#15803d!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableOut .warn,
+html body:not(.print-protocol) .fve-dashboard-results .warn{
+  color:#b45309!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableOut .bad,
+html body:not(.print-protocol) .fve-dashboard-results .bad{
+  color:#b91c1c!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableOut .calc-highlight,
+html body:not(.print-protocol) #cableOut .cable-card-list,
+html body:not(.print-protocol) #cableOut .open-panel-actions,
+html body:not(.print-protocol) #cableOut button{
+  display:none!important;
+}
+
+@media(max-width:1100px){
+  html body:not(.print-protocol) #cableOut .fve-cable-summary-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:700px){
+  html body:not(.print-protocol) #cableOut .fve-cable-summary-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  html body:not(.print-protocol) #cableOut .fve-cable-result-table th,
+  html body:not(.print-protocol) #cableOut .fve-cable-result-table td{
+    font-size:11px!important;
+    padding:3px!important;
+  }
+}
+
+@media print{
+  .result-cables-card{grid-column:1 / -1!important;}
+  #cableOut .fve-cable-summary-grid{grid-template-columns:repeat(4,1fr)!important;gap:4px!important;}
+}
+</style>
+<style id="fve-krok-49-restore-cable-collapsible-details">
+/* KROK 49: Podrobnosti kabelů a jištění jsou zpět v původních rozkrývacích tabulkách.
+   V hlavních výsledcích zůstává jen kompaktní souhrn. */
+
+html body:not(.print-protocol) .result-cables-card{
+  grid-column:1 / -1!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) #cableOut{
+  display:block!important;
+  overflow:visible!important;
+}
+
+html body:not(.print-protocol) #cableOut .fve-cable-result-table{
+  display:none!important;
+}
+
+html body:not(.print-protocol) #cableOut .open-panel-actions{
+  display:block!important;
+  margin-top:8px!important;
+}
+
+html body:not(.print-protocol) #cableOut button,
+html body:not(.print-protocol) #cableDetailsToggleBtn{
+  display:block!important;
+  width:100%!important;
+  min-height:34px!important;
+  padding:7px 10px!important;
+  margin:0!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:9px!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:400!important;
+  line-height:1.2!important;
+}
+
+html body:not(.print-protocol) #cableDetails{
+  display:block;
+  margin-top:10px!important;
+}
+
+html body:not(.print-protocol) #cableDetails.closed,
+html body:not(.print-protocol) #cableDetails[hidden]{
+  display:none!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card-list{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card{
+  display:block!important;
+  border:1px solid #dbeafe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  padding:0!important;
+  margin:0!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card h4{
+  margin:0!important;
+  padding:7px 9px!important;
+  border-bottom:1px solid #dbeafe!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12.5px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,.72fr)!important;
+  gap:8px!important;
+  align-items:start!important;
+  min-height:0!important;
+  padding:6px 9px!important;
+  border-top:1px solid #e5e7eb!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-row:first-of-type{
+  border-top:0!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-label,
+html body:not(.print-protocol) #cableDetails .cable-value{
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  line-height:1.22!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-label{
+  color:#374151!important;
+  text-align:left!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-value{
+  color:#111827!important;
+  text-align:right!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-status{
+  margin:8px 9px 9px!important;
+  padding:7px 8px!important;
+  border-radius:999px!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableDetails .ok{color:#15803d!important;font-weight:400!important;}
+html body:not(.print-protocol) #cableDetails .warn{color:#b45309!important;font-weight:400!important;}
+html body:not(.print-protocol) #cableDetails .bad{color:#b91c1c!important;font-weight:400!important;}
+
+@media(max-width:1100px){
+  html body:not(.print-protocol) #cableDetails .cable-card-list{
+    grid-template-columns:1fr!important;
+  }
+
+  html body:not(.print-protocol) #cableDetails .cable-value{
+    text-align:left!important;
+  }
+}
+</style>
+<style id="fve-krok-51-restore-original-cable-page-style">
+/* KROK 51: původní rozkrývací tabulky kabelů a jištění obnovené jako samostatný panel. */
+html body:not(.print-protocol) #cablePage{
+  position:fixed!important;
+  inset:0!important;
+  z-index:10050!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+  background:rgba(244,246,248,.88)!important;
+  backdrop-filter:saturate(135%) blur(8px)!important;
+  -webkit-backdrop-filter:saturate(135%) blur(8px)!important;
+}
+
+html body:not(.print-protocol) #cablePage.open{
+  display:flex!important;
+}
+
+html body:not(.print-protocol) #cablePage .subpage{
+  width:min(1500px,96vw)!important;
+  max-height:92vh!important;
+  overflow:auto!important;
+  background:#ffffff!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:12px!important;
+  box-shadow:0 16px 42px rgba(15,23,42,.18)!important;
+  padding:12px!important;
+  font-family:Arial,sans-serif!important;
+}
+
+html body:not(.print-protocol) #cablePage .subpage-header{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 10px!important;
+  padding-bottom:8px!important;
+  border-bottom:1px solid #dbeafe!important;
+}
+
+html body:not(.print-protocol) #cablePage .subpage-header h2{
+  margin:0!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:20px!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #cablePage .subpage-header button{
+  width:auto!important;
+  min-height:34px!important;
+  margin:0!important;
+  padding:7px 12px!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:9px!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) #cableDetails{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card-list{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:0!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  border:1px solid #dbeafe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-card h4{
+  margin:0!important;
+  padding:8px 10px!important;
+  border-bottom:1px solid #dbeafe!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,.78fr)!important;
+  gap:8px!important;
+  align-items:start!important;
+  min-height:0!important;
+  padding:7px 10px!important;
+  border-top:1px solid #e5e7eb!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-row:first-of-type{
+  border-top:0!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-label,
+html body:not(.print-protocol) #cableDetails .cable-value{
+  font-family:Arial,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.22!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-label{
+  color:#374151!important;
+  text-align:left!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-value{
+  color:#111827!important;
+  text-align:right!important;
+}
+
+html body:not(.print-protocol) #cableDetails .cable-status{
+  margin:8px 10px 10px!important;
+  padding:7px 8px!important;
+  border-radius:999px!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.2!important;
+  font-weight:400!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+html body:not(.print-protocol) #cableDetails .ok{color:#15803d!important;font-weight:400!important;}
+html body:not(.print-protocol) #cableDetails .warn{color:#b45309!important;font-weight:400!important;}
+html body:not(.print-protocol) #cableDetails .bad{color:#b91c1c!important;font-weight:400!important;}
+
+html body:not(.print-protocol) #cableOut .open-panel-actions{
+  display:block!important;
+  margin-top:8px!important;
+}
+
+html body:not(.print-protocol) #cableOut button,
+html body:not(.print-protocol) #cableDetailsToggleBtn{
+  display:block!important;
+  width:100%!important;
+  min-height:34px!important;
+  padding:7px 10px!important;
+  margin:0!important;
+  border:1px solid #bfdbfe!important;
+  border-radius:9px!important;
+  background:#f8fafc!important;
+  color:#111827!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:400!important;
+  line-height:1.2!important;
+}
+
+@media(max-width:1100px){
+  html body:not(.print-protocol) #cableDetails .cable-card-list{
+    grid-template-columns:1fr!important;
+  }
+  html body:not(.print-protocol) #cableDetails .cable-value{
+    text-align:left!important;
+  }
+}
+</style>
+<style id="fve-krok-57-results-reorder-and-summary-fix">
+/* KROK 57: výsledkové karty bez číslování, nové pořadí a opravené Vyhodnocení systému. */
+html body:not(.print-protocol) :is(#customerSummaryCard,#wWaterEvaluation){
+  display:block!important;
+  margin:14px 0 10px!important;
+  padding:14px 16px!important;
+  border:1px solid #c46a1c!important;
+  border-left:6px solid #c46a1c!important;
+  border-radius:18px!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+  font-family:Arial,sans-serif!important;
+}
+
+html body:not(.print-protocol) #customerSummaryCard.summary-warn{
+  border-color:#b45309!important;
+  border-left-color:#b45309!important;
+}
+
+html body:not(.print-protocol) #customerSummaryCard.summary-bad{
+  border-color:#b91c1c!important;
+  border-left-color:#b91c1c!important;
+}
+
+html body:not(.print-protocol) :is(#customerSummaryCard,#wWaterEvaluation)>h3{
+  margin:0 0 10px!important;
+  color:#111827!important;
+  font-family:Arial,sans-serif!important;
+  font-size:19px!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+}
+
+html body:not(.print-protocol) #customerSummary,
+html body:not(.print-protocol) #customerSummaryNote,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>p,
+html body:not(.print-protocol) #wWaterEvaluation #wStatus>ul{
+  display:block!important;
+  font-family:Arial,sans-serif!important;
+  color:#111827!important;
+}
+
+html body:not(.print-protocol) #customerSummary .customer-summary-headline{
+  font-family:Arial,sans-serif!important;
+  font-size:clamp(20px,3vw,26px)!important;
+  line-height:1.15!important;
+  font-weight:500!important;
+  margin:0 0 8px!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote .customer-summary-table{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote .customer-summary-cell{
+  border:1px solid #dbeafe!important;
+  border-radius:10px!important;
+  background:#ffffff!important;
+  padding:8px!important;
+  text-align:left!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote .customer-summary-label{
+  color:#374151!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  font-weight:400!important;
+  margin-bottom:4px!important;
+}
+
+html body:not(.print-protocol) #customerSummaryNote .customer-summary-value{
+  font-size:20px!important;
+  line-height:1!important;
+  font-weight:400!important;
+}
+
+html body:not(.print-protocol) .fve-dashboard-results{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:start!important;
