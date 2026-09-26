@@ -1,9 +1,10 @@
 {
-  "name": "fve-o131-vercel",
+  "name": "fve-o131-railway",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=20"
